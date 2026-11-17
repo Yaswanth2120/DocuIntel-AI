@@ -6,7 +6,13 @@ from pathlib import Path
 
 # Force offline/deterministic config before app import (mirrors tests/__init__,
 # in case the suite is run without the tests package being imported first).
-for _var in ("OPENAI_API_KEY", "SUPABASE_URL", "SUPABASE_KEY", "SUPABASE_SERVICE_ROLE_KEY", "LANGSMITH_API_KEY"):
+for _var in (
+    "OPENAI_API_KEY",
+    "SUPABASE_URL",
+    "SUPABASE_KEY",
+    "SUPABASE_SERVICE_ROLE_KEY",
+    "LANGSMITH_API_KEY",
+):
     os.environ[_var] = ""
 os.environ["API_KEY"] = "test-api-key"
 os.environ["LANGSMITH_TRACING"] = "false"
@@ -16,7 +22,8 @@ from fastapi.testclient import TestClient
 from app.api.dependencies import get_rag_engine
 from app.core import rate_limit
 from app.main import app
-from app.services import document_service, vector_store
+from app.documents import service as document_service
+from app.storage import vector_store
 
 
 API_KEY = "test-api-key"
@@ -50,17 +57,11 @@ class RateLimitTestCase(unittest.TestCase):
         payload = {"question": "anything"}
 
         # First two requests are within the 2/minute limit.
-        self.assertEqual(
-            self.client.post("/query/documents", json=payload).status_code, 200
-        )
-        self.assertEqual(
-            self.client.post("/query/documents", json=payload).status_code, 200
-        )
+        self.assertEqual(self.client.post("/query/documents", json=payload).status_code, 200)
+        self.assertEqual(self.client.post("/query/documents", json=payload).status_code, 200)
 
         # The third request from the same IP is throttled.
-        self.assertEqual(
-            self.client.post("/query/documents", json=payload).status_code, 429
-        )
+        self.assertEqual(self.client.post("/query/documents", json=payload).status_code, 429)
 
 
 if __name__ == "__main__":

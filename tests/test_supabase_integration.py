@@ -33,9 +33,7 @@ _ENV = dotenv_values(REPO_ROOT / ".env")
 
 SUPABASE_URL = os.environ.get("SUPABASE_TEST_URL") or _ENV.get("SUPABASE_URL")
 SUPABASE_KEY = (
-    os.environ.get("SUPABASE_TEST_KEY")
-    or _ENV.get("SUPABASE_SERVICE_ROLE_KEY")
-    or _ENV.get("SUPABASE_KEY")
+    os.environ.get("SUPABASE_TEST_KEY") or _ENV.get("SUPABASE_SERVICE_ROLE_KEY") or _ENV.get("SUPABASE_KEY")
 )
 
 # Auth must be configured for the protected routes (fail-closed).
@@ -45,9 +43,9 @@ from fastapi.testclient import TestClient  # noqa: E402
 
 from app.core import offline  # noqa: E402
 from app.core.config import settings  # noqa: E402
-from app.db import document_repository  # noqa: E402
+from app.storage import supabase_metadata as document_repository
 from app.main import app  # noqa: E402
-from app.services import document_service  # noqa: E402
+from app.documents import service as document_service
 
 API_KEY = os.environ["API_KEY"]
 

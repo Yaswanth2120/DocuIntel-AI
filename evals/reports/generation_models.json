@@ -1,0 +1,2749 @@
+{
+  "scope": "Paired local generation-model evaluation: same public SQuAD query sample, same recursive hybrid + neural-reranked retrieval, same production grounding gate (verify_answer). Not a domain certification.",
+  "dataset": {
+    "dataset": "squad",
+    "url": "https://rajpurkar.github.io/SQuAD-explorer/dataset/dev-v1.1.json",
+    "sha256": "95aa6a52d5d6a735563366753ca50492a658031da74f301ac5238b03966972c9",
+    "downloaded_at": "2026-11-17T18:05:01.483739+00:00",
+    "verified_at": "2026-11-17T20:55:35.381412+00:00",
+    "license": "CC BY-SA 4.0",
+    "reference": "https://rajpurkar.github.io/SQuAD-explorer/",
+    "documents": 2067,
+    "queries": 10570
+  },
+  "query_ids": [
+    "573786b51c4567190057448d",
+    "56e7714a00c9c71400d77138",
+    "56bf6b303aeaaa14008c960e",
+    "57266e72f1498d1400e8df8f",
+    "5726241189a1e219009ac2df",
+    "5725c948ec44d21400f3d577",
+    "56f8ac579e9bad19000a02ba",
+    "56e7535037bdd419002c3e72",
+    "572f60f4947a6a140053c8ee",
+    "56e1262fcd28a01900c67657",
+    "57309a6c2461fd1900a9cf03",
+    "572827fc3acd2414000df5be",
+    "56d7096b0d65d214001982fd",
+    "56d6f3500d65d21400198290",
+    "56e1c2eee3433e1400423138",
+    "5725c071271a42140099d128",
+    "5725db4aec44d21400f3d6be",
+    "5729789b6aef051400154f6f",
+    "5730c6d3b54a4f140068cc4e",
+    "56d2045de7d4791d009025f5",
+    "572fe92204bcaa1900d76e97",
+    "571c3a685efbb31900334db2",
+    "572f609ca23a5019007fc5b1",
+    "57282358ff5b5019007d9de0",
+    "5725c3a9ec44d21400f3d505",
+    "57287e512ca10214002da3fb",
+    "573098f38ab72b1400f9c5d2",
+    "572673f5708984140094c69d",
+    "56beb57b3aeaaa14008c927a",
+    "5709686c200fba1400367f77",
+    "572829532ca10214002d9fa3",
+    "5726f0865951b619008f82e7",
+    "57267383dd62a815002e8554",
+    "5706149552bb891400689883",
+    "5725bad5271a42140099d0be",
+    "5726ea985951b619008f8262",
+    "56e751fb00c9c71400d76fab",
+    "56e1bc3ae3433e1400423104",
+    "57275cb3f1498d1400e8f6dc",
+    "56e1e9dfe3433e14004231ff",
+    "57274046dd62a815002e9a13",
+    "5726f8aef1498d1400e8f170",
+    "5730cb8df6cb411900e244c6",
+    "57265642f1498d1400e8dc6a",
+    "56d9a6b4dc89441400fdb6a1",
+    "5728e8212ca10214002daa70",
+    "572a0e4b6aef051400155216",
+    "56f82989aef2371900625e6d",
+    "572759665951b619008f8884",
+    "56e10c61e3433e1400422b36",
+    "572fc49d04bcaa1900d76ccb",
+    "572689385951b619008f761c",
+    "5733f8dc4776f419006615f9",
+    "57339a554776f41900660e75",
+    "572744aff1498d1400e8f58b",
+    "57300c67947a6a140053cff2",
+    "57115e532419e314009555af",
+    "56e0d76d231d4119001ac42c",
+    "56d9bf70dc89441400fdb77c",
+    "5725d16aec44d21400f3d61f",
+    "57268525dd62a815002e8808",
+    "56e10e73cd28a01900c674ed",
+    "5725db98ec44d21400f3d6c5",
+    "56e74d1f00c9c71400d76f6f",
+    "57275e125951b619008f88d8",
+    "57267383dd62a815002e8556",
+    "572885023acd2414000dfa83",
+    "57376828c3c5551400e51eba",
+    "57274a1edd62a815002e9a9a",
+    "57097d63ed30961900e84200",
+    "5727502f708984140094dc0a",
+    "57273b69dd62a815002e99d6",
+    "571cdcb85efbb31900334e0f",
+    "572659535951b619008f703f",
+    "56e0ecd37aa994140058e7d5",
+    "5733266d4776f41900660712",
+    "5737534ec3c5551400e51eab",
+    "57106644b654c5140001f8e9",
+    "572a0bebaf94a219006aa772",
+    "5726219489a1e219009ac2d0",
+    "570d26efb3d812140066d491",
+    "5728f50baf94a219006a9e59",
+    "57275a505951b619008f88a2",
+    "57265e97708984140094c3c5",
+    "5737898f1c45671900574496",
+    "572fd7b8947a6a140053cd3a",
+    "5725c28a271a42140099d150",
+    "5726c80c5951b619008f7de7",
+    "56de51c64396321400ee27f7",
+    "5725d403ec44d21400f3d65b",
+    "56d70adc0d65d21400198312",
+    "5726b12f5951b619008f7ab0",
+    "5727f746ff5b5019007d9961",
+    "57265aaf5951b619008f706b",
+    "56e0c0c7231d4119001ac375",
+    "571ce7f25efbb31900334e40",
+    "572ffa79a23a5019007fcbe9",
+    "5726af765951b619008f7a53",
+    "5725b5a689a1e219009abd29",
+    "5729723c6aef051400154eeb"
+  ],
+  "created_at": "2026-11-17T21:00:19.702015+00:00",
+  "models": [
+    {
+      "model": "qwen3:1.7b",
+      "summary": {
+        "cases": 30,
+        "exact_match": 0.03333333333333333,
+        "token_f1": 0.21196736903139585,
+        "reference_span_hit": 0.6333333333333333,
+        "abstention_rate": 0.1,
+        "unsupported_claim_rate_nli": 0.2037037037037037,
+        "grounding_gate_coverage": 0.7,
+        "delivered_with_reference_answer": 0.5333333333333333,
+        "delivered_without_reference_answer": 0.16666666666666666,
+        "median_generation_and_verification_ms": 3187.609417999738,
+        "invalid_citation_rate": 0,
+        "limitations": "Generator backend is explicit; NLI is an imperfect automated contextual-support measurement, not a truth oracle."
+      },
+      "cases": [
+        {
+          "id": "573786b51c4567190057448d",
+          "question": "How might gravity effects be observed differently according to Newton?",
+          "answer": "According to Newton, gravity effects can be observed differently at larger distances. Specifically, he realized that the acceleration of the Moon around the Earth could be explained by the same force of gravity if the acceleration due to gravity decreased as an inverse square law [S1].",
+          "reference_answers": [
+            "at larger distances.",
+            "at larger distances",
+            "at larger distances",
+            "at larger distances"
+          ],
+          "provider_usage": {
+            "generation_ms": 5434.01,
+            "model_usage": {
+              "input_tokens": 1237,
+              "output_tokens": 53,
+              "total_tokens": 1290,
+              "input_token_details": {
+                "cache_read": 0
+              },
+              "output_token_details": {}
+            }
+          },
+          "cited_chunks": 1,
+          "invalid_citations": 0,
+          "answer_exact_match": 0.0,
+          "reference_span_hit": 1.0,
+          "answer_token_f1": 0.14285714285714285,
+          "claims": [
+            {
+              "text": "According to Newton, gravity effects can be observed differently at larger distances.",
+              "supported": true,
+              "entailment_score": 0.9958916902542114,
+              "evidence": "Newton came to realize that the effects of gravity might be observed in different ways at larger distances."
+            },
+            {
+              "text": "Specifically, he realized that the acceleration of the Moon around the Earth could be explained by the same force of gravity if the acceleration due to gravity decreased as an inverse square law.",
+              "supported": true,
+              "entailment_score": 0.9943197965621948,
+              "evidence": "In particular, Newton determined that the acceleration of the Moon around the Earth could be ascribed to the same force of gravity if the acceleration due to gravity decreased as an inverse square law."
+            }
+          ],
+          "unsupported_claim_rate_nli": 0.0,
+          "verifier": "cross-encoder/nli-deberta-v3-xsmall",
+          "threshold": 0.5,
+          "premise_granularity": "sentence windows (1-3) + passage",
+          "generation_and_verification_ms": 11404.266255000039,
+          "accepted_by_grounding_gate": true,
+          "abstention_reason": null
+        },
+        {
+          "id": "56e7714a00c9c71400d77138",
+          "question": "What is the basic pay for a teacher, in Euros?",
+          "answer": "The basic pay for a starting teacher in Ireland is \u20ac27,814 per year [S1].",
+          "reference_answers": [
+            "27,814",
+            "\u20ac27,814",
+            "\u20ac27,814"
+          ],
+          "provider_usage": {
+            "generation_ms": 1928.413,
+            "model_usage": {
+              "input_tokens": 1193,
+              "output_tokens": 24,
+              "total_tokens": 1217,
+              "input_token_details": {
+                "cache_read": 116
+              },
+              "output_token_details": {}
+            }
+          },
+          "cited_chunks": 1,
+          "invalid_citations": 0,
+          "answer_exact_match": 0.0,
+          "reference_span_hit": 1.0,
+          "answer_token_f1": 0.16666666666666666,
+          "claims": [
+            {
+              "text": "The basic pay for a starting teacher in Ireland is \u20ac27,814 per year.",
+              "supported": true,
+              "entailment_score": 0.9253802299499512,
+              "evidence": "Salaries for primary teachers in Ireland depend mainly on seniority (i.e. holding the position of principal, deputy principal or assistant principal), experience and qualifications. Extra pay is also given for teaching through the Irish language, in a Gaeltacht area or on an island. The basic pay for a starting teacher is \u20ac27,814 p.a., rising incrementally to \u20ac53,423 for a teacher with 25 years service. A principal of a large school with many years experience and several qualifications (M.A., H.Dip., etc.) could earn over \u20ac90,000."
+            }
+          ],
+          "unsupported_claim_rate_nli": 0.0,
+          "verifier": "cross-encoder/nli-deberta-v3-xsmall",
+          "threshold": 0.5,
+          "premise_granularity": "sentence windows (1-3) + passage",
+          "generation_and_verification_ms": 2947.546168000372,
+          "accepted_by_grounding_gate": true,
+          "abstention_reason": null
+        },
+        {
+          "id": "56bf6b303aeaaa14008c960e",
+          "question": "What position does Jerricho Cotchery play?",
+          "answer": "Jerricho Cotchery is a receiver, as stated in [S2].",
+          "reference_answers": [
+            "receivers",
+            "receivers",
+            "receivers"
+          ],
+          "provider_usage": {
+            "generation_ms": 1832.974,
+            "model_usage": {
+              "input_tokens": 1249,
+              "output_tokens": 18,
+              "total_tokens": 1267,
+              "input_token_details": {
+                "cache_read": 116
+              },
+              "output_token_details": {}
+            }
+          },
+          "cited_chunks": 1,
+          "invalid_citations": 0,
+          "answer_exact_match": 0.0,
+          "reference_span_hit": 0.0,
+          "answer_token_f1": 0.0,
+          "claims": [
+            {
+              "text": "Jerricho Cotchery is a receiver, as stated in.",
+              "supported": true,
+              "entailment_score": 0.9734333753585815,
+              "evidence": "Other key receivers included veteran Jerricho Cotchery (39 receptions for 485 yards), rookie Devin Funchess (31 receptions for 473 yards and five touchdowns), and second-year receiver Corey Brown (31 receptions for 447 yards)"
+            }
+          ],
+          "unsupported_claim_rate_nli": 0.0,
+          "verifier": "cross-encoder/nli-deberta-v3-xsmall",
+          "threshold": 0.5,
+          "premise_granularity": "sentence windows (1-3) + passage",
+          "generation_and_verification_ms": 2681.8015429998923,
+          "accepted_by_grounding_gate": true,
+          "abstention_reason": null
+        },
+        {
+          "id": "57266e72f1498d1400e8df8f",
+          "question": "How can you find the absolute age of sedimentary rock units which do not contain radioactive isotopes?",
+          "answer": "The absolute age of sedimentary rock units without radioactive isotopes can be determined using thermochemical techniques, which analyze temperature profiles within the crust and provide age data for sedimentary rock units [S1]. Additionally, these methods can be used to determine the ages of pluton emplacement [S1].",
+          "reference_answers": [
+            "Dating of lava and volcanic ash layers found within a stratigraphic sequence",
+            "Dating of lava and volcanic ash layers",
+            "stratigraphic sequence",
+            "Dating of lava and volcanic ash layers found within a stratigraphic sequence"
+          ],
+          "provider_usage": {
+            "generation_ms": 2596.873,
+            "model_usage": {
+              "input_tokens": 1227,
+              "output_tokens": 61,
+              "total_tokens": 1288,
+              "input_token_details": {
+                "cache_read": 116
+              },
+              "output_token_details": {}
+            }
+          },
+          "cited_chunks": 1,
+          "invalid_citations": 0,
+          "answer_exact_match": 0.0,
+          "reference_span_hit": 0.0,
+          "answer_token_f1": 0.11538461538461539,
+          "claims": [
+            {
+              "text": "The absolute age of sedimentary rock units without radioactive isotopes can be determined using thermochemical techniques, which analyze temperature profiles within the crust and provide age data for sedimentary rock units.",
+              "supported": true,
+              "entailment_score": 0.99276202917099,
+              "evidence": "Dating of lava and volcanic ash layers found within a stratigraphic sequence can provide absolute age data for sedimentary rock units which do not contain radioactive isotopes and calibrate relative dating techniques. These methods can also be used to determine ages of pluton emplacement. Thermochemical techniques can be used to determine temperature profiles within the crust, the uplift of mountain ranges, and paleotopography."
+            },
+            {
+              "text": "Additionally, these methods can be used to determine the ages of pluton emplacement.",
+              "supported": true,
+              "entailment_score": 0.9934307932853699,
+              "evidence": "These methods can also be used to determine ages of pluton emplacement."
+            }
+          ],
+          "unsupported_claim_rate_nli": 0.0,
+          "verifier": "cross-encoder/nli-deberta-v3-xsmall",
+          "threshold": 0.5,
+          "premise_granularity": "sentence windows (1-3) + passage",
+          "generation_and_verification_ms": 4021.8295429995123,
+          "accepted_by_grounding_gate": true,
+          "abstention_reason": null
+        },
+        {
+          "id": "5726241189a1e219009ac2df",
+          "question": "On an international level, which industry's competitive positions is affected? ",
+          "answer": "On an international level, the price increases caused by the embargo changed competitive positions in industries such as automobiles [S1].",
+          "reference_answers": [
+            "automobiles",
+            "automobiles",
+            "automobiles",
+            "automobiles",
+            "automobiles"
+          ],
+          "provider_usage": {
+            "generation_ms": 1983.729,
+            "model_usage": {
+              "input_tokens": 1209,
+              "output_tokens": 25,
+              "total_tokens": 1234,
+              "input_token_details": {
+                "cache_read": 116
+              },
+              "output_token_details": {}
+            }
+          },
+          "cited_chunks": 1,
+          "invalid_citations": 0,
+          "answer_exact_match": 0.0,
+          "reference_span_hit": 1.0,
+          "answer_token_f1": 0.11764705882352941,
+          "claims": [
+            {
+              "text": "On an international level, the price increases caused by the embargo changed competitive positions in industries such as automobiles.",
+              "supported": true,
+              "entailment_score": 0.9952219128608704,
+              "evidence": "The embargo had a negative influence on the US economy by causing immediate demands to address the threats to U.S. energy security. On an international level, the price increases changed competitive positions in many industries, such as automobiles."
+            }
+          ],
+          "unsupported_claim_rate_nli": 0.0,
+          "verifier": "cross-encoder/nli-deberta-v3-xsmall",
+          "threshold": 0.5,
+          "premise_granularity": "sentence windows (1-3) + passage",
+          "generation_and_verification_ms": 2844.604500999594,
+          "accepted_by_grounding_gate": true,
+          "abstention_reason": null
+        },
+        {
+          "id": "5725c948ec44d21400f3d577",
+          "question": "What was the advantage that the LOR method produced in the event of a spacecraft failure?",
+          "answer": "The LOR method allowed the lander spacecraft to be used as a \"lifeboat\" in the event of a failure of the command ship [S1].",
+          "reference_answers": [
+            "spacecraft to be used as a \"lifeboat\"",
+            "allowing the lander spacecraft to be used as a \"lifeboat",
+            "allowing the lander spacecraft to be used as a \"lifeboat\"",
+            "lifeboat",
+            "allowing the lander spacecraft to be used as a \"lifeboat\""
+          ],
+          "provider_usage": {
+            "generation_ms": 2288.736,
+            "model_usage": {
+              "input_tokens": 1229,
+              "output_tokens": 33,
+              "total_tokens": 1262,
+              "input_token_details": {
+                "cache_read": 117
+              },
+              "output_token_details": {}
+            }
+          },
+          "cited_chunks": 1,
+          "invalid_citations": 0,
+          "answer_exact_match": 0.0,
+          "reference_span_hit": 1.0,
+          "answer_token_f1": 0.56,
+          "claims": [
+            {
+              "text": "The LOR method allowed the lander spacecraft to be used as a \"lifeboat\" in the event of a failure of the command ship.",
+              "supported": true,
+              "entailment_score": 0.9950413107872009,
+              "evidence": "The LOR method had the advantage of allowing the lander spacecraft to be used as a \"lifeboat\" in the event of a failure of the command ship."
+            }
+          ],
+          "unsupported_claim_rate_nli": 0.0,
+          "verifier": "cross-encoder/nli-deberta-v3-xsmall",
+          "threshold": 0.5,
+          "premise_granularity": "sentence windows (1-3) + passage",
+          "generation_and_verification_ms": 3554.301959999975,
+          "accepted_by_grounding_gate": true,
+          "abstention_reason": null
+        },
+        {
+          "id": "56f8ac579e9bad19000a02ba",
+          "question": "What did Luther get implicated in concerning Philip I?",
+          "answer": "Luther became implicated in the bigamy of Philip I, Landgrave of Hesse, who wanted to marry one of his wife's ladies-in-waiting [S1].",
+          "reference_answers": [
+            "bigamy",
+            "bigamy",
+            "bigamy"
+          ],
+          "provider_usage": {
+            "generation_ms": 2458.223,
+            "model_usage": {
+              "input_tokens": 1419,
+              "output_tokens": 37,
+              "total_tokens": 1456,
+              "input_token_details": {
+                "cache_read": 116
+              },
+              "output_token_details": {}
+            }
+          },
+          "cited_chunks": 1,
+          "invalid_citations": 0,
+          "answer_exact_match": 0.0,
+          "reference_span_hit": 1.0,
+          "answer_token_f1": 0.09523809523809523,
+          "claims": [
+            {
+              "text": "Luther became implicated in the bigamy of Philip I, Landgrave of Hesse, who wanted to marry one of his wife's ladies-in-waiting.",
+              "supported": true,
+              "entailment_score": 0.9949893355369568,
+              "evidence": "From December 1539, Luther became implicated in the bigamy of Philip I, Landgrave of Hesse, who wanted to marry one of his wife's ladies-in-waiting. Philip solicited the approval of Luther, Melanchthon, and Bucer, citing as a precedent the polygamy of the patriarchs."
+            }
+          ],
+          "unsupported_claim_rate_nli": 0.0,
+          "verifier": "cross-encoder/nli-deberta-v3-xsmall",
+          "threshold": 0.5,
+          "premise_granularity": "sentence windows (1-3) + passage",
+          "generation_and_verification_ms": 3589.020460000029,
+          "accepted_by_grounding_gate": true,
+          "abstention_reason": null
+        },
+        {
+          "id": "56e7535037bdd419002c3e72",
+          "question": "What is the youngest student a teacher might have?",
+          "answer": "The retrieved evidence does not provide information about the youngest student a teacher might have.",
+          "reference_answers": [
+            "infants",
+            "infants",
+            "infants"
+          ],
+          "provider_usage": {
+            "generation_ms": 1718.941,
+            "model_usage": {
+              "input_tokens": 1138,
+              "output_tokens": 17,
+              "total_tokens": 1155,
+              "input_token_details": {
+                "cache_read": 116
+              },
+              "output_token_details": {}
+            }
+          },
+          "cited_chunks": 0,
+          "invalid_citations": 0,
+          "answer_exact_match": 0.0,
+          "reference_span_hit": 0.0,
+          "answer_token_f1": 0.0,
+          "claims": [],
+          "unsupported_claim_rate_nli": 0.0,
+          "generation_and_verification_ms": 1724.0865009998743,
+          "accepted_by_grounding_gate": false,
+          "abstention_reason": "model_abstained"
+        },
+        {
+          "id": "572f60f4947a6a140053c8ee",
+          "question": "How wide is the Upper Rhine Plain? ",
+          "answer": "The Upper Rhine Plain is about 40 km wide [S1].",
+          "reference_answers": [
+            "40 km wide",
+            "40 km wide",
+            "40 km"
+          ],
+          "provider_usage": {
+            "generation_ms": 2092.288,
+            "model_usage": {
+              "input_tokens": 1432,
+              "output_tokens": 17,
+              "total_tokens": 1449,
+              "input_token_details": {
+                "cache_read": 116
+              },
+              "output_token_details": {}
+            }
+          },
+          "cited_chunks": 1,
+          "invalid_citations": 0,
+          "answer_exact_match": 0.0,
+          "reference_span_hit": 1.0,
+          "answer_token_f1": 0.5454545454545454,
+          "claims": [
+            {
+              "text": "The Upper Rhine Plain is about 40 km wide.",
+              "supported": true,
+              "entailment_score": 0.9782894253730774,
+              "evidence": "The river now flows North as Upper Rhine through the Upper Rhine Plain, which is about 300 km long and up to 40 km wide."
+            }
+          ],
+          "unsupported_claim_rate_nli": 0.0,
+          "verifier": "cross-encoder/nli-deberta-v3-xsmall",
+          "threshold": 0.5,
+          "premise_granularity": "sentence windows (1-3) + passage",
+          "generation_and_verification_ms": 3177.627668000241,
+          "accepted_by_grounding_gate": true,
+          "abstention_reason": null
+        },
+        {
+          "id": "56e1262fcd28a01900c67657",
+          "question": "What was one of Tesla's books where articles can be read?",
+          "answer": "One of Tesla's books where articles can be read is \"My Inventions: The Autobiography of Nikola Tesla,\" compiled and edited by Ben Johnston [S1].",
+          "reference_answers": [
+            "Inventions, Researches and Writings of Nikola Tesla.",
+            "Researches and Writings of Nikola Tesla",
+            "Researches and Writings of Nikola Tesla"
+          ],
+          "provider_usage": {
+            "generation_ms": 1792.753,
+            "model_usage": {
+              "input_tokens": 978,
+              "output_tokens": 35,
+              "total_tokens": 1013,
+              "input_token_details": {
+                "cache_read": 116
+              },
+              "output_token_details": {}
+            }
+          },
+          "cited_chunks": 1,
+          "invalid_citations": 0,
+          "answer_exact_match": 0.0,
+          "reference_span_hit": 0.0,
+          "answer_token_f1": 0.3448275862068966,
+          "claims": [
+            {
+              "text": "One of Tesla's books where articles can be read is \"My Inventions: The Autobiography of Nikola Tesla,\" compiled and edited by Ben Johnston.",
+              "supported": true,
+              "entailment_score": 0.9755426049232483,
+              "evidence": "Tesla wrote a number of books and articles for magazines and journals. Among his books are My Inventions: The Autobiography of Nikola Tesla, compiled and edited by Ben Johnston; The Fantastic Inventions of Nikola Tesla, compiled and edited by David Hatcher Childress; and The Tesla Papers."
+            }
+          ],
+          "unsupported_claim_rate_nli": 0.0,
+          "verifier": "cross-encoder/nli-deberta-v3-xsmall",
+          "threshold": 0.5,
+          "premise_granularity": "sentence windows (1-3) + passage",
+          "generation_and_verification_ms": 2703.348501000619,
+          "accepted_by_grounding_gate": true,
+          "abstention_reason": null
+        },
+        {
+          "id": "57309a6c2461fd1900a9cf03",
+          "question": "What is considered the Mother Church of American Methodism?",
+          "answer": "The Mother Church of American Methodism is the Lovely Lane Methodist Church, which was the site of the Baltimore Christmas Conference of 1784 [S1].",
+          "reference_answers": [
+            "Lovely Lane Methodist Church",
+            "Lovely Lane Methodist Church,",
+            "Lovely Lane Methodist Church"
+          ],
+          "provider_usage": {
+            "generation_ms": 2074.098,
+            "model_usage": {
+              "input_tokens": 1191,
+              "output_tokens": 34,
+              "total_tokens": 1225,
+              "input_token_details": {
+                "cache_read": 116
+              },
+              "output_token_details": {}
+            }
+          },
+          "cited_chunks": 1,
+          "invalid_citations": 0,
+          "answer_exact_match": 0.0,
+          "reference_span_hit": 1.0,
+          "answer_token_f1": 0.34782608695652173,
+          "claims": [
+            {
+              "text": "The Mother Church of American Methodism is the Lovely Lane Methodist Church, which was the site of the Baltimore Christmas Conference of 1784.",
+              "supported": true,
+              "entailment_score": 0.9947643280029297,
+              "evidence": "Together with Coke, Wesley sent a revision of the Anglican Prayerbook and the Articles of Religion which were received and adopted by the Baltimore Christmas Conference of 1784, officially establishing the Methodist Episcopal Church. The conference was held at the Lovely Lane Methodist Church, considered the Mother Church of American Methodism."
+            }
+          ],
+          "unsupported_claim_rate_nli": 0.0,
+          "verifier": "cross-encoder/nli-deberta-v3-xsmall",
+          "threshold": 0.5,
+          "premise_granularity": "sentence windows (1-3) + passage",
+          "generation_and_verification_ms": 3197.591167999235,
+          "accepted_by_grounding_gate": true,
+          "abstention_reason": null
+        },
+        {
+          "id": "572827fc3acd2414000df5be",
+          "question": "How many men older than 18 are there for every 100 women?",
+          "answer": "The question asks for the number of men older than 18 for every 100 women. The retrieved evidence does not provide specific data on the number of men older than 18 for every 100 women. Therefore, I do not know.",
+          "reference_answers": [
+            "91.3",
+            "91.3",
+            "91.3"
+          ],
+          "provider_usage": {
+            "generation_ms": 2609.776,
+            "model_usage": {
+              "input_tokens": 1350,
+              "output_tokens": 55,
+              "total_tokens": 1405,
+              "input_token_details": {
+                "cache_read": 117
+              },
+              "output_token_details": {}
+            }
+          },
+          "cited_chunks": 0,
+          "invalid_citations": 0,
+          "answer_exact_match": 0.0,
+          "reference_span_hit": 0.0,
+          "answer_token_f1": 0.0,
+          "claims": [],
+          "unsupported_claim_rate_nli": 0.0,
+          "generation_and_verification_ms": 2620.0028759994893,
+          "accepted_by_grounding_gate": false,
+          "abstention_reason": "model_abstained"
+        },
+        {
+          "id": "56d7096b0d65d214001982fd",
+          "question": "Newton was the number one pick in which draft?",
+          "answer": "Cam Newton was the number one pick in the 2011 NFL draft [S1].",
+          "reference_answers": [
+            "2011",
+            "2011",
+            "2011"
+          ],
+          "provider_usage": {
+            "generation_ms": 2198.246,
+            "model_usage": {
+              "input_tokens": 1440,
+              "output_tokens": 21,
+              "total_tokens": 1461,
+              "input_token_details": {
+                "cache_read": 116
+              },
+              "output_token_details": {}
+            }
+          },
+          "cited_chunks": 1,
+          "invalid_citations": 0,
+          "answer_exact_match": 0.0,
+          "reference_span_hit": 1.0,
+          "answer_token_f1": 0.18181818181818182,
+          "claims": [
+            {
+              "text": "Cam Newton was the number one pick in the 2011 NFL draft.",
+              "supported": true,
+              "entailment_score": 0.9931768178939819,
+              "evidence": "Manning was the #1 selection of the 1998 NFL draft, while Newton was picked first in 2011."
+            }
+          ],
+          "unsupported_claim_rate_nli": 0.0,
+          "verifier": "cross-encoder/nli-deberta-v3-xsmall",
+          "threshold": 0.5,
+          "premise_granularity": "sentence windows (1-3) + passage",
+          "generation_and_verification_ms": 3306.33862600007,
+          "accepted_by_grounding_gate": true,
+          "abstention_reason": null
+        },
+        {
+          "id": "56d6f3500d65d21400198290",
+          "question": "How many interceptions are the Panthers defense credited with in 2015?",
+          "answer": "The Panthers defense in 2015 was credited with 7 interceptions [S1, S2, S3, S4, S9].",
+          "reference_answers": [
+            "24",
+            "24",
+            "24"
+          ],
+          "provider_usage": {
+            "generation_ms": 2262.561,
+            "model_usage": {
+              "input_tokens": 1357,
+              "output_tokens": 32,
+              "total_tokens": 1389,
+              "input_token_details": {
+                "cache_read": 116
+              },
+              "output_token_details": {}
+            }
+          },
+          "cited_chunks": 5,
+          "invalid_citations": 0,
+          "answer_exact_match": 0.0,
+          "reference_span_hit": 0.0,
+          "answer_token_f1": 0.0,
+          "claims": [
+            {
+              "text": "The Panthers defense in 2015 was credited with 7 interceptions.",
+              "supported": false,
+              "entailment_score": 0.0034140439238399267,
+              "evidence": "Although the team had a 7\u20130 start, Manning led the NFL in interceptions."
+            }
+          ],
+          "unsupported_claim_rate_nli": 1.0,
+          "verifier": "cross-encoder/nli-deberta-v3-xsmall",
+          "threshold": 0.5,
+          "premise_granularity": "sentence windows (1-3) + passage",
+          "generation_and_verification_ms": 3353.206460000365,
+          "accepted_by_grounding_gate": false,
+          "abstention_reason": "unsupported_generated_claims"
+        },
+        {
+          "id": "56e1c2eee3433e1400423138",
+          "question": "Decision problems capable of being solved by a deterministic Turing machine while maintaining adherence to polynomial time belong to what class?",
+          "answer": "Decision problems capable of being solved by a deterministic Turing machine while maintaining adherence to polynomial time belong to the class P [S4].",
+          "reference_answers": [
+            "complexity class P",
+            "P",
+            "complexity class P"
+          ],
+          "provider_usage": {
+            "generation_ms": 1846.471,
+            "model_usage": {
+              "input_tokens": 1128,
+              "output_tokens": 27,
+              "total_tokens": 1155,
+              "input_token_details": {
+                "cache_read": 116
+              },
+              "output_token_details": {}
+            }
+          },
+          "cited_chunks": 1,
+          "invalid_citations": 0,
+          "answer_exact_match": 0.0,
+          "reference_span_hit": 1.0,
+          "answer_token_f1": 0.17391304347826086,
+          "claims": [
+            {
+              "text": "Decision problems capable of being solved by a deterministic Turing machine while maintaining adherence to polynomial time belong to the class P.",
+              "supported": true,
+              "entailment_score": 0.9907286167144775,
+              "evidence": "This forms the basis for the complexity class P, which is the set of decision problems solvable by a deterministic Turing machine within polynomial time."
+            }
+          ],
+          "unsupported_claim_rate_nli": 0.0,
+          "verifier": "cross-encoder/nli-deberta-v3-xsmall",
+          "threshold": 0.5,
+          "premise_granularity": "sentence windows (1-3) + passage",
+          "generation_and_verification_ms": 3049.925001999327,
+          "accepted_by_grounding_gate": true,
+          "abstention_reason": null
+        },
+        {
+          "id": "5725c071271a42140099d128",
+          "question": "In which direction did the water on the eastern side flow?",
+          "answer": "The water on the eastern side flowed toward the Atlantic [S1].",
+          "reference_answers": [
+            "Water on the eastern side flowed toward the Atlantic,",
+            "toward the Atlantic",
+            "toward the Atlantic"
+          ],
+          "provider_usage": {
+            "generation_ms": 2054.41,
+            "model_usage": {
+              "input_tokens": 1428,
+              "output_tokens": 15,
+              "total_tokens": 1443,
+              "input_token_details": {
+                "cache_read": 116
+              },
+              "output_token_details": {}
+            }
+          },
+          "cited_chunks": 1,
+          "invalid_citations": 0,
+          "answer_exact_match": 1.0,
+          "reference_span_hit": 1.0,
+          "answer_token_f1": 1.0,
+          "claims": [
+            {
+              "text": "The water on the eastern side flowed toward the Atlantic.",
+              "supported": true,
+              "entailment_score": 0.9944738745689392,
+              "evidence": "Water on the eastern side flowed toward the Atlantic, while to the west water flowed toward the Pacific across the Amazonas Basin."
+            }
+          ],
+          "unsupported_claim_rate_nli": 0.0,
+          "verifier": "cross-encoder/nli-deberta-v3-xsmall",
+          "threshold": 0.5,
+          "premise_granularity": "sentence windows (1-3) + passage",
+          "generation_and_verification_ms": 2991.4980430003197,
+          "accepted_by_grounding_gate": true,
+          "abstention_reason": null
+        },
+        {
+          "id": "5725db4aec44d21400f3d6be",
+          "question": "Who was the main crew of Apollo 1, of which they named themselves?",
+          "answer": "The main crew of Apollo 1 was Neil Armstrong, Michael Collins, and Buzz Aldrin, and they named their flight Apollo 1 as a motivational focus on the first manned flight [S1].",
+          "reference_answers": [
+            "Grissom, White, and Chaffee",
+            "Apollo 1",
+            "Grissom, White, and Chaffee",
+            "Grissom, White, and Chaffee"
+          ],
+          "provider_usage": {
+            "generation_ms": 2312.302,
+            "model_usage": {
+              "input_tokens": 1281,
+              "output_tokens": 41,
+              "total_tokens": 1322,
+              "input_token_details": {
+                "cache_read": 116
+              },
+              "output_token_details": {}
+            }
+          },
+          "cited_chunks": 1,
+          "invalid_citations": 0,
+          "answer_exact_match": 0.0,
+          "reference_span_hit": 1.0,
+          "answer_token_f1": 0.13793103448275862,
+          "claims": [
+            {
+              "text": "The main crew of Apollo 1 was Neil Armstrong, Michael Collins, and Buzz Aldrin, and they named their flight Apollo 1 as a motivational focus on the first manned flight.",
+              "supported": false,
+              "entailment_score": 0.4210655689239502,
+              "evidence": "Grissom, White, and Chaffee decided to name their flight Apollo 1 as a motivational focus on the first manned flight."
+            }
+          ],
+          "unsupported_claim_rate_nli": 1.0,
+          "verifier": "cross-encoder/nli-deberta-v3-xsmall",
+          "threshold": 0.5,
+          "premise_granularity": "sentence windows (1-3) + passage",
+          "generation_and_verification_ms": 3378.571334999833,
+          "accepted_by_grounding_gate": false,
+          "abstention_reason": "unsupported_generated_claims"
+        },
+        {
+          "id": "5729789b6aef051400154f6f",
+          "question": "How far apart are the outer PD ring's filaments?",
+          "answer": "The outer PD ring's filaments are arranged in rows 6.4 nanometers apart [S1].",
+          "reference_answers": [
+            "6.4 nanometers",
+            "6.4 nanometers",
+            "6.4 nanometers"
+          ],
+          "provider_usage": {
+            "generation_ms": 2183.214,
+            "model_usage": {
+              "input_tokens": 1409,
+              "output_tokens": 23,
+              "total_tokens": 1432,
+              "input_token_details": {
+                "cache_read": 116
+              },
+              "output_token_details": {}
+            }
+          },
+          "cited_chunks": 1,
+          "invalid_citations": 0,
+          "answer_exact_match": 0.0,
+          "reference_span_hit": 1.0,
+          "answer_token_f1": 0.3076923076923077,
+          "claims": [
+            {
+              "text": "The outer PD ring's filaments are arranged in rows 6.4 nanometers apart.",
+              "supported": true,
+              "entailment_score": 0.9658677577972412,
+              "evidence": "The outer plastid-dividing ring is found wrapped around the outer chloroplast membrane. It consists of filaments about 5 nanometers across, arranged in rows 6.4 nanometers apart, and shrinks to squeeze the chloroplast. This is when chloroplast constriction begins."
+            }
+          ],
+          "unsupported_claim_rate_nli": 0.0,
+          "verifier": "cross-encoder/nli-deberta-v3-xsmall",
+          "threshold": 0.5,
+          "premise_granularity": "sentence windows (1-3) + passage",
+          "generation_and_verification_ms": 3080.503459999818,
+          "accepted_by_grounding_gate": true,
+          "abstention_reason": null
+        },
+        {
+          "id": "5730c6d3b54a4f140068cc4e",
+          "question": "Who is Methodism's revered founder?",
+          "answer": "Methodism's revered founder is John Wesley [S3].",
+          "reference_answers": [
+            "John Wesley",
+            "John Wesley",
+            "John Wesley"
+          ],
+          "provider_usage": {
+            "generation_ms": 1762.966,
+            "model_usage": {
+              "input_tokens": 1190,
+              "output_tokens": 13,
+              "total_tokens": 1203,
+              "input_token_details": {
+                "cache_read": 116
+              },
+              "output_token_details": {}
+            }
+          },
+          "cited_chunks": 1,
+          "invalid_citations": 0,
+          "answer_exact_match": 0.0,
+          "reference_span_hit": 1.0,
+          "answer_token_f1": 0.5,
+          "claims": [
+            {
+              "text": "Methodism's revered founder is John Wesley.",
+              "supported": true,
+              "entailment_score": 0.9958283305168152,
+              "evidence": ". Such exemplary saints include martyrs, confessors of the Faith, evangelists, or important biblical figures such as Saint Matthew, Lutheran theologian and martyr to the Nazis Dietrich Bonhoeffer, Salvation Army Founder William Booth, African missionary David Livingstone and Methodism's revered founder John Wesley are among many cited as Protestant saints."
+            }
+          ],
+          "unsupported_claim_rate_nli": 0.0,
+          "verifier": "cross-encoder/nli-deberta-v3-xsmall",
+          "threshold": 0.5,
+          "premise_granularity": "sentence windows (1-3) + passage",
+          "generation_and_verification_ms": 2708.3651259999897,
+          "accepted_by_grounding_gate": true,
+          "abstention_reason": null
+        },
+        {
+          "id": "56d2045de7d4791d009025f5",
+          "question": "How many times have the Panthers been in the Super Bowl?",
+          "answer": "The Carolina Panthers have been in the Super Bowl twice [S6].",
+          "reference_answers": [
+            "2",
+            "second",
+            "second"
+          ],
+          "provider_usage": {
+            "generation_ms": 1789.879,
+            "model_usage": {
+              "input_tokens": 1223,
+              "output_tokens": 15,
+              "total_tokens": 1238,
+              "input_token_details": {
+                "cache_read": 116
+              },
+              "output_token_details": {}
+            }
+          },
+          "cited_chunks": 1,
+          "invalid_citations": 0,
+          "answer_exact_match": 0.0,
+          "reference_span_hit": 0.0,
+          "answer_token_f1": 0.0,
+          "claims": [
+            {
+              "text": "The Carolina Panthers have been in the Super Bowl twice.",
+              "supported": true,
+              "entailment_score": 0.9751914739608765,
+              "evidence": "Super Bowl 50 was an American football game to determine the champion of the National Football League (NFL) for the 2015 season. The American Football Conference (AFC) champion Denver Broncos defeated the National Football Conference (NFC) champion Carolina Panthers 24\u201310 to earn their third Super Bowl title."
+            }
+          ],
+          "unsupported_claim_rate_nli": 0.0,
+          "verifier": "cross-encoder/nli-deberta-v3-xsmall",
+          "threshold": 0.5,
+          "premise_granularity": "sentence windows (1-3) + passage",
+          "generation_and_verification_ms": 2713.666792999902,
+          "accepted_by_grounding_gate": true,
+          "abstention_reason": null
+        },
+        {
+          "id": "572fe92204bcaa1900d76e97",
+          "question": "A small fraction of the cold water flow from Lake Constance goes to what other lake?",
+          "answer": "A small fraction of the cold water flow from Lake Constance goes to Lake \u00dcberlingen [S1].",
+          "reference_answers": [
+            "Lake \u00dcberlingen",
+            "Lake \u00dcberlingen",
+            "Lake \u00dcberlingen"
+          ],
+          "provider_usage": {
+            "generation_ms": 2183.088,
+            "model_usage": {
+              "input_tokens": 1425,
+              "output_tokens": 22,
+              "total_tokens": 1447,
+              "input_token_details": {
+                "cache_read": 116
+              },
+              "output_token_details": {}
+            }
+          },
+          "cited_chunks": 1,
+          "invalid_citations": 0,
+          "answer_exact_match": 0.0,
+          "reference_span_hit": 1.0,
+          "answer_token_f1": 0.26666666666666666,
+          "claims": [
+            {
+              "text": "A small fraction of the cold water flow from Lake Constance goes to Lake \u00dcberlingen.",
+              "supported": true,
+              "entailment_score": 0.8924975991249084,
+              "evidence": "The flow of cold, gray mountain water continues for some distance into the lake. The cold water flows near the surface and at first doesn't mix with the warmer, green waters of Upper Lake. But then, at the so-called Rheinbrech, the Rhine water abruptly falls into the depths because of the greater density of cold water. The flow reappears on the surface at the northern (German) shore of the lake, off the island of Lindau. The water then follows the northern shore until Hagnau am Bodensee. A small fraction of the flow is diverted off the island of Mainau into Lake \u00dcberlingen"
+            }
+          ],
+          "unsupported_claim_rate_nli": 0.0,
+          "verifier": "cross-encoder/nli-deberta-v3-xsmall",
+          "threshold": 0.5,
+          "premise_granularity": "sentence windows (1-3) + passage",
+          "generation_and_verification_ms": 3120.7382099992174,
+          "accepted_by_grounding_gate": true,
+          "abstention_reason": null
+        },
+        {
+          "id": "571c3a685efbb31900334db2",
+          "question": "What is the atomic number of the element oxygen?",
+          "answer": "The atomic number of the element oxygen is 8 [S1].",
+          "reference_answers": [
+            "8",
+            "8",
+            "8",
+            "8",
+            "8"
+          ],
+          "provider_usage": {
+            "generation_ms": 1948.292,
+            "model_usage": {
+              "input_tokens": 1347,
+              "output_tokens": 15,
+              "total_tokens": 1362,
+              "input_token_details": {
+                "cache_read": 116
+              },
+              "output_token_details": {}
+            }
+          },
+          "cited_chunks": 1,
+          "invalid_citations": 0,
+          "answer_exact_match": 0.0,
+          "reference_span_hit": 1.0,
+          "answer_token_f1": 0.25,
+          "claims": [
+            {
+              "text": "The atomic number of the element oxygen is 8.",
+              "supported": true,
+              "entailment_score": 0.9948006868362427,
+              "evidence": "Oxygen is a chemical element with symbol O and atomic number 8."
+            }
+          ],
+          "unsupported_claim_rate_nli": 0.0,
+          "verifier": "cross-encoder/nli-deberta-v3-xsmall",
+          "threshold": 0.5,
+          "premise_granularity": "sentence windows (1-3) + passage",
+          "generation_and_verification_ms": 2711.0733350000373,
+          "accepted_by_grounding_gate": true,
+          "abstention_reason": null
+        },
+        {
+          "id": "572f609ca23a5019007fc5b1",
+          "question": "How much water does the Aare give to the Rhine?",
+          "answer": "The Aare contributes more than a fifth of the discharge at the Dutch border to the Rhine [S2].",
+          "reference_answers": [
+            "1,000 m3/s (35,000 cu ft/s)",
+            "1,000 m3/s"
+          ],
+          "provider_usage": {
+            "generation_ms": 2390.435,
+            "model_usage": {
+              "input_tokens": 1530,
+              "output_tokens": 24,
+              "total_tokens": 1554,
+              "input_token_details": {
+                "cache_read": 116
+              },
+              "output_token_details": {}
+            }
+          },
+          "cited_chunks": 1,
+          "invalid_citations": 0,
+          "answer_exact_match": 0.0,
+          "reference_span_hit": 0.0,
+          "answer_token_f1": 0.0,
+          "claims": [
+            {
+              "text": "The Aare contributes more than a fifth of the discharge at the Dutch border to the Rhine.",
+              "supported": true,
+              "entailment_score": 0.9953393936157227,
+              "evidence": "The Aare more than doubles the Rhine's water discharge, to an average of nearly 1,000 m3/s (35,000 cu ft/s), and provides more than a fifth of the discharge at the Dutch border."
+            }
+          ],
+          "unsupported_claim_rate_nli": 0.0,
+          "verifier": "cross-encoder/nli-deberta-v3-xsmall",
+          "threshold": 0.5,
+          "premise_granularity": "sentence windows (1-3) + passage",
+          "generation_and_verification_ms": 3729.3829190002725,
+          "accepted_by_grounding_gate": true,
+          "abstention_reason": null
+        },
+        {
+          "id": "57282358ff5b5019007d9de0",
+          "question": "What else contributes to Jacksonville's summer storms other than land heating beside the water?",
+          "answer": "The text does not provide specific information about other factors contributing to Jacksonville's summer storms besides land heating.",
+          "reference_answers": [
+            "high humidity",
+            "high humidity",
+            "extremely high humidity"
+          ],
+          "provider_usage": {
+            "generation_ms": 2294.947,
+            "model_usage": {
+              "input_tokens": 1438,
+              "output_tokens": 21,
+              "total_tokens": 1459,
+              "input_token_details": {
+                "cache_read": 116
+              },
+              "output_token_details": {}
+            }
+          },
+          "cited_chunks": 0,
+          "invalid_citations": 0,
+          "answer_exact_match": 0.0,
+          "reference_span_hit": 0.0,
+          "answer_token_f1": 0.0,
+          "claims": [],
+          "unsupported_claim_rate_nli": 0.0,
+          "generation_and_verification_ms": 2316.4940850001585,
+          "accepted_by_grounding_gate": false,
+          "abstention_reason": "model_abstained"
+        },
+        {
+          "id": "5725c3a9ec44d21400f3d505",
+          "question": "Which court is the highest court in the European Union?",
+          "answer": "The highest court in the European Union is the European Court of Justice (ECJ), which is the final authority for interpreting European Union law [S1, S2, S7].",
+          "reference_answers": [
+            "The European Court of Justice",
+            "The European Court of Justice",
+            "The European Court of Justice",
+            "The European Court of Justice"
+          ],
+          "provider_usage": {
+            "generation_ms": 2157.716,
+            "model_usage": {
+              "input_tokens": 973,
+              "output_tokens": 38,
+              "total_tokens": 1011,
+              "input_token_details": {
+                "cache_read": 116
+              },
+              "output_token_details": {}
+            }
+          },
+          "cited_chunks": 3,
+          "invalid_citations": 0,
+          "answer_exact_match": 0.0,
+          "reference_span_hit": 1.0,
+          "answer_token_f1": 0.3333333333333333,
+          "claims": [
+            {
+              "text": "The highest court in the European Union is the European Court of Justice (ECJ), which is the final authority for interpreting European Union law.",
+              "supported": false,
+              "entailment_score": 0.057451795786619186,
+              "evidence": "The judicial branch of the EU has played an important role in the development of EU law, by assuming the task of interpreting the treaties, and accelerating economic and political integration. Today the Court of Justice of the European Union (CJEU) is the main judicial body, within which there is a higher European Court of Justice (commonly abbreviated as ECJ) that deals with cases that contain more public importance, and a General Court that deals with issues of detail but without general importance."
+            }
+          ],
+          "unsupported_claim_rate_nli": 1.0,
+          "verifier": "cross-encoder/nli-deberta-v3-xsmall",
+          "threshold": 0.5,
+          "premise_granularity": "sentence windows (1-3) + passage",
+          "generation_and_verification_ms": 4170.977042999766,
+          "accepted_by_grounding_gate": false,
+          "abstention_reason": "unsupported_generated_claims"
+        },
+        {
+          "id": "57287e512ca10214002da3fb",
+          "question": "The mother of which emperor was a concubine?",
+          "answer": "The mother of Emperor Tem\u00fcr Khan was a concubine [S2].",
+          "reference_answers": [
+            "Tugh Temur",
+            "Tugh Temur",
+            "Tugh Temur"
+          ],
+          "provider_usage": {
+            "generation_ms": 3529.663,
+            "model_usage": {
+              "input_tokens": 1257,
+              "output_tokens": 17,
+              "total_tokens": 1274,
+              "input_token_details": {
+                "cache_read": 116
+              },
+              "output_token_details": {}
+            }
+          },
+          "cited_chunks": 1,
+          "invalid_citations": 0,
+          "answer_exact_match": 0.0,
+          "reference_span_hit": 0.0,
+          "answer_token_f1": 0.0,
+          "claims": [
+            {
+              "text": "The mother of Emperor Tem\u00fcr Khan was a concubine.",
+              "supported": false,
+              "entailment_score": 0.0013813554542139173,
+              "evidence": ". Thus, Zhenjin's third son, with the support of his mother K\u00f6kejin and the minister Bayan, succeeded the throne and ruled as Tem\u00fcr Khan, or Emperor Chengzong, from 1294 to 1307."
+            }
+          ],
+          "unsupported_claim_rate_nli": 1.0,
+          "verifier": "cross-encoder/nli-deberta-v3-xsmall",
+          "threshold": 0.5,
+          "premise_granularity": "sentence windows (1-3) + passage",
+          "generation_and_verification_ms": 4687.876627000151,
+          "accepted_by_grounding_gate": false,
+          "abstention_reason": "unsupported_generated_claims"
+        },
+        {
+          "id": "573098f38ab72b1400f9c5d2",
+          "question": "European imperialism was focused on what?",
+          "answer": "European imperialism was focused on economic growth by collecting resources from colonies, in combination with assuming political control by military and political means [S3].",
+          "reference_answers": [
+            "economic growth",
+            "economic growth",
+            "economic growth",
+            "economic growth",
+            "economic growth"
+          ],
+          "provider_usage": {
+            "generation_ms": 3205.129,
+            "model_usage": {
+              "input_tokens": 1336,
+              "output_tokens": 29,
+              "total_tokens": 1365,
+              "input_token_details": {
+                "cache_read": 116
+              },
+              "output_token_details": {}
+            }
+          },
+          "cited_chunks": 1,
+          "invalid_citations": 0,
+          "answer_exact_match": 0.0,
+          "reference_span_hit": 1.0,
+          "answer_token_f1": 0.16,
+          "claims": [
+            {
+              "text": "European imperialism was focused on economic growth by collecting resources from colonies, in combination with assuming political control by military and political means.",
+              "supported": true,
+              "entailment_score": 0.9932994842529297,
+              "evidence": "Europe's expansion into territorial imperialism was largely focused on economic growth by collecting resources from colonies, in combination with assuming political control by military and political means. The colonization of India in the mid-18th century offers an example of this focus: there, the \"British exploited the political weakness of the Mughal state, and, while military activity was important at various times, the economic and administrative incorporation of local elites was also of crucial significance\" for the establishment of control over the subcontinent's resources, markets, and manpower"
+            }
+          ],
+          "unsupported_claim_rate_nli": 0.0,
+          "verifier": "cross-encoder/nli-deberta-v3-xsmall",
+          "threshold": 0.5,
+          "premise_granularity": "sentence windows (1-3) + passage",
+          "generation_and_verification_ms": 4405.010168999979,
+          "accepted_by_grounding_gate": true,
+          "abstention_reason": null
+        },
+        {
+          "id": "572673f5708984140094c69d",
+          "question": "What type of gradients are formed by faulting and other deformational processes?",
+          "answer": "Faulting and other deformational processes create topographic gradients, which are gradients in elevation [S1]. These gradients are formed as material on the rock unit that is increasing in elevation is eroded by hillslopes and channels, while the material that is decreasing in elevation is deposited on the rock unit that is going down [S1].",
+          "reference_answers": [
+            "topographic gradients",
+            "topographic",
+            "topographic"
+          ],
+          "provider_usage": {
+            "generation_ms": 2813.141,
+            "model_usage": {
+              "input_tokens": 1180,
+              "output_tokens": 69,
+              "total_tokens": 1249,
+              "input_token_details": {
+                "cache_read": 116
+              },
+              "output_token_details": {}
+            }
+          },
+          "cited_chunks": 1,
+          "invalid_citations": 0,
+          "answer_exact_match": 0.0,
+          "reference_span_hit": 1.0,
+          "answer_token_f1": 0.0784313725490196,
+          "claims": [
+            {
+              "text": "Faulting and other deformational processes create topographic gradients, which are gradients in elevation.",
+              "supported": true,
+              "entailment_score": 0.9749290943145752,
+              "evidence": "Faulting and other deformational processes result in the creation of topographic gradients, causing material on the rock unit that is increasing in elevation to be eroded by hillslopes and channels."
+            },
+            {
+              "text": "These gradients are formed as material on the rock unit that is increasing in elevation is eroded by hillslopes and channels, while the material that is decreasing in elevation is deposited on the rock unit that is going down.",
+              "supported": false,
+              "entailment_score": 0.0880899578332901,
+              "evidence": "Faulting and other deformational processes result in the creation of topographic gradients, causing material on the rock unit that is increasing in elevation to be eroded by hillslopes and channels."
+            }
+          ],
+          "unsupported_claim_rate_nli": 0.5,
+          "verifier": "cross-encoder/nli-deberta-v3-xsmall",
+          "threshold": 0.5,
+          "premise_granularity": "sentence windows (1-3) + passage",
+          "generation_and_verification_ms": 6813.06729500011,
+          "accepted_by_grounding_gate": false,
+          "abstention_reason": "unsupported_generated_claims"
+        },
+        {
+          "id": "56beb57b3aeaaa14008c927a",
+          "question": "How many picks did Peyton Manning throw in the season?",
+          "answer": "Peyton Manning threw 13 picks during the season [S1].",
+          "reference_answers": [
+            "17",
+            "17",
+            "17"
+          ],
+          "provider_usage": {
+            "generation_ms": 2081.895,
+            "model_usage": {
+              "input_tokens": 1315,
+              "output_tokens": 17,
+              "total_tokens": 1332,
+              "input_token_details": {
+                "cache_read": 116
+              },
+              "output_token_details": {}
+            }
+          },
+          "cited_chunks": 1,
+          "invalid_citations": 0,
+          "answer_exact_match": 0.0,
+          "reference_span_hit": 0.0,
+          "answer_token_f1": 0.0,
+          "claims": [
+            {
+              "text": "Peyton Manning threw 13 picks during the season.",
+              "supported": false,
+              "entailment_score": 0.007814204320311546,
+              "evidence": ". Osweiler was injured, however, leading to Manning's return during the Week 17 regular season finale, where the Broncos were losing 13\u20137 against the 4\u201311 San Diego Chargers, resulting in Manning re-claiming the starting quarterback position for the playoffs by leading the team to a key 27\u201320 win that enabled the team to clinch the number one overall AFC seed."
+            }
+          ],
+          "unsupported_claim_rate_nli": 1.0,
+          "verifier": "cross-encoder/nli-deberta-v3-xsmall",
+          "threshold": 0.5,
+          "premise_granularity": "sentence windows (1-3) + passage",
+          "generation_and_verification_ms": 3473.233042999709,
+          "accepted_by_grounding_gate": false,
+          "abstention_reason": "unsupported_generated_claims"
+        },
+        {
+          "id": "5709686c200fba1400367f77",
+          "question": "When did BSkyB launch it's HDTV service?",
+          "answer": "BSkyB launched its HDTV service, Sky+ HD, on 22 May 2006 [S1].",
+          "reference_answers": [
+            "22 May 2006",
+            "on 22 May 2006",
+            "22 May 2006"
+          ],
+          "provider_usage": {
+            "generation_ms": 2220.824,
+            "model_usage": {
+              "input_tokens": 1341,
+              "output_tokens": 28,
+              "total_tokens": 1369,
+              "input_token_details": {
+                "cache_read": 116
+              },
+              "output_token_details": {}
+            }
+          },
+          "cited_chunks": 1,
+          "invalid_citations": 0,
+          "answer_exact_match": 0.0,
+          "reference_span_hit": 1.0,
+          "answer_token_f1": 0.5333333333333333,
+          "claims": [
+            {
+              "text": "BSkyB launched its HDTV service, Sky+ HD, on 22 May 2006.",
+              "supported": true,
+              "entailment_score": 0.9934216141700745,
+              "evidence": "BSkyB launched its HDTV service, Sky+ HD, on 22 May 2006."
+            }
+          ],
+          "unsupported_claim_rate_nli": 0.0,
+          "verifier": "cross-encoder/nli-deberta-v3-xsmall",
+          "threshold": 0.5,
+          "premise_granularity": "sentence windows (1-3) + passage",
+          "generation_and_verification_ms": 3311.5627520001,
+          "accepted_by_grounding_gate": true,
+          "abstention_reason": null
+        }
+      ]
+    },
+    {
+      "model": "qwen3:4b-instruct-2507-q4_K_M",
+      "summary": {
+        "cases": 30,
+        "exact_match": 0.06666666666666667,
+        "token_f1": 0.2881950172685735,
+        "reference_span_hit": 0.8333333333333334,
+        "abstention_rate": 0.1,
+        "unsupported_claim_rate_nli": 0.09567901234567901,
+        "grounding_gate_coverage": 0.7666666666666667,
+        "delivered_with_reference_answer": 0.6666666666666666,
+        "delivered_without_reference_answer": 0.1,
+        "median_generation_and_verification_ms": 7307.271503500488,
+        "invalid_citation_rate": 0,
+        "limitations": "Generator backend is explicit; NLI is an imperfect automated contextual-support measurement, not a truth oracle."
+      },
+      "cases": [
+        {
+          "id": "573786b51c4567190057448d",
+          "question": "How might gravity effects be observed differently according to Newton?",
+          "answer": "Newton observed that gravity effects could be seen differently at larger distances by noting that the acceleration of the Moon around the Earth could be explained by the same gravitational force as that causing objects to fall on Earth, provided the acceleration due to gravity decreased according to an inverse square law [S1]. He also realized that the gravitational acceleration is proportional to the mass of the attracting body [S1]. This allowed him to derive a formula relating the mass and radius of the Earth to gravitational acceleration [S1].",
+          "reference_answers": [
+            "at larger distances.",
+            "at larger distances",
+            "at larger distances",
+            "at larger distances"
+          ],
+          "provider_usage": {
+            "generation_ms": 21845.737,
+            "model_usage": {
+              "input_tokens": 1229,
+              "output_tokens": 100,
+              "total_tokens": 1329,
+              "input_token_details": {
+                "cache_read": 0
+              },
+              "output_token_details": {}
+            }
+          },
+          "cited_chunks": 1,
+          "invalid_citations": 0,
+          "answer_exact_match": 0.0,
+          "reference_span_hit": 1.0,
+          "answer_token_f1": 0.07792207792207792,
+          "claims": [
+            {
+              "text": "Newton observed that gravity effects could be seen differently at larger distances by noting that the acceleration of the Moon around the Earth could be explained by the same gravitational force as that causing objects to fall on Earth, provided the acceleration due to gravity decreased according to an inverse square law.",
+              "supported": false,
+              "entailment_score": 0.4682893455028534,
+              "evidence": "Newton came to realize that the effects of gravity might be observed in different ways at larger distances. In particular, Newton determined that the acceleration of the Moon around the Earth could be ascribed to the same force of gravity if the acceleration due to gravity decreased as an inverse square law."
+            },
+            {
+              "text": "He also realized that the gravitational acceleration is proportional to the mass of the attracting body.",
+              "supported": true,
+              "entailment_score": 0.9660223722457886,
+              "evidence": "Further, Newton realized that the acceleration due to gravity is proportional to the mass of the attracting body."
+            },
+            {
+              "text": "This allowed him to derive a formula relating the mass and radius of the Earth to gravitational acceleration.",
+              "supported": true,
+              "entailment_score": 0.9922466278076172,
+              "evidence": "Further, Newton realized that the acceleration due to gravity is proportional to the mass of the attracting body. Combining these ideas gives a formula that relates the mass () and the radius () of the Earth to the gravitational acceleration:"
+            }
+          ],
+          "unsupported_claim_rate_nli": 0.3333333333333333,
+          "verifier": "cross-encoder/nli-deberta-v3-xsmall",
+          "threshold": 0.5,
+          "premise_granularity": "sentence windows (1-3) + passage",
+          "generation_and_verification_ms": 34792.41959999945,
+          "accepted_by_grounding_gate": false,
+          "abstention_reason": "unsupported_generated_claims"
+        },
+        {
+          "id": "56e7714a00c9c71400d77138",
+          "question": "What is the basic pay for a teacher, in Euros?",
+          "answer": "The basic pay for a starting teacher in Ireland is \u20ac27,814 per year [S1].",
+          "reference_answers": [
+            "27,814",
+            "\u20ac27,814",
+            "\u20ac27,814"
+          ],
+          "provider_usage": {
+            "generation_ms": 5243.322,
+            "model_usage": {
+              "input_tokens": 1185,
+              "output_tokens": 24,
+              "total_tokens": 1209,
+              "input_token_details": {
+                "cache_read": 116
+              },
+              "output_token_details": {}
+            }
+          },
+          "cited_chunks": 1,
+          "invalid_citations": 0,
+          "answer_exact_match": 0.0,
+          "reference_span_hit": 1.0,
+          "answer_token_f1": 0.16666666666666666,
+          "claims": [
+            {
+              "text": "The basic pay for a starting teacher in Ireland is \u20ac27,814 per year.",
+              "supported": true,
+              "entailment_score": 0.9253802299499512,
+              "evidence": "Salaries for primary teachers in Ireland depend mainly on seniority (i.e. holding the position of principal, deputy principal or assistant principal), experience and qualifications. Extra pay is also given for teaching through the Irish language, in a Gaeltacht area or on an island. The basic pay for a starting teacher is \u20ac27,814 p.a., rising incrementally to \u20ac53,423 for a teacher with 25 years service. A principal of a large school with many years experience and several qualifications (M.A., H.Dip., etc.) could earn over \u20ac90,000."
+            }
+          ],
+          "unsupported_claim_rate_nli": 0.0,
+          "verifier": "cross-encoder/nli-deberta-v3-xsmall",
+          "threshold": 0.5,
+          "premise_granularity": "sentence windows (1-3) + passage",
+          "generation_and_verification_ms": 7442.735462000201,
+          "accepted_by_grounding_gate": true,
+          "abstention_reason": null
+        },
+        {
+          "id": "56bf6b303aeaaa14008c960e",
+          "question": "What position does Jerricho Cotchery play?",
+          "answer": "Jerricho Cotchery plays as a receiver. [S2]",
+          "reference_answers": [
+            "receivers",
+            "receivers",
+            "receivers"
+          ],
+          "provider_usage": {
+            "generation_ms": 4466.842,
+            "model_usage": {
+              "input_tokens": 1241,
+              "output_tokens": 16,
+              "total_tokens": 1257,
+              "input_token_details": {
+                "cache_read": 116
+              },
+              "output_token_details": {}
+            }
+          },
+          "cited_chunks": 1,
+          "invalid_citations": 0,
+          "answer_exact_match": 0.0,
+          "reference_span_hit": 0.0,
+          "answer_token_f1": 0.0,
+          "claims": [
+            {
+              "text": "Jerricho Cotchery plays as a receiver.",
+              "supported": true,
+              "entailment_score": 0.9895231127738953,
+              "evidence": "Other key receivers included veteran Jerricho Cotchery (39 receptions for 485 yards), rookie Devin Funchess (31 receptions for 473 yards and five touchdowns), and second-year receiver Corey Brown (31 receptions for 447 yards)"
+            }
+          ],
+          "unsupported_claim_rate_nli": 0.0,
+          "verifier": "cross-encoder/nli-deberta-v3-xsmall",
+          "threshold": 0.5,
+          "premise_granularity": "sentence windows (1-3) + passage",
+          "generation_and_verification_ms": 5632.788543000061,
+          "accepted_by_grounding_gate": true,
+          "abstention_reason": null
+        },
+        {
+          "id": "57266e72f1498d1400e8df8f",
+          "question": "How can you find the absolute age of sedimentary rock units which do not contain radioactive isotopes?",
+          "answer": "You can find the absolute age of sedimentary rock units which do not contain radioactive isotopes by dating the lava and volcanic ash layers found within the stratigraphic sequence [S1]. These dated layers provide absolute age data that can be used to calibrate the relative dating of the sedimentary rock units [S1].",
+          "reference_answers": [
+            "Dating of lava and volcanic ash layers found within a stratigraphic sequence",
+            "Dating of lava and volcanic ash layers",
+            "stratigraphic sequence",
+            "Dating of lava and volcanic ash layers found within a stratigraphic sequence"
+          ],
+          "provider_usage": {
+            "generation_ms": 6028.164,
+            "model_usage": {
+              "input_tokens": 1219,
+              "output_tokens": 65,
+              "total_tokens": 1284,
+              "input_token_details": {
+                "cache_read": 116
+              },
+              "output_token_details": {}
+            }
+          },
+          "cited_chunks": 0,
+          "invalid_citations": 0,
+          "answer_exact_match": 0.0,
+          "reference_span_hit": 1.0,
+          "answer_token_f1": 0.39285714285714285,
+          "claims": [],
+          "unsupported_claim_rate_nli": 0.0,
+          "generation_and_verification_ms": 6040.857877000235,
+          "accepted_by_grounding_gate": false,
+          "abstention_reason": "model_abstained"
+        },
+        {
+          "id": "5726241189a1e219009ac2df",
+          "question": "On an international level, which industry's competitive positions is affected? ",
+          "answer": "The automobiles industry's competitive positions are affected [S1].",
+          "reference_answers": [
+            "automobiles",
+            "automobiles",
+            "automobiles",
+            "automobiles",
+            "automobiles"
+          ],
+          "provider_usage": {
+            "generation_ms": 4169.566,
+            "model_usage": {
+              "input_tokens": 1201,
+              "output_tokens": 13,
+              "total_tokens": 1214,
+              "input_token_details": {
+                "cache_read": 116
+              },
+              "output_token_details": {}
+            }
+          },
+          "cited_chunks": 1,
+          "invalid_citations": 0,
+          "answer_exact_match": 0.0,
+          "reference_span_hit": 1.0,
+          "answer_token_f1": 0.2857142857142857,
+          "claims": [
+            {
+              "text": "The automobiles industry's competitive positions are affected.",
+              "supported": true,
+              "entailment_score": 0.9865921139717102,
+              "evidence": "On an international level, the price increases changed competitive positions in many industries, such as automobiles. Macroeconomic problems consisted of both inflationary and deflationary impacts. The embargo left oil companies searching for new ways to increase oil supplies, even in rugged terrain such as the Arctic."
+            }
+          ],
+          "unsupported_claim_rate_nli": 0.0,
+          "verifier": "cross-encoder/nli-deberta-v3-xsmall",
+          "threshold": 0.5,
+          "premise_granularity": "sentence windows (1-3) + passage",
+          "generation_and_verification_ms": 5356.80508600035,
+          "accepted_by_grounding_gate": true,
+          "abstention_reason": null
+        },
+        {
+          "id": "5725c948ec44d21400f3d577",
+          "question": "What was the advantage that the LOR method produced in the event of a spacecraft failure?",
+          "answer": "The LOR method allowed the Lunar Module to be used as a \"lifeboat\" in the event of a failure of the command ship, providing propulsion, electrical power, and life support to ensure crew safety [S1].",
+          "reference_answers": [
+            "spacecraft to be used as a \"lifeboat\"",
+            "allowing the lander spacecraft to be used as a \"lifeboat",
+            "allowing the lander spacecraft to be used as a \"lifeboat\"",
+            "lifeboat",
+            "allowing the lander spacecraft to be used as a \"lifeboat\""
+          ],
+          "provider_usage": {
+            "generation_ms": 5329.037,
+            "model_usage": {
+              "input_tokens": 1221,
+              "output_tokens": 46,
+              "total_tokens": 1267,
+              "input_token_details": {
+                "cache_read": 117
+              },
+              "output_token_details": {}
+            }
+          },
+          "cited_chunks": 1,
+          "invalid_citations": 0,
+          "answer_exact_match": 0.0,
+          "reference_span_hit": 1.0,
+          "answer_token_f1": 0.29411764705882354,
+          "claims": [
+            {
+              "text": "The LOR method allowed the Lunar Module to be used as a \"lifeboat\" in the event of a failure of the command ship, providing propulsion, electrical power, and life support to ensure crew safety.",
+              "supported": true,
+              "entailment_score": 0.9889693260192871,
+              "evidence": "The LOR method had the advantage of allowing the lander spacecraft to be used as a \"lifeboat\" in the event of a failure of the command ship. Some documents prove this theory was discussed before and after the method was chosen. A 1964 MSC study concluded, \"The LM [as lifeboat] ... was finally dropped, because no single reasonable CSM failure could be identified that would prohibit use of the SPS.\" Ironically, just such a failure happened on Apollo 13 when an oxygen tank explosion left the command ship without electrical power. The Lunar Module provided propulsion, electrical power and life support to get the crew home safely."
+            }
+          ],
+          "unsupported_claim_rate_nli": 0.0,
+          "verifier": "cross-encoder/nli-deberta-v3-xsmall",
+          "threshold": 0.5,
+          "premise_granularity": "sentence windows (1-3) + passage",
+          "generation_and_verification_ms": 6856.961169999522,
+          "accepted_by_grounding_gate": true,
+          "abstention_reason": null
+        },
+        {
+          "id": "56f8ac579e9bad19000a02ba",
+          "question": "What did Luther get implicated in concerning Philip I?",
+          "answer": "Luther got implicated in the bigamy of Philip I, Landgrave of Hesse, who wanted to marry one of his wife's ladies-in-waiting [S1].",
+          "reference_answers": [
+            "bigamy",
+            "bigamy",
+            "bigamy"
+          ],
+          "provider_usage": {
+            "generation_ms": 5751.449,
+            "model_usage": {
+              "input_tokens": 1411,
+              "output_tokens": 37,
+              "total_tokens": 1448,
+              "input_token_details": {
+                "cache_read": 116
+              },
+              "output_token_details": {}
+            }
+          },
+          "cited_chunks": 1,
+          "invalid_citations": 0,
+          "answer_exact_match": 0.0,
+          "reference_span_hit": 1.0,
+          "answer_token_f1": 0.09523809523809523,
+          "claims": [
+            {
+              "text": "Luther got implicated in the bigamy of Philip I, Landgrave of Hesse, who wanted to marry one of his wife's ladies-in-waiting.",
+              "supported": true,
+              "entailment_score": 0.9960903525352478,
+              "evidence": "From December 1539, Luther became implicated in the bigamy of Philip I, Landgrave of Hesse, who wanted to marry one of his wife's ladies-in-waiting. Philip solicited the approval of Luther, Melanchthon, and Bucer, citing as a precedent the polygamy of the patriarchs."
+            }
+          ],
+          "unsupported_claim_rate_nli": 0.0,
+          "verifier": "cross-encoder/nli-deberta-v3-xsmall",
+          "threshold": 0.5,
+          "premise_granularity": "sentence windows (1-3) + passage",
+          "generation_and_verification_ms": 7313.074378000238,
+          "accepted_by_grounding_gate": true,
+          "abstention_reason": null
+        },
+        {
+          "id": "56e7535037bdd419002c3e72",
+          "question": "What is the youngest student a teacher might have?",
+          "answer": "You do not know.",
+          "reference_answers": [
+            "infants",
+            "infants",
+            "infants"
+          ],
+          "provider_usage": {
+            "generation_ms": 3744.07,
+            "model_usage": {
+              "input_tokens": 1130,
+              "output_tokens": 6,
+              "total_tokens": 1136,
+              "input_token_details": {
+                "cache_read": 116
+              },
+              "output_token_details": {}
+            }
+          },
+          "cited_chunks": 0,
+          "invalid_citations": 0,
+          "answer_exact_match": 0.0,
+          "reference_span_hit": 0.0,
+          "answer_token_f1": 0.0,
+          "claims": [],
+          "unsupported_claim_rate_nli": 0.0,
+          "generation_and_verification_ms": 3756.4192509998975,
+          "accepted_by_grounding_gate": false,
+          "abstention_reason": "model_abstained"
+        },
+        {
+          "id": "572f60f4947a6a140053c8ee",
+          "question": "How wide is the Upper Rhine Plain? ",
+          "answer": "The Upper Rhine Plain is about 300 km long and up to 40 km wide [S1].",
+          "reference_answers": [
+            "40 km wide",
+            "40 km wide",
+            "40 km"
+          ],
+          "provider_usage": {
+            "generation_ms": 5375.459,
+            "model_usage": {
+              "input_tokens": 1424,
+              "output_tokens": 26,
+              "total_tokens": 1450,
+              "input_token_details": {
+                "cache_read": 116
+              },
+              "output_token_details": {}
+            }
+          },
+          "cited_chunks": 1,
+          "invalid_citations": 0,
+          "answer_exact_match": 0.0,
+          "reference_span_hit": 1.0,
+          "answer_token_f1": 0.35294117647058826,
+          "claims": [
+            {
+              "text": "The Upper Rhine Plain is about 300 km long and up to 40 km wide.",
+              "supported": true,
+              "entailment_score": 0.9909670948982239,
+              "evidence": "The river now flows North as Upper Rhine through the Upper Rhine Plain, which is about 300 km long and up to 40 km wide."
+            }
+          ],
+          "unsupported_claim_rate_nli": 0.0,
+          "verifier": "cross-encoder/nli-deberta-v3-xsmall",
+          "threshold": 0.5,
+          "premise_granularity": "sentence windows (1-3) + passage",
+          "generation_and_verification_ms": 6520.133586000156,
+          "accepted_by_grounding_gate": true,
+          "abstention_reason": null
+        },
+        {
+          "id": "56e1262fcd28a01900c67657",
+          "question": "What was one of Tesla's books where articles can be read?",
+          "answer": "One of Tesla's books where articles can be read is \"Inventions, Researches and Writings of Nikola Tesla.\" [S3]",
+          "reference_answers": [
+            "Inventions, Researches and Writings of Nikola Tesla.",
+            "Researches and Writings of Nikola Tesla",
+            "Researches and Writings of Nikola Tesla"
+          ],
+          "provider_usage": {
+            "generation_ms": 4002.091,
+            "model_usage": {
+              "input_tokens": 970,
+              "output_tokens": 30,
+              "total_tokens": 1000,
+              "input_token_details": {
+                "cache_read": 116
+              },
+              "output_token_details": {}
+            }
+          },
+          "cited_chunks": 1,
+          "invalid_citations": 0,
+          "answer_exact_match": 0.0,
+          "reference_span_hit": 1.0,
+          "answer_token_f1": 0.5833333333333334,
+          "claims": [
+            {
+              "text": "One of Tesla's books where articles can be read is \"Inventions, Researches and Writings of Nikola Tesla.\"",
+              "supported": true,
+              "entailment_score": 0.9849062561988831,
+              "evidence": "Many of Tesla's writings are freely available on the web, including the article \"The Problem of Increasing Human Energy,\" published in The Century Magazine in 1900, and the article \"Experiments With Alternate Currents Of High Potential And High Frequency,\" published in his book Inventions, Researches and Writings of Nikola Tesla."
+            }
+          ],
+          "unsupported_claim_rate_nli": 0.0,
+          "verifier": "cross-encoder/nli-deberta-v3-xsmall",
+          "threshold": 0.5,
+          "premise_granularity": "sentence windows (1-3) + passage",
+          "generation_and_verification_ms": 5094.724086000497,
+          "accepted_by_grounding_gate": true,
+          "abstention_reason": null
+        },
+        {
+          "id": "57309a6c2461fd1900a9cf03",
+          "question": "What is considered the Mother Church of American Methodism?",
+          "answer": "The Lovely Lane Methodist Church is considered the Mother Church of American Methodism [S1].",
+          "reference_answers": [
+            "Lovely Lane Methodist Church",
+            "Lovely Lane Methodist Church,",
+            "Lovely Lane Methodist Church"
+          ],
+          "provider_usage": {
+            "generation_ms": 4403.242,
+            "model_usage": {
+              "input_tokens": 1183,
+              "output_tokens": 19,
+              "total_tokens": 1202,
+              "input_token_details": {
+                "cache_read": 116
+              },
+              "output_token_details": {}
+            }
+          },
+          "cited_chunks": 1,
+          "invalid_citations": 0,
+          "answer_exact_match": 0.0,
+          "reference_span_hit": 1.0,
+          "answer_token_f1": 0.5333333333333333,
+          "claims": [
+            {
+              "text": "The Lovely Lane Methodist Church is considered the Mother Church of American Methodism.",
+              "supported": true,
+              "entailment_score": 0.9823839664459229,
+              "evidence": "The conference was held at the Lovely Lane Methodist Church, considered the Mother Church of American Methodism."
+            }
+          ],
+          "unsupported_claim_rate_nli": 0.0,
+          "verifier": "cross-encoder/nli-deberta-v3-xsmall",
+          "threshold": 0.5,
+          "premise_granularity": "sentence windows (1-3) + passage",
+          "generation_and_verification_ms": 5225.791502999527,
+          "accepted_by_grounding_gate": true,
+          "abstention_reason": null
+        },
+        {
+          "id": "572827fc3acd2414000df5be",
+          "question": "How many men older than 18 are there for every 100 women?",
+          "answer": "For every 100 females age 18 and over, there were 91.3 males [S1]. Therefore, there are 91.3 men older than 18 for every 100 women.",
+          "reference_answers": [
+            "91.3",
+            "91.3",
+            "91.3"
+          ],
+          "provider_usage": {
+            "generation_ms": 6297.928,
+            "model_usage": {
+              "input_tokens": 1342,
+              "output_tokens": 50,
+              "total_tokens": 1392,
+              "input_token_details": {
+                "cache_read": 117
+              },
+              "output_token_details": {}
+            }
+          },
+          "cited_chunks": 1,
+          "invalid_citations": 0,
+          "answer_exact_match": 0.0,
+          "reference_span_hit": 1.0,
+          "answer_token_f1": 0.08,
+          "claims": [
+            {
+              "text": "For every 100 females age 18 and over, there were 91.3 males.",
+              "supported": true,
+              "entailment_score": 0.990817666053772,
+              "evidence": "For every 100 females age 18 and over, there were 91.3 males."
+            },
+            {
+              "text": "Therefore, there are 91.3 men older than 18 for every 100 women.",
+              "supported": true,
+              "entailment_score": 0.9789761900901794,
+              "evidence": "For every 100 females age 18 and over, there were 91.3 males."
+            }
+          ],
+          "unsupported_claim_rate_nli": 0.0,
+          "verifier": "cross-encoder/nli-deberta-v3-xsmall",
+          "threshold": 0.5,
+          "premise_granularity": "sentence windows (1-3) + passage",
+          "generation_and_verification_ms": 8491.311546000361,
+          "accepted_by_grounding_gate": true,
+          "abstention_reason": null
+        },
+        {
+          "id": "56d7096b0d65d214001982fd",
+          "question": "Newton was the number one pick in which draft?",
+          "answer": "Newton was the number one pick in the 2011 draft [S1].",
+          "reference_answers": [
+            "2011",
+            "2011",
+            "2011"
+          ],
+          "provider_usage": {
+            "generation_ms": 5666.033,
+            "model_usage": {
+              "input_tokens": 1432,
+              "output_tokens": 19,
+              "total_tokens": 1451,
+              "input_token_details": {
+                "cache_read": 116
+              },
+              "output_token_details": {}
+            }
+          },
+          "cited_chunks": 1,
+          "invalid_citations": 0,
+          "answer_exact_match": 0.0,
+          "reference_span_hit": 1.0,
+          "answer_token_f1": 0.2222222222222222,
+          "claims": [
+            {
+              "text": "Newton was the number one pick in the 2011 draft.",
+              "supported": true,
+              "entailment_score": 0.9927438497543335,
+              "evidence": "Manning was the #1 selection of the 1998 NFL draft, while Newton was picked first in 2011."
+            }
+          ],
+          "unsupported_claim_rate_nli": 0.0,
+          "verifier": "cross-encoder/nli-deberta-v3-xsmall",
+          "threshold": 0.5,
+          "premise_granularity": "sentence windows (1-3) + passage",
+          "generation_and_verification_ms": 6507.885043999522,
+          "accepted_by_grounding_gate": true,
+          "abstention_reason": null
+        },
+        {
+          "id": "56d6f3500d65d21400198290",
+          "question": "How many interceptions are the Panthers defense credited with in 2015?",
+          "answer": "The Panthers defense is credited with 24 interceptions in 2015 [S1]. This is explicitly stated in the text: \"The Panthers defense gave up just 308 points, ranking sixth in the league, while also leading the NFL in interceptions with 24.\"",
+          "reference_answers": [
+            "24",
+            "24",
+            "24"
+          ],
+          "provider_usage": {
+            "generation_ms": 7024.044,
+            "model_usage": {
+              "input_tokens": 1349,
+              "output_tokens": 60,
+              "total_tokens": 1409,
+              "input_token_details": {
+                "cache_read": 116
+              },
+              "output_token_details": {}
+            }
+          },
+          "cited_chunks": 1,
+          "invalid_citations": 0,
+          "answer_exact_match": 0.0,
+          "reference_span_hit": 1.0,
+          "answer_token_f1": 0.05714285714285714,
+          "claims": [
+            {
+              "text": "The Panthers defense is credited with 24 interceptions in 2015.",
+              "supported": false,
+              "entailment_score": 0.0030997165013104677,
+              "evidence": "The Panthers defense gave up just 308 points, ranking sixth in the league, while also leading the NFL in interceptions with 24 and boasting four Pro Bowl selections. Pro Bowl defensive tackle Kawann Short led the team in sacks with 11, while also forcing three fumbles and recovering two. Fellow lineman Mario Addison added 6\u00bd sacks. The Panthers line also featured veteran defensive end Jared Allen, a 5-time pro bowler who was the NFL's active career sack leader with 136, along with defensive end Kony Ealy, who had 5 sacks in just 9 starts"
+            },
+            {
+              "text": "This is explicitly stated in the text: \"The Panthers defense gave up just 308 points, ranking sixth in the league, while also leading the NFL in interceptions with 24.\"",
+              "supported": false,
+              "entailment_score": 0.0011602892773225904,
+              "evidence": "The Panthers defense gave up just 308 points, ranking sixth in the league, while also leading the NFL in interceptions with 24 and boasting four Pro Bowl selections."
+            }
+          ],
+          "unsupported_claim_rate_nli": 1.0,
+          "verifier": "cross-encoder/nli-deberta-v3-xsmall",
+          "threshold": 0.5,
+          "premise_granularity": "sentence windows (1-3) + passage",
+          "generation_and_verification_ms": 10063.676088999273,
+          "accepted_by_grounding_gate": false,
+          "abstention_reason": "unsupported_generated_claims"
+        },
+        {
+          "id": "56e1c2eee3433e1400423138",
+          "question": "Decision problems capable of being solved by a deterministic Turing machine while maintaining adherence to polynomial time belong to what class?",
+          "answer": "Decision problems capable of being solved by a deterministic Turing machine while maintaining adherence to polynomial time belong to the class P [S1].",
+          "reference_answers": [
+            "complexity class P",
+            "P",
+            "complexity class P"
+          ],
+          "provider_usage": {
+            "generation_ms": 5144.994,
+            "model_usage": {
+              "input_tokens": 1120,
+              "output_tokens": 27,
+              "total_tokens": 1147,
+              "input_token_details": {
+                "cache_read": 116
+              },
+              "output_token_details": {}
+            }
+          },
+          "cited_chunks": 1,
+          "invalid_citations": 0,
+          "answer_exact_match": 0.0,
+          "reference_span_hit": 1.0,
+          "answer_token_f1": 0.17391304347826086,
+          "claims": [
+            {
+              "text": "Decision problems capable of being solved by a deterministic Turing machine while maintaining adherence to polynomial time belong to the class P.",
+              "supported": true,
+              "entailment_score": 0.9907286167144775,
+              "evidence": "This forms the basis for the complexity class P, which is the set of decision problems solvable by a deterministic Turing machine within polynomial time."
+            }
+          ],
+          "unsupported_claim_rate_nli": 0.0,
+          "verifier": "cross-encoder/nli-deberta-v3-xsmall",
+          "threshold": 0.5,
+          "premise_granularity": "sentence windows (1-3) + passage",
+          "generation_and_verification_ms": 6939.72158699944,
+          "accepted_by_grounding_gate": true,
+          "abstention_reason": null
+        },
+        {
+          "id": "5725c071271a42140099d128",
+          "question": "In which direction did the water on the eastern side flow?",
+          "answer": "The water on the eastern side flowed toward the Atlantic [S1].",
+          "reference_answers": [
+            "Water on the eastern side flowed toward the Atlantic,",
+            "toward the Atlantic",
+            "toward the Atlantic"
+          ],
+          "provider_usage": {
+            "generation_ms": 6617.145,
+            "model_usage": {
+              "input_tokens": 1420,
+              "output_tokens": 15,
+              "total_tokens": 1435,
+              "input_token_details": {
+                "cache_read": 116
+              },
+              "output_token_details": {}
+            }
+          },
+          "cited_chunks": 1,
+          "invalid_citations": 0,
+          "answer_exact_match": 1.0,
+          "reference_span_hit": 1.0,
+          "answer_token_f1": 1.0,
+          "claims": [
+            {
+              "text": "The water on the eastern side flowed toward the Atlantic.",
+              "supported": true,
+              "entailment_score": 0.9944738745689392,
+              "evidence": "Water on the eastern side flowed toward the Atlantic, while to the west water flowed toward the Pacific across the Amazonas Basin."
+            }
+          ],
+          "unsupported_claim_rate_nli": 0.0,
+          "verifier": "cross-encoder/nli-deberta-v3-xsmall",
+          "threshold": 0.5,
+          "premise_granularity": "sentence windows (1-3) + passage",
+          "generation_and_verification_ms": 7573.708420000003,
+          "accepted_by_grounding_gate": true,
+          "abstention_reason": null
+        },
+        {
+          "id": "5725db4aec44d21400f3d6be",
+          "question": "Who was the main crew of Apollo 1, of which they named themselves?",
+          "answer": "The main crew of Apollo 1 was Grissom, White, and Chaffee [S7].",
+          "reference_answers": [
+            "Grissom, White, and Chaffee",
+            "Apollo 1",
+            "Grissom, White, and Chaffee",
+            "Grissom, White, and Chaffee"
+          ],
+          "provider_usage": {
+            "generation_ms": 5966.593,
+            "model_usage": {
+              "input_tokens": 1273,
+              "output_tokens": 23,
+              "total_tokens": 1296,
+              "input_token_details": {
+                "cache_read": 116
+              },
+              "output_token_details": {}
+            }
+          },
+          "cited_chunks": 1,
+          "invalid_citations": 0,
+          "answer_exact_match": 0.0,
+          "reference_span_hit": 1.0,
+          "answer_token_f1": 0.5714285714285714,
+          "claims": [
+            {
+              "text": "The main crew of Apollo 1 was Grissom, White, and Chaffee.",
+              "supported": true,
+              "entailment_score": 0.9633169174194336,
+              "evidence": "Deke Slayton, the grounded Mercury astronaut who became Director of Flight Crew Operations for the Gemini and Apollo programs, selected the first Apollo crew in January 1966, with Grissom as Command Pilot, White as Senior Pilot, and rookie Donn F. Eisele as Pilot."
+            }
+          ],
+          "unsupported_claim_rate_nli": 0.0,
+          "verifier": "cross-encoder/nli-deberta-v3-xsmall",
+          "threshold": 0.5,
+          "premise_granularity": "sentence windows (1-3) + passage",
+          "generation_and_verification_ms": 7212.541670000064,
+          "accepted_by_grounding_gate": true,
+          "abstention_reason": null
+        },
+        {
+          "id": "5729789b6aef051400154f6f",
+          "question": "How far apart are the outer PD ring's filaments?",
+          "answer": "The outer PD ring's filaments are arranged in rows 6.4 nanometers apart [S1].",
+          "reference_answers": [
+            "6.4 nanometers",
+            "6.4 nanometers",
+            "6.4 nanometers"
+          ],
+          "provider_usage": {
+            "generation_ms": 6404.97,
+            "model_usage": {
+              "input_tokens": 1401,
+              "output_tokens": 23,
+              "total_tokens": 1424,
+              "input_token_details": {
+                "cache_read": 116
+              },
+              "output_token_details": {}
+            }
+          },
+          "cited_chunks": 1,
+          "invalid_citations": 0,
+          "answer_exact_match": 0.0,
+          "reference_span_hit": 1.0,
+          "answer_token_f1": 0.3076923076923077,
+          "claims": [
+            {
+              "text": "The outer PD ring's filaments are arranged in rows 6.4 nanometers apart.",
+              "supported": true,
+              "entailment_score": 0.9658677577972412,
+              "evidence": "The outer plastid-dividing ring is found wrapped around the outer chloroplast membrane. It consists of filaments about 5 nanometers across, arranged in rows 6.4 nanometers apart, and shrinks to squeeze the chloroplast. This is when chloroplast constriction begins."
+            }
+          ],
+          "unsupported_claim_rate_nli": 0.0,
+          "verifier": "cross-encoder/nli-deberta-v3-xsmall",
+          "threshold": 0.5,
+          "premise_granularity": "sentence windows (1-3) + passage",
+          "generation_and_verification_ms": 7470.9437949995845,
+          "accepted_by_grounding_gate": true,
+          "abstention_reason": null
+        },
+        {
+          "id": "5730c6d3b54a4f140068cc4e",
+          "question": "Who is Methodism's revered founder?",
+          "answer": "John Wesley [S1].",
+          "reference_answers": [
+            "John Wesley",
+            "John Wesley",
+            "John Wesley"
+          ],
+          "provider_usage": {
+            "generation_ms": 4791.96,
+            "model_usage": {
+              "input_tokens": 1182,
+              "output_tokens": 7,
+              "total_tokens": 1189,
+              "input_token_details": {
+                "cache_read": 116
+              },
+              "output_token_details": {}
+            }
+          },
+          "cited_chunks": 1,
+          "invalid_citations": 0,
+          "answer_exact_match": 1.0,
+          "reference_span_hit": 1.0,
+          "answer_token_f1": 1.0,
+          "claims": [
+            {
+              "text": "John Wesley.",
+              "supported": true,
+              "entailment_score": 0.9895568490028381,
+              "evidence": "Although United Methodist practices and interpretation of beliefs have evolved over time, these practices and beliefs can be traced to the writings of the church's founders, especially John Wesley and Charles Wesley (Anglicans), but also Philip William Otterbein and Martin Boehm (United Brethren), and Jacob Albright (Evangelical Association)."
+            }
+          ],
+          "unsupported_claim_rate_nli": 0.0,
+          "verifier": "cross-encoder/nli-deberta-v3-xsmall",
+          "threshold": 0.5,
+          "premise_granularity": "sentence windows (1-3) + passage",
+          "generation_and_verification_ms": 6313.904628000273,
+          "accepted_by_grounding_gate": true,
+          "abstention_reason": null
+        },
+        {
+          "id": "56d2045de7d4791d009025f5",
+          "question": "How many times have the Panthers been in the Super Bowl?",
+          "answer": "The Panthers have been in the Super Bowl twice. [S1] states that the Panthers made their second Super Bowl appearance in franchise history, their other appearance being Super Bowl XXXVIII. [S6] confirms they advanced to their second Super Bowl appearance since the franchise was founded in 1995.",
+          "reference_answers": [
+            "2",
+            "second",
+            "second"
+          ],
+          "provider_usage": {
+            "generation_ms": 7508.086,
+            "model_usage": {
+              "input_tokens": 1215,
+              "output_tokens": 64,
+              "total_tokens": 1279,
+              "input_token_details": {
+                "cache_read": 116
+              },
+              "output_token_details": {}
+            }
+          },
+          "cited_chunks": 2,
+          "invalid_citations": 0,
+          "answer_exact_match": 0.0,
+          "reference_span_hit": 1.0,
+          "answer_token_f1": 0.047619047619047616,
+          "claims": [
+            {
+              "text": "The Panthers have been in the Super Bowl twice.",
+              "supported": true,
+              "entailment_score": 0.992408037185669,
+              "evidence": "The Panthers finished the regular season with a 15\u20131 record, and quarterback Cam Newton was named the NFL Most Valuable Player (MVP). They defeated the Arizona Cardinals 49\u201315 in the NFC Championship Game and advanced to their second Super Bowl appearance since the franchise was founded in 1995."
+            },
+            {
+              "text": "states that the Panthers made their second Super Bowl appearance in franchise history, their other appearance being Super Bowl XXXVIII.",
+              "supported": true,
+              "entailment_score": 0.9812520742416382,
+              "evidence": "The Broncos made their second Super Bowl appearance in three years, having reached Super Bowl XLVIII, while the Panthers made their second Super Bowl appearance in franchise history, their other appearance being Super Bowl XXXVIII"
+            },
+            {
+              "text": "confirms they advanced to their second Super Bowl appearance since the franchise was founded in 1995.",
+              "supported": true,
+              "entailment_score": 0.9496746063232422,
+              "evidence": "The Panthers finished the regular season with a 15\u20131 record, and quarterback Cam Newton was named the NFL Most Valuable Player (MVP). They defeated the Arizona Cardinals 49\u201315 in the NFC Championship Game and advanced to their second Super Bowl appearance since the franchise was founded in 1995."
+            }
+          ],
+          "unsupported_claim_rate_nli": 0.0,
+          "verifier": "cross-encoder/nli-deberta-v3-xsmall",
+          "threshold": 0.5,
+          "premise_granularity": "sentence windows (1-3) + passage",
+          "generation_and_verification_ms": 12288.422921000347,
+          "accepted_by_grounding_gate": true,
+          "abstention_reason": null
+        },
+        {
+          "id": "572fe92204bcaa1900d76e97",
+          "question": "A small fraction of the cold water flow from Lake Constance goes to what other lake?",
+          "answer": "A small fraction of the cold water flow from Lake Constance goes to Lake \u00dcberlingen [S1].",
+          "reference_answers": [
+            "Lake \u00dcberlingen",
+            "Lake \u00dcberlingen",
+            "Lake \u00dcberlingen"
+          ],
+          "provider_usage": {
+            "generation_ms": 6238.756,
+            "model_usage": {
+              "input_tokens": 1417,
+              "output_tokens": 22,
+              "total_tokens": 1439,
+              "input_token_details": {
+                "cache_read": 116
+              },
+              "output_token_details": {}
+            }
+          },
+          "cited_chunks": 1,
+          "invalid_citations": 0,
+          "answer_exact_match": 0.0,
+          "reference_span_hit": 1.0,
+          "answer_token_f1": 0.26666666666666666,
+          "claims": [
+            {
+              "text": "A small fraction of the cold water flow from Lake Constance goes to Lake \u00dcberlingen.",
+              "supported": true,
+              "entailment_score": 0.8924975991249084,
+              "evidence": "The flow of cold, gray mountain water continues for some distance into the lake. The cold water flows near the surface and at first doesn't mix with the warmer, green waters of Upper Lake. But then, at the so-called Rheinbrech, the Rhine water abruptly falls into the depths because of the greater density of cold water. The flow reappears on the surface at the northern (German) shore of the lake, off the island of Lindau. The water then follows the northern shore until Hagnau am Bodensee. A small fraction of the flow is diverted off the island of Mainau into Lake \u00dcberlingen"
+            }
+          ],
+          "unsupported_claim_rate_nli": 0.0,
+          "verifier": "cross-encoder/nli-deberta-v3-xsmall",
+          "threshold": 0.5,
+          "premise_granularity": "sentence windows (1-3) + passage",
+          "generation_and_verification_ms": 7301.468629000738,
+          "accepted_by_grounding_gate": true,
+          "abstention_reason": null
+        },
+        {
+          "id": "571c3a685efbb31900334db2",
+          "question": "What is the atomic number of the element oxygen?",
+          "answer": "The atomic number of the element oxygen is 8 [S1].",
+          "reference_answers": [
+            "8",
+            "8",
+            "8",
+            "8",
+            "8"
+          ],
+          "provider_usage": {
+            "generation_ms": 5810.358,
+            "model_usage": {
+              "input_tokens": 1339,
+              "output_tokens": 15,
+              "total_tokens": 1354,
+              "input_token_details": {
+                "cache_read": 116
+              },
+              "output_token_details": {}
+            }
+          },
+          "cited_chunks": 1,
+          "invalid_citations": 0,
+          "answer_exact_match": 0.0,
+          "reference_span_hit": 1.0,
+          "answer_token_f1": 0.25,
+          "claims": [
+            {
+              "text": "The atomic number of the element oxygen is 8.",
+              "supported": true,
+              "entailment_score": 0.9948006868362427,
+              "evidence": "Oxygen is a chemical element with symbol O and atomic number 8."
+            }
+          ],
+          "unsupported_claim_rate_nli": 0.0,
+          "verifier": "cross-encoder/nli-deberta-v3-xsmall",
+          "threshold": 0.5,
+          "premise_granularity": "sentence windows (1-3) + passage",
+          "generation_and_verification_ms": 6795.186168999862,
+          "accepted_by_grounding_gate": true,
+          "abstention_reason": null
+        },
+        {
+          "id": "572f609ca23a5019007fc5b1",
+          "question": "How much water does the Aare give to the Rhine?",
+          "answer": "The Aare more than doubles the Rhine's water discharge, to an average of nearly 1,000 m\u00b3/s (35,000 cu ft/s), and provides more than a fifth of the discharge at the Dutch border. [S1]",
+          "reference_answers": [
+            "1,000 m3/s (35,000 cu ft/s)",
+            "1,000 m3/s"
+          ],
+          "provider_usage": {
+            "generation_ms": 8746.254,
+            "model_usage": {
+              "input_tokens": 1522,
+              "output_tokens": 57,
+              "total_tokens": 1579,
+              "input_token_details": {
+                "cache_read": 116
+              },
+              "output_token_details": {}
+            }
+          },
+          "cited_chunks": 1,
+          "invalid_citations": 0,
+          "answer_exact_match": 0.0,
+          "reference_span_hit": 0.0,
+          "answer_token_f1": 0.25806451612903225,
+          "claims": [
+            {
+              "text": "The Aare more than doubles the Rhine's water discharge, to an average of nearly 1,000 m\u00b3/s (35,000 cu ft/s), and provides more than a fifth of the discharge at the Dutch border.",
+              "supported": true,
+              "entailment_score": 0.9938296675682068,
+              "evidence": "The Rhine emerges from Lake Constance, flows generally westward, as the Hochrhein, passes the Rhine Falls, and is joined by its major tributary, the river Aare. The Aare more than doubles the Rhine's water discharge, to an average of nearly 1,000 m3/s (35,000 cu ft/s), and provides more than a fifth of the discharge at the Dutch border."
+            }
+          ],
+          "unsupported_claim_rate_nli": 0.0,
+          "verifier": "cross-encoder/nli-deberta-v3-xsmall",
+          "threshold": 0.5,
+          "premise_granularity": "sentence windows (1-3) + passage",
+          "generation_and_verification_ms": 10718.819837999945,
+          "accepted_by_grounding_gate": true,
+          "abstention_reason": null
+        },
+        {
+          "id": "57282358ff5b5019007d9de0",
+          "question": "What else contributes to Jacksonville's summer storms other than land heating beside the water?",
+          "answer": "The retrieved evidence does not specify any factor other than land heating that contributes to Jacksonville's summer storms. Therefore, based on the provided information, no additional factor besides land heating is mentioned. [S4]",
+          "reference_answers": [
+            "high humidity",
+            "high humidity",
+            "extremely high humidity"
+          ],
+          "provider_usage": {
+            "generation_ms": 8174.887,
+            "model_usage": {
+              "input_tokens": 1430,
+              "output_tokens": 42,
+              "total_tokens": 1472,
+              "input_token_details": {
+                "cache_read": 116
+              },
+              "output_token_details": {}
+            }
+          },
+          "cited_chunks": 0,
+          "invalid_citations": 0,
+          "answer_exact_match": 0.0,
+          "reference_span_hit": 0.0,
+          "answer_token_f1": 0.0,
+          "claims": [],
+          "unsupported_claim_rate_nli": 0.0,
+          "generation_and_verification_ms": 8188.037128999895,
+          "accepted_by_grounding_gate": false,
+          "abstention_reason": "model_abstained"
+        },
+        {
+          "id": "5725c3a9ec44d21400f3d505",
+          "question": "Which court is the highest court in the European Union?",
+          "answer": "The European Court of Justice is the highest court able to interpret European Union law [S1]. Under the Treaty on European Union, it is to be the ultimate court to interpret questions of EU law [S2].",
+          "reference_answers": [
+            "The European Court of Justice",
+            "The European Court of Justice",
+            "The European Court of Justice",
+            "The European Court of Justice"
+          ],
+          "provider_usage": {
+            "generation_ms": 6086.121,
+            "model_usage": {
+              "input_tokens": 965,
+              "output_tokens": 44,
+              "total_tokens": 1009,
+              "input_token_details": {
+                "cache_read": 116
+              },
+              "output_token_details": {}
+            }
+          },
+          "cited_chunks": 2,
+          "invalid_citations": 0,
+          "answer_exact_match": 0.0,
+          "reference_span_hit": 1.0,
+          "answer_token_f1": 0.23529411764705882,
+          "claims": [
+            {
+              "text": "The European Court of Justice is the highest court able to interpret European Union law.",
+              "supported": true,
+              "entailment_score": 0.9915086030960083,
+              "evidence": "In case of European Union law which should have been transposed into the laws of member states, such as Directives, the European Commission can take proceedings against the member state under the Treaty on the Functioning of the European Union. The European Court of Justice is the highest court able to interpret European Union law"
+            },
+            {
+              "text": "Under the Treaty on European Union, it is to be the ultimate court to interpret questions of EU law.",
+              "supported": true,
+              "entailment_score": 0.9108827710151672,
+              "evidence": "Under TEU article 19(3) is to be the ultimate court to interpret questions of EU law"
+            }
+          ],
+          "unsupported_claim_rate_nli": 0.0,
+          "verifier": "cross-encoder/nli-deberta-v3-xsmall",
+          "threshold": 0.5,
+          "premise_granularity": "sentence windows (1-3) + passage",
+          "generation_and_verification_ms": 8472.00771199914,
+          "accepted_by_grounding_gate": true,
+          "abstention_reason": null
+        },
+        {
+          "id": "57287e512ca10214002da3fb",
+          "question": "The mother of which emperor was a concubine?",
+          "answer": "The mother of Tugh Tem\u00fcr was a Tangut concubine. [S1]",
+          "reference_answers": [
+            "Tugh Temur",
+            "Tugh Temur",
+            "Tugh Temur"
+          ],
+          "provider_usage": {
+            "generation_ms": 6118.728,
+            "model_usage": {
+              "input_tokens": 1249,
+              "output_tokens": 20,
+              "total_tokens": 1269,
+              "input_token_details": {
+                "cache_read": 116
+              },
+              "output_token_details": {}
+            }
+          },
+          "cited_chunks": 1,
+          "invalid_citations": 0,
+          "answer_exact_match": 0.0,
+          "reference_span_hit": 0.0,
+          "answer_token_f1": 0.2222222222222222,
+          "claims": [
+            {
+              "text": "The mother of Tugh Tem\u00fcr was a Tangut concubine.",
+              "supported": true,
+              "entailment_score": 0.9941271543502808,
+              "evidence": "The Mongol custom of long standing quda/marriage alliance with Mongol clans, the Onggirat, and the Ikeres, kept the imperial blood purely Mongol until the reign of Tugh Temur, whose mother was a Tangut concubine."
+            }
+          ],
+          "unsupported_claim_rate_nli": 0.0,
+          "verifier": "cross-encoder/nli-deberta-v3-xsmall",
+          "threshold": 0.5,
+          "premise_granularity": "sentence windows (1-3) + passage",
+          "generation_and_verification_ms": 7502.859336000256,
+          "accepted_by_grounding_gate": true,
+          "abstention_reason": null
+        },
+        {
+          "id": "573098f38ab72b1400f9c5d2",
+          "question": "European imperialism was focused on what?",
+          "answer": "European imperialism was focused on economic growth by collecting resources from colonies, in combination with assuming political control by military and political means [S3]. It also involved extending a country's power and influence through colonization, use of military force, or other means [S6]. The bulk of British emigration, trade, and capital went to areas outside the formal British Empire [S1]. European expansion caused the world to be divided into core and periphery regions based on income and profit [S4].",
+          "reference_answers": [
+            "economic growth",
+            "economic growth",
+            "economic growth",
+            "economic growth",
+            "economic growth"
+          ],
+          "provider_usage": {
+            "generation_ms": 10467.359,
+            "model_usage": {
+              "input_tokens": 1328,
+              "output_tokens": 100,
+              "total_tokens": 1428,
+              "input_token_details": {
+                "cache_read": 116
+              },
+              "output_token_details": {}
+            }
+          },
+          "cited_chunks": 4,
+          "invalid_citations": 0,
+          "answer_exact_match": 0.0,
+          "reference_span_hit": 1.0,
+          "answer_token_f1": 0.0547945205479452,
+          "claims": [
+            {
+              "text": "European imperialism was focused on economic growth by collecting resources from colonies, in combination with assuming political control by military and political means.",
+              "supported": true,
+              "entailment_score": 0.9932994842529297,
+              "evidence": "Europe's expansion into territorial imperialism was largely focused on economic growth by collecting resources from colonies, in combination with assuming political control by military and political means. The colonization of India in the mid-18th century offers an example of this focus: there, the \"British exploited the political weakness of the Mughal state, and, while military activity was important at various times, the economic and administrative incorporation of local elites was also of crucial significance\" for the establishment of control over the subcontinent's resources, markets, and manpower"
+            },
+            {
+              "text": "It also involved extending a country's power and influence through colonization, use of military force, or other means.",
+              "supported": false,
+              "entailment_score": 0.13682596385478973,
+              "evidence": "Imperialism is \"a policy of extending a country's power and influence through colonization, use of military force, or other means\". Imperialism has greatly shaped the contemporary world. It has also allowed for the rapid spread of technologies and ideas."
+            },
+            {
+              "text": "The bulk of British emigration, trade, and capital went to areas outside the formal British Empire.",
+              "supported": true,
+              "entailment_score": 0.9941428303718567,
+              "evidence": "The bulk of British emigration, trade, and capital went to areas outside the formal British Empire"
+            },
+            {
+              "text": "European expansion caused the world to be divided into core and periphery regions based on income and profit.",
+              "supported": true,
+              "entailment_score": 0.9883641004562378,
+              "evidence": "European expansion caused the world to be divided by how developed and developing nation are portrayed through the world systems theory. The two main regions are the core and the periphery. The core consists of high areas of income and profit; the periphery is on the opposing side of the spectrum consisting of areas of low income and profit"
+            }
+          ],
+          "unsupported_claim_rate_nli": 0.25,
+          "verifier": "cross-encoder/nli-deberta-v3-xsmall",
+          "threshold": 0.5,
+          "premise_granularity": "sentence windows (1-3) + passage",
+          "generation_and_verification_ms": 17874.3993829994,
+          "accepted_by_grounding_gate": false,
+          "abstention_reason": "unsupported_generated_claims"
+        },
+        {
+          "id": "572673f5708984140094c69d",
+          "question": "What type of gradients are formed by faulting and other deformational processes?",
+          "answer": "Topographic gradients are formed by faulting and other deformational processes [S1].",
+          "reference_answers": [
+            "topographic gradients",
+            "topographic",
+            "topographic"
+          ],
+          "provider_usage": {
+            "generation_ms": 5528.583,
+            "model_usage": {
+              "input_tokens": 1172,
+              "output_tokens": 18,
+              "total_tokens": 1190,
+              "input_token_details": {
+                "cache_read": 116
+              },
+              "output_token_details": {}
+            }
+          },
+          "cited_chunks": 1,
+          "invalid_citations": 0,
+          "answer_exact_match": 0.0,
+          "reference_span_hit": 1.0,
+          "answer_token_f1": 0.3333333333333333,
+          "claims": [
+            {
+              "text": "Topographic gradients are formed by faulting and other deformational processes.",
+              "supported": true,
+              "entailment_score": 0.9920601844787598,
+              "evidence": "Faulting and other deformational processes result in the creation of topographic gradients, causing material on the rock unit that is increasing in elevation to be eroded by hillslopes and channels."
+            }
+          ],
+          "unsupported_claim_rate_nli": 0.0,
+          "verifier": "cross-encoder/nli-deberta-v3-xsmall",
+          "threshold": 0.5,
+          "premise_granularity": "sentence windows (1-3) + passage",
+          "generation_and_verification_ms": 7128.2057110001915,
+          "accepted_by_grounding_gate": true,
+          "abstention_reason": null
+        },
+        {
+          "id": "56beb57b3aeaaa14008c927a",
+          "question": "How many picks did Peyton Manning throw in the season?",
+          "answer": "Peyton Manning threw 17 interceptions in the season [S3].",
+          "reference_answers": [
+            "17",
+            "17",
+            "17"
+          ],
+          "provider_usage": {
+            "generation_ms": 6511.592,
+            "model_usage": {
+              "input_tokens": 1307,
+              "output_tokens": 17,
+              "total_tokens": 1324,
+              "input_token_details": {
+                "cache_read": 116
+              },
+              "output_token_details": {}
+            }
+          },
+          "cited_chunks": 1,
+          "invalid_citations": 0,
+          "answer_exact_match": 0.0,
+          "reference_span_hit": 1.0,
+          "answer_token_f1": 0.25,
+          "claims": [
+            {
+              "text": "Peyton Manning threw 17 interceptions in the season.",
+              "supported": false,
+              "entailment_score": 0.1883840262889862,
+              "evidence": "Manning finished the year with a career-low 67.9 passer rating, throwing for 2,249 yards and nine touchdowns, with 17 interceptions. In contrast, Osweiler threw for 1,967 yards, 10 touchdowns and six interceptions for a rating of 86.4. Veteran receiver Demaryius Thomas led the team with 105 receptions for 1,304 yards and six touchdowns, while Emmanuel Sanders caught 76 passes for 1,135 yards and six scores, while adding another 106 yards returning punts."
+            }
+          ],
+          "unsupported_claim_rate_nli": 1.0,
+          "verifier": "cross-encoder/nli-deberta-v3-xsmall",
+          "threshold": 0.5,
+          "premise_granularity": "sentence windows (1-3) + passage",
+          "generation_and_verification_ms": 7820.651044999977,
+          "accepted_by_grounding_gate": false,
+          "abstention_reason": "unsupported_generated_claims"
+        },
+        {
+          "id": "5709686c200fba1400367f77",
+          "question": "When did BSkyB launch it's HDTV service?",
+          "answer": "BSkyB launched its HDTV service, Sky+ HD, on 22 May 2006 [S1].",
+          "reference_answers": [
+            "22 May 2006",
+            "on 22 May 2006",
+            "22 May 2006"
+          ],
+          "provider_usage": {
+            "generation_ms": 6792.89,
+            "model_usage": {
+              "input_tokens": 1333,
+              "output_tokens": 28,
+              "total_tokens": 1361,
+              "input_token_details": {
+                "cache_read": 116
+              },
+              "output_token_details": {}
+            }
+          },
+          "cited_chunks": 1,
+          "invalid_citations": 0,
+          "answer_exact_match": 0.0,
+          "reference_span_hit": 1.0,
+          "answer_token_f1": 0.5333333333333333,
+          "claims": [
+            {
+              "text": "BSkyB launched its HDTV service, Sky+ HD, on 22 May 2006.",
+              "supported": true,
+              "entailment_score": 0.9934216141700745,
+              "evidence": "BSkyB launched its HDTV service, Sky+ HD, on 22 May 2006."
+            }
+          ],
+          "unsupported_claim_rate_nli": 0.0,
+          "verifier": "cross-encoder/nli-deberta-v3-xsmall",
+          "threshold": 0.5,
+          "premise_granularity": "sentence windows (1-3) + passage",
+          "generation_and_verification_ms": 8428.314836999562,
+          "accepted_by_grounding_gate": true,
+          "abstention_reason": null
+        }
+      ]
+    }
+  ],
+  "verifier_fix_ablation": {
+    "model": "qwen3:4b-instruct-2507-q4_K_M",
+    "before": {
+      "citation_format": "raw 64-char chunk ids",
+      "nli_premise": "whole 650-char chunk",
+      "grounding_gate_coverage": 0.3333333333333333,
+      "unsupported_claim_rate_nli": 0.5111111111111111,
+      "invalid_citation_rate": 0.2,
+      "reference_span_hit": 0.8
+    },
+    "after": {
+      "citation_format": "server-issued [S#] labels",
+      "nli_premise": "1-3 sentence windows + passage, top-8 lexical candidates per claim",
+      "grounding_gate_coverage": 0.7666666666666667,
+      "unsupported_claim_rate_nli": 0.09567901234567901,
+      "invalid_citation_rate": 0,
+      "reference_span_hit": 0.8333333333333334
+    }
+  },
+  "manual_adjudication": {
+    "model": "qwen3:4b-instruct-2507-q4_K_M",
+    "delivered_answers": 23,
+    "delivered_without_lexical_reference_match": 3,
+    "of_which_correct_on_review": 3,
+    "notes": [
+      "'receiver' vs reference 'receivers'",
+      "'Tugh Tem\u00fcr' vs reference 'Tugh Temur' (diacritic)",
+      "'1,000 m\u00b3/s' vs reference '1,000 m3/s' (superscript)"
+    ],
+    "scope": "Single-reviewer check of 30 sampled cases; not a statistically powered hallucination estimate."
+  },
+  "decision": "Default local generator: qwen3:4b-instruct-2507-q4_K_M. Higher delivered-correct coverage (0.667 vs 0.533) and half the unsupported-claim rate (0.096 vs 0.204) at ~2.3x median latency (7.3 s vs 3.2 s on CPU) and ~2.5 GB model weights. qwen3:1.7b remains a lower-latency/memory option."
+}

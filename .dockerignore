@@ -1,27 +1,16 @@
-# Virtual environments
-.venv/
-.venv*/
-
-# Version control
 .git/
-.gitignore
-
-# Python caches and build artifacts
+.venv*/
+node_modules/
+**/node_modules/
 __pycache__/
+**/__pycache__/
 *.py[cod]
-*.egg-info/
-build/
-dist/
-wheels/
-
-# Local runtime data and secrets
+.ruff_cache/
+data*/
 storage/
 .env
-
-# Editor / OS noise
+.env.*
+!.env.example
+evals/reports/
 .DS_Store
-.idea/
 .vscode/
-
-# Project notes not needed in the image
-docs/dev-process/

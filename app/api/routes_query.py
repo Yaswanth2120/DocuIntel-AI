@@ -3,12 +3,12 @@ import json
 from fastapi import APIRouter, Depends, HTTPException, Request
 from fastapi.responses import StreamingResponse
 
-from app.api.dependencies import get_rag_engine, require_api_key
+from app.api.dependencies import get_rag_engine, require_api_key, demo_only
 from app.core.rate_limit import current_rate_limit, limiter
 from app.schemas.document_query import DocumentQueryRequest, DocumentQueryResponse
 from app.schemas.query import AskRequest, AskResponse
-from app.services import document_qa_service
-from app.services.rag_service import AdvancedRAGEngine
+from app.rag import answering as document_qa_service
+from app.rag.demo_engine import AdvancedRAGEngine
 
 
 router = APIRouter()
@@ -27,13 +27,13 @@ def _sse(events) -> StreamingResponse:
         try:
             for event in events:
                 yield f"data: {json.dumps(event)}\n\n"
-        except Exception as exc:
-            yield f"data: {json.dumps({'type': 'error', 'detail': str(exc)})}\n\n"
+        except Exception:
+            yield f"data: {json.dumps({'type': 'error', 'detail': 'Answer generation failed'})}\n\n"
 
     return StreamingResponse(generate(), media_type="text/event-stream")
 
 
-@router.post("/ask", response_model=AskResponse)
+@router.post("/ask", response_model=AskResponse, dependencies=[Depends(demo_only)])
 @limiter.limit(current_rate_limit)
 def ask(
     request: Request,
@@ -64,7 +64,7 @@ def ask(
 @limiter.limit(current_rate_limit)
 def query_documents(request: Request, body: DocumentQueryRequest):
     if body.stream:
-        return _sse(document_qa_service.stream_answer_question(body.question))
+        return _sse(document_qa_service.stream_answer_question(**body.model_dump(exclude={"stream"})))
 
-    result = document_qa_service.answer_question(body.question)
+    result = document_qa_service.answer_question(**body.model_dump(exclude={"stream"}))
     return DocumentQueryResponse(**result)

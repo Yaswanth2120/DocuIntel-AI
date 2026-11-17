@@ -1,0 +1,6 @@
+{
+  "backup_restore_verified": true,
+  "original_documents_found": 1,
+  "restored_rls_isolation_verified": true,
+  "scope": "Disposable local PostgreSQL database; restored into a separate database, never over an existing deployment"
+}

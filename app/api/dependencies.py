@@ -3,7 +3,7 @@ from functools import lru_cache
 from fastapi import Depends, Header, HTTPException
 
 from app.core.config import settings
-from app.services.rag_service import AdvancedRAGEngine
+from app.rag.demo_engine import AdvancedRAGEngine
 
 
 @lru_cache(maxsize=1)
@@ -29,11 +29,55 @@ def require_api_key(
     - ``API_KEY`` set: a request is allowed only when its ``X-API-Key`` header
       matches; otherwise 401.
     """
+    import os
+    import hmac
+
+    configured = os.getenv("TENANT_API_KEYS", "")
+    if configured:
+        from app.core.tenancy import authenticate
+
+        if x_api_key and authenticate(x_api_key):
+            return
+        raise HTTPException(status_code=401, detail="Invalid or missing API key")
     if not expected:
         # Fail closed: no server key configured -> reject all protected traffic.
         raise HTTPException(
             status_code=401,
             detail="API key auth is not configured (set API_KEY on the server).",
         )
-    if x_api_key != expected:
+    if not x_api_key or not hmac.compare_digest(x_api_key.encode(), expected.encode()):
         raise HTTPException(status_code=401, detail="Invalid or missing API key")
+
+
+def require_writer(auth=Depends(require_api_key)):
+    from app.core.tenancy import role
+
+    if role.get() not in {"writer", "admin"}:
+        raise HTTPException(status_code=403, detail="Writer role required")
+
+
+def require_admin(auth=Depends(require_api_key)):
+    from app.core.tenancy import role
+
+    if role.get() != "admin":
+        raise HTTPException(status_code=403, detail="Admin role required")
+
+
+def demo_only():
+    import os
+
+    if os.getenv("APP_ENV") == "production":
+        raise HTTPException(status_code=404, detail="Demo endpoint disabled in production")
+
+
+def require_operator(x_metrics_key: str | None = Header(default=None, alias="X-Metrics-Key")):
+    import os
+    import hmac
+
+    expected = os.getenv("METRICS_API_KEY", "")
+    if (
+        not expected
+        or not x_metrics_key
+        or not hmac.compare_digest(expected.encode(), x_metrics_key.encode())
+    ):
+        raise HTTPException(status_code=403, detail="Operator metrics credential required")

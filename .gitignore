@@ -1,25 +1,30 @@
-# macOS
+# OS and editor caches
 .DS_Store
 **/.DS_Store
-
-# Node (frontend e2e)
+.ruff_cache/
+# Dependencies and generated Python files
 node_modules/
-
-# Python-generated files
+.venv/
+.venv_*/
 __pycache__/
-*.py[oc]
+*.py[cod]
+*.egg-info/
 build/
 dist/
 wheels/
-*.egg-info
-
-# Virtual environments
+# Secrets and runtime data
 .env
-.venv/
-__pycache__/
-
-# Local document storage (Phase 2 uploads)
+.env.*
+!.env.example
 storage/
-.venv/
-.venv_*/
-.git_broken_cloud/evals/results_live.md
+data/
+# Optional live/provider reports
+evals/reports/results_live.md
+
+
+# Resident runtime symlinks on synced macOS workspaces
+.venv
+data
+
+# Node dependencies may be a resident cache symlink on macOS.
+node_modules

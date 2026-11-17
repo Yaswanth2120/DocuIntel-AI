@@ -5,13 +5,25 @@ adjusted at runtime — the routes evaluate it per request. It defaults to the
 ``RATE_LIMIT`` env var (via settings).
 """
 
+import os
+import hashlib
+
 from slowapi import Limiter
 from slowapi.util import get_remote_address
 
 from app.core.config import settings
 
 
-limiter = Limiter(key_func=get_remote_address)
+def client_identity(request):
+    if os.getenv("TENANT_API_KEYS"):
+        from app.core.tenancy import tenant_id
+
+        return hashlib.sha256(tenant_id.get().encode()).hexdigest()
+    key = request.headers.get("X-API-Key")
+    return hashlib.sha256(key.encode()).hexdigest() if key else get_remote_address(request)
+
+
+limiter = Limiter(key_func=client_identity, storage_uri=os.getenv("REDIS_URL", "memory://"))
 
 _rate_limit = settings.rate_limit
 
