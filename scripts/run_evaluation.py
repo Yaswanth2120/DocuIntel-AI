@@ -21,6 +21,11 @@ def main():
     parser.add_argument("--generate", type=int, default=0)
     parser.add_argument("--generation-backend", choices=("local", "configured"), default="local")
     parser.add_argument("--generation-only", action="store_true")
+    parser.add_argument("--output", help="Report path under evals/reports/")
+    parser.add_argument(
+        "--seed", type=int, default=42, help="Query sample seed; use a new seed for held-out runs"
+    )
+    parser.add_argument("--exclude-report", help="Report whose query ids are excluded (held-out runs)")
     args = parser.parse_args()
     if args.queries < 1 or args.generate < 0:
         parser.error("queries must be positive and generate must be nonnegative")
@@ -39,6 +44,8 @@ def main():
         "MAX_OUTPUT_TOKENS",
         "INPUT_USD_PER_MILLION",
         "OUTPUT_USD_PER_MILLION",
+        "GROUNDING_ESCALATION",
+        "GROUNDING_PARTIAL_DELIVERY",
     }
     environment = {
         name: str(value)
@@ -63,7 +70,7 @@ def main():
         "--rm",
         "--user",
         f"{os.getuid()}:{os.getgid()}",
-        "--memory=1200m",
+        "--memory=2g",  # fast + escalation NLI models resident during generation
         "--cpus=2",
     ]
     for network in api["networks"]:
@@ -101,6 +108,11 @@ def main():
         ]
         if args.generation_only:
             command.append("--generation-only")
+        if args.output:
+            command += ["--output", args.output]
+        command += ["--seed", str(args.seed)]
+        if args.exclude_report:
+            command += ["--exclude-report", args.exclude_report]
         subprocess.run(command, cwd=ROOT, check=True)
 
 

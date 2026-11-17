@@ -16,6 +16,7 @@ import math
 import os
 from pathlib import Path
 import random
+import unicodedata
 import re
 from statistics import mean, median
 from time import perf_counter
@@ -47,7 +48,10 @@ def metrics(actual, expected, k):
 
 
 def normalize(text):
-    text = CITATION_PATTERN.sub("", text)
+    # NFKC folds superscripts/compatibility forms (m³ -> m3); dropping combining
+    # marks folds diacritics (Temür -> Temur) so formatting is not scored as error.
+    text = unicodedata.normalize("NFKC", CITATION_PATTERN.sub("", text))
+    text = "".join(c for c in unicodedata.normalize("NFKD", text) if not unicodedata.combining(c))
     text = re.sub(r"[^\w\s]", "", text.lower())
     return " ".join(re.sub(r"\b(a|an|the)\b", " ", text).split())
 
@@ -174,6 +178,7 @@ def run(
     queries=100,
     generate=0,
     seed_value=42,
+    exclude_report=None,
     k=10,
     output=None,
     generation_backend="local",
@@ -191,13 +196,15 @@ def run(
         raise ValueError("Public benchmark requires DATABASE_URL with migrated shared storage")
     postgres.readiness()
     corpus, all_cases, manifest = load(dataset)
-    sample = random.Random(seed_value).sample(
-        sorted(all_cases, key=lambda case: case["id"]), min(queries, len(all_cases))
-    )
+    excluded = set(json.loads(Path(exclude_report).read_text())["query_ids"]) if exclude_report else set()
+    pool = sorted((case for case in all_cases if case["id"] not in excluded), key=lambda case: case["id"])
+    sample = random.Random(seed_value).sample(pool, min(queries, len(pool)))
     suffix = "-production" if generation_backend == "configured" else ""
     report_path = Path(output or f"evals/reports/{dataset}{suffix}.json")
     previous = None
-    if generation_only:
+    # A separate --output report evaluates generation on its own (larger) sample
+    # with the production retrieval configuration; it does not inherit ablations.
+    if generation_only and not output:
         previous_path = report_path
         if not previous_path.exists() and generation_backend == "configured":
             previous_path = Path("evals/reports/squad.json")
@@ -303,11 +310,30 @@ def run(
                     "answer": answer,
                     "reference_answers": case["answers"],
                     "provider_usage": usage,
+                    "delivered_answer": verdict.get("answer") if verdict["accepted"] else None,
                     **verdict["citation_validation"],
                     **answer_metrics(answer, case["answers"]),
+                    "delivered_reference_span_hit": answer_metrics(verdict["answer"], case["answers"])[
+                        "reference_span_hit"
+                    ]
+                    if verdict["accepted"]
+                    else 0.0,
                     **assessment,
                     "generation_and_verification_ms": (perf_counter() - started) * 1000,
                     "accepted_by_grounding_gate": verdict["accepted"],
+                    "partial_delivery": bool(verdict.get("partial")),
+                    "dropped_claims": verdict.get("dropped_claims", []),
+                    "escalated_claims": sum("escalation_score" in c for c in assessment["claims"]),
+                    "escalation_rescued_claims": sum(
+                        c.get("verified_by") == "escalation" for c in assessment["claims"]
+                    ),
+                    # Counterfactual on the same answer: previous all-claims,
+                    # fast-verifier-only policy, for an apples-to-apples ablation.
+                    "accepted_by_strict_policy": verdict.get("abstention_reason") is None
+                    and bool(assessment["claims"])
+                    and all(
+                        c.get("verified_by") == "primary" and c["supported"] for c in assessment["claims"]
+                    ),
                     "abstention_reason": verdict.get("abstention_reason"),
                 }
             )
@@ -315,6 +341,7 @@ def run(
         "dataset": manifest,
         "created_at": datetime.now(timezone.utc).isoformat(),
         "seed": seed_value,
+        "excluded_query_ids_from": exclude_report,
         "query_sample_size": len(sample),
         "query_ids": [case["id"] for case in sample],
         "k": k,
@@ -354,12 +381,17 @@ def run(
             if any(row["abstention_reason"] != "model_abstained" for row in generation)
             else 0.0,
             "grounding_gate_coverage": mean(row["accepted_by_grounding_gate"] for row in generation),
-            # Human-labelled outcomes of the delivered answers.
+            "strict_policy_coverage": mean(row["accepted_by_strict_policy"] for row in generation),
+            "partial_delivery_rate": mean(row["partial_delivery"] for row in generation),
+            "escalation_rescue_rate": mean(row["escalation_rescued_claims"] > 0 for row in generation),
+            # Outcomes of the delivered (post-gate) text against human references.
             "delivered_with_reference_answer": mean(
-                row["accepted_by_grounding_gate"] and row["reference_span_hit"] == 1.0 for row in generation
+                row["accepted_by_grounding_gate"] and row["delivered_reference_span_hit"] == 1.0
+                for row in generation
             ),
             "delivered_without_reference_answer": mean(
-                row["accepted_by_grounding_gate"] and row["reference_span_hit"] == 0.0 for row in generation
+                row["accepted_by_grounding_gate"] and row["delivered_reference_span_hit"] == 0.0
+                for row in generation
             ),
             "median_generation_and_verification_ms": median(
                 row["generation_and_verification_ms"] for row in generation
@@ -384,6 +416,10 @@ if __name__ == "__main__":
     parser.add_argument("--queries", type=int, default=100)
     parser.add_argument("--generate", type=int, default=0)
     parser.add_argument("--output")
+    parser.add_argument("--seed", type=int, default=42)
+    parser.add_argument(
+        "--exclude-report", help="Held-out evaluation: never sample query ids that appear in this report"
+    )
     parser.add_argument(
         "--generation-only",
         action="store_true",
@@ -403,6 +439,8 @@ if __name__ == "__main__":
         args.queries,
         args.generate,
         output=args.output,
+        seed_value=args.seed,
+        exclude_report=args.exclude_report,
         generation_backend=args.generation_backend,
         generation_only=args.generation_only,
     )

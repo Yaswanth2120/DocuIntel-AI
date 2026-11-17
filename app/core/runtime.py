@@ -26,11 +26,13 @@ def validate_production():
     cache.ready()
     # Load once before accepting concurrent requests. functools.lru_cache alone
     # can execute a cold model factory more than once across worker threads.
-    from app.rag.models import encoder, reranker, nli_model
+    from app.rag.models import encoder, escalation_nli_model, reranker, nli_model
 
     encoder()
     reranker()
     nli_model()
+    if os.getenv("GROUNDING_ESCALATION", "nli") == "nli":
+        escalation_nli_model()
 
 
 def readiness():

@@ -8,6 +8,7 @@ REVISIONS = {
     "LOCAL_EMBEDDING_REVISION": "1110a243fdf4706b3f48f1d95db1a4f5529b4d41",
     "RERANKER_REVISION": "81d1926f67cb8eee2c2be17ca9f793c7c3bd20cc",
     "NLI_REVISION": "a150876415327c80daeff35ca6f68f5ed8cf5c24",
+    "ESCALATION_NLI_REVISION": "6f5cf0a2b59cabb106aca4c287eed12e357e90eb",
     "LOCAL_GENERATION_REVISION": "0fc9ddf78a1e988dac52e2dac162b0ede4fd74ab",
 }
 
@@ -63,6 +64,20 @@ def nli_model():
     return CrossEncoder(
         os.getenv("NLI_MODEL", "cross-encoder/nli-deberta-v3-xsmall"),
         revision=revision("NLI_REVISION"),
+        device=os.getenv("MODEL_DEVICE", "cpu"),
+        max_length=512,
+        trust_remote_code=False,
+    )
+
+
+@lru_cache(maxsize=1)
+def escalation_nli_model():
+    """Stronger NLI (MNLI+FEVER+ANLI, MIT) consulted only for rejected claims."""
+    from sentence_transformers import CrossEncoder
+
+    return CrossEncoder(
+        os.getenv("ESCALATION_NLI_MODEL", "MoritzLaurer/DeBERTa-v3-base-mnli-fever-anli"),
+        revision=revision("ESCALATION_NLI_REVISION"),
         device=os.getenv("MODEL_DEVICE", "cpu"),
         max_length=512,
         trust_remote_code=False,

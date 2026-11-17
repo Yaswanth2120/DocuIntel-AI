@@ -67,18 +67,25 @@ Default retrieval latency: p95 486 ms cold / 4 ms warm (SciFact), 181 ms / <1 ms
 Recursive chunking cuts SciFact prompt context from ~1,530 to ~1,240 estimated
 tokens versus fixed chunks at higher recall.
 
-**Generation and hallucination** (30 SQuAD questions with human reference answers,
-same retrieval and production grounding gate)
+**Generation and hallucination** (SQuAD questions with human reference answers,
+Qwen3 4B-Instruct on CPU, full corpus retrieval; [report](evals/reports/generation_quality.json))
 
-| Generator | Delivered & contains reference | Unsupported claims | Abstained | Median latency |
-| --- | --- | --- | --- | --- |
-| Qwen3 1.7B | 53% | 20% | 10% | 3.2 s |
-| **Qwen3 4B-Instruct (default)** | **67%** | **9.6%** | 10% | 7.3 s |
+| Outcome | Dev baseline (200) | Dev improved (200) | **Held-out final (200)** |
+| --- | --- | --- | --- |
+| Delivered and correct | 76.5% | 80.0% | **75.5%** |
+| Delivered but wrong | 4.0% | 5.0% | **5.5%** |
+| Correct answer withheld by the gate | 8.0% | 3.5% | 3.5% |
+| Model refused although gold passage retrieved | 8.0% | 9.5% | 11.5% |
+| Gold passage not retrieved | 1.5% | 1.5% | 2.5% |
 
-Manual review of the 4B run found no incorrect delivered answers in this sample
-(the 3 lexical misses were "receiver/receivers", a diacritic, and "m³/m3").
-Fixing citation labels and sentence-level NLI raised verified coverage from 33%
-to 77% and cut invalid citations from 20% to 0. API cost is $0 (local inference).
+The held-out set (200 new questions, never inspected while tuning) is the
+number to quote. On the same held-out answers, the improved gate (stronger NLI
+second opinion for rejected claims, supported-sentence delivery, refusal
+detection) delivered 14 more answers, 13 of them correct, versus the previous
+all-claims policy (69.0% -> 75.5% correct). 93% of delivered answers are correct.
+Wrong answers are almost all supported by a retrieved passage but answer a
+different reading of a context-dependent question; the gate verifies support,
+not intent. Median answer time is ~10 s on 2 CPU cores; API cost is $0.
 
 **Operations:** 100 concurrent requests at concurrency 8 with 0 errors; tenant
 isolation enforced by PostgreSQL row-level security (verified even without the

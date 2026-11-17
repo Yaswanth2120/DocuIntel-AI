@@ -121,3 +121,32 @@ adjudication of delivered answers that missed the lexical reference match.
 Refusals are counted as `abstention_rate`; `unsupported_claim_rate_nli` is over
 attempted answers only. `delivered_without_reference_answer` is an upper bound
 on wrong delivered answers because it is lexical.
+
+## 200-question generation evaluation (development and held-out)
+
+`evals/reports/generation_quality.json` summarizes three 200-question runs:
+
+1. **Development baseline** (seed 42): previous prompt and strict gate.
+2. **Development improved** (seed 42): refusal-detection fix, stronger NLI
+   escalation for rejected claims, supported-sentence partial delivery, prompt
+   rules. Failures on this set were inspected to tune the system.
+3. **Held-out final** (seed 7, `--exclude-report` guarantees zero overlap): the
+   final configuration on questions never inspected during tuning.
+
+Each run records `accepted_by_strict_policy`, the previous policy's verdict on
+the same answer, so gate changes are measured without sampling noise. Delivered
+answers without a normalized reference-span match were individually adjudicated;
+the reviewer was the AI assistant that built the system (not independent), and
+the lists are recorded in the report for audit.
+
+```bash
+python scripts/run_evaluation.py --dataset squad --queries 200 --generate 200 \
+  --generation-backend configured --generation-only \
+  --seed 7 --exclude-report evals/reports/squad-generation-200.json \
+  --output evals/reports/squad-generation-200-heldout.json
+```
+
+Remaining error sources, in order: model refusal despite retrieved evidence,
+grounded answers to ambiguous context-dependent questions, and verifier false
+negatives. A larger generator and a question-answer relevance check address the
+first two; neither is solved by stricter entailment.

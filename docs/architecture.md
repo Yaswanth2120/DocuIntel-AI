@@ -92,7 +92,16 @@ the API and the evaluation runner, so measured coverage is what users receive:
    8 most lexically overlapping windows per claim to bound CPU cost. The model is
    trained on sentence-length premises; scoring whole 650-character chunks
    diluted entailment so much that stated facts scored ~0.02 instead of ~0.99.
-   Every claim must reach entailment >= 0.5 or the API abstains.
+   Every claim must reach entailment >= 0.5.
+4. **Escalation.** Claims the fast verifier rejects are re-scored by a stronger
+   NLI model (DeBERTa-v3-base MNLI/FEVER/ANLI, pinned revision) against their 3
+   best evidence windows, at the same 0.5 threshold. It catches paraphrases the
+   small model misses ("finished the year with 17 interceptions"). Disable with
+   `GROUNDING_ESCALATION=off`.
+5. **Partial delivery.** The prompt puts the direct answer first. If that claim
+   is supported, only supported sentences are delivered, verbatim with their
+   citations; otherwise the API abstains. Unsupported text is never delivered.
+   Disable with `GROUNDING_PARTIAL_DELIVERY=false`.
 
 Streaming with this gate buffers the answer; it does not release unverified
 tokens. NLI remains an imperfect automated check, particularly for numbers and

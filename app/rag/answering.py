@@ -49,6 +49,11 @@ def _generate_answer(question: str, docs, diagnostics=None) -> str:
                 "Answer directly using only explicitly stated facts. Prefer exact source wording. "
                 "Use short complete sentences with one factual claim each; lists are allowed when needed. "
                 "Do not add background, implications, or speculative explanations. "
+                "State the direct answer in the first sentence. "
+                "If the evidence answers the question, answer it even when the evidence does not repeat every "
+                "detail of the question; do not refuse for that reason. In your answer, state only what the evidence "
+                "says and do not restate dates or qualifiers from the question that the evidence does not state. "
+                "Do not describe or comment on the evidence or sources. "
                 "Cite each claim with the supplied source labels, for example [S1] or [S1, S2].",
             ),
             ("human", "Retrieved evidence:\n{context}\n\nQuestion: {question}"),
@@ -98,6 +103,8 @@ def answer_question(question: str, mode="vector", rerank=False, top_k=None, cont
         diagnostics["citation_validation"] = verdict["citation_validation"]
         if "grounding" in verdict:
             diagnostics["grounding"] = verdict["grounding"]
+        if verdict.get("dropped_claims"):
+            diagnostics["dropped_unsupported_claims"] = len(verdict["dropped_claims"])
         if not verdict["accepted"]:
             diagnostics["abstention_reason"] = verdict["abstention_reason"]
             return {
@@ -107,6 +114,7 @@ def answer_question(question: str, mode="vector", rerank=False, top_k=None, cont
                 "diagnostics": diagnostics,
                 "citations": [],
             }
+        answer = verdict["answer"]
     diagnostics.update(grounding_proxy(answer, "\n\n".join(doc.page_content for doc in docs)))
     from app.rag.grounding import cited_references, citation_index
 
@@ -136,7 +144,13 @@ def verify_answer(answer: str, docs) -> dict:
     Rejects answers citing sources that were not retrieved, then requires every
     factual claim to be entailed by retrieved evidence per the NLI verifier.
     """
-    from app.rag.grounding import cited_references, citation_index, is_abstention, nli_grounding
+    from app.rag.grounding import (
+        cited_references,
+        citation_index,
+        is_abstention,
+        nli_grounding,
+        segment_answer,
+    )
 
     if is_abstention(answer):
         return {
@@ -159,8 +173,28 @@ def verify_answer(answer: str, docs) -> dict:
         "claim_count": len(assessment["claims"]),
         "verifier": assessment.get("verifier", "nli"),
     }
-    if assessment["unsupported_claim_rate_nli"] > 0:
+    verdict["grounding"]["escalated_claims"] = sum(
+        "escalation_score" in claim for claim in assessment["claims"]
+    )
+    verdict["answer"] = answer
+    if assessment["unsupported_claim_rate_nli"] == 0:
+        return verdict
+    # Partial delivery: the prompt puts the direct answer first. If that claim
+    # is supported, deliver only the supported sentences (verbatim, with their
+    # citations) and drop the rest; otherwise abstain. Unsupported text is
+    # never delivered either way.
+    segments = segment_answer(answer)
+    claims = assessment["claims"]
+    if (
+        os.getenv("GROUNDING_PARTIAL_DELIVERY", "true").lower() != "true"
+        or len(segments) != len(claims)
+        or not claims[0]["supported"]
+    ):
         return {**verdict, "accepted": False, "abstention_reason": "unsupported_generated_claims"}
+    kept = [raw for (raw, _), claim in zip(segments, claims) if claim["supported"]]
+    verdict["answer"] = ("\n" if "\n" in answer.strip() else " ").join(kept)
+    verdict["dropped_claims"] = [claim["text"] for claim in claims if not claim["supported"]]
+    verdict["partial"] = True
     return verdict
 
 
