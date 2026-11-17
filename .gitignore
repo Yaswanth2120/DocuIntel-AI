@@ -16,8 +16,8 @@ wheels/
 .env
 .env.*
 !.env.example
-storage/
-data/
+/storage/
+/data/
 # Optional live/provider reports
 evals/reports/results_live.md
 
