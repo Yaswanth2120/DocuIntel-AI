@@ -58,7 +58,7 @@ def ingest_document(document_id: str, strategy="fixed", chunk_size=None, overlap
         raise document_service.DocumentNotFoundError(document_id)
 
     # Local file location is derived from the id (not stored in metadata),
-    # so this works whether the metadata came from Supabase or local JSON.
+    # so this works whether the metadata came from PostgreSQL or local JSON.
     text = document_service.document_text(document_id)
     pieces = split_text(
         text,

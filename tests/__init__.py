@@ -1,8 +1,8 @@
 """Test package bootstrap.
 
 Forces the suite to run fully offline and deterministically regardless of any
-local ``.env``: no OpenAI (local embeddings + extractive answers), no Supabase
-(local JSON metadata). A fixed ``API_KEY`` is configured so auth is enabled
+local ``.env``: no OpenAI (local embeddings + extractive answers) and local
+JSON metadata. A fixed ``API_KEY`` is configured so auth is enabled
 (fail-closed) and the tests can authenticate with it.
 
 External credentials are set to empty strings rather than unset because
@@ -20,9 +20,6 @@ TEST_API_KEY = "test-api-key"
 
 for _var in (
     "OPENAI_API_KEY",
-    "SUPABASE_URL",
-    "SUPABASE_KEY",
-    "SUPABASE_SERVICE_ROLE_KEY",
     "LANGSMITH_API_KEY",
 ):
     os.environ[_var] = ""

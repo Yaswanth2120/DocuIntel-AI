@@ -8,9 +8,6 @@ from pathlib import Path
 # in case the suite is run without the tests package being imported first).
 for _var in (
     "OPENAI_API_KEY",
-    "SUPABASE_URL",
-    "SUPABASE_KEY",
-    "SUPABASE_SERVICE_ROLE_KEY",
     "LANGSMITH_API_KEY",
 ):
     os.environ[_var] = ""

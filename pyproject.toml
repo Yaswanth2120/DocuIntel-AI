@@ -18,7 +18,6 @@ dependencies = [
     "langchain-chroma>=1.1,<2",
     "langchain-text-splitters>=1.1,<2",
     "langsmith>=0.8,<1",
-    "supabase>=2.25,<3",
     "psycopg[binary,pool]>=3.2,<4",
     "redis>=5,<7",
     "prometheus-client>=0.21,<1",
