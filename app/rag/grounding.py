@@ -266,3 +266,76 @@ def _escalate(pending, premises, threshold, premises_per_claim=3):
             result["escalation_score"] = entailment
             if entailment >= threshold:
                 result.update(supported=True, evidence=premises[index], verified_by="escalation")
+
+
+_CLAUSE_BREAK = re.compile(
+    r"\s*(?:;|,?\s+but\s+|,\s*(?:however|although|though|while)\s+|\.\s+However,?\s+"
+    r"|,\s+(?=(?:it|this|they|which)\s+(?:does|do|did)\s+not\b))",
+    re.I,
+)
+# Clause-level hedges ("it does not give an exact count"); broader than the
+# answer-level refusal detector because it only filters fragments for salvage.
+_HEDGE = re.compile(
+    r"\b(?:(?:does|do|did)\s+not|doesn't|don't|didn't|cannot|can't)\s+\w+|"
+    r"^(?:this|that|it)\s+(?:refers|suggests|implies|means|appears|seems)\b|\bnot\s+(?:\w+ly\s+)?(?:specified|stated|"
+    r"mentioned|provided|given|clear|known|available|included)\b|\bno\s+(?:other\s+)?(?:information|evidence|"
+    r"mention|data)\b|\bunknown\b|^(?:therefore|thus|so|in\s+summary|overall)\b",
+    re.I,
+)
+_META_LEAD_IN = re.compile(
+    r"^(?:(?:while|although|but|however),?\s+)?"
+    r"(?P<subject>\[[^\]]+\]|it|this|they|the\s+(?:retrieved\s+)?(?:evidence|text|passage|source|context)s?)\s+"
+    r"(?:only\s+|also\s+)?(?:mentions|states|notes|says|indicates|reports|explains|shows)(?:\s+that)?\s+",
+    re.I,
+)
+
+
+def salvage_hedged_answer(answer):
+    """Recover cited facts from an answer that hedges ("X is not specified. [S1] states Y").
+
+    Small models often refuse in the first sentence and then quote the answer.
+    Refusal clauses are removed, meta lead-ins ("[S1] mentions that") are
+    rewritten as plain claims with the citation moved to the end, and only
+    cited fragments are kept. The result must still pass the full gate; this
+    function never decides that anything is supported. Returns None if nothing
+    cited remains.
+    """
+    kept = []
+    for raw, _ in segment_answer(answer):
+        citations = [match.group(0) for match in CITATION_PATTERN.finditer(raw)]
+        for clause in _CLAUSE_BREAK.split(raw):
+            clause = clause.strip(" ,;")
+            if not clause or _HEDGE.search(CITATION_PATTERN.sub("", clause)):
+                continue
+            lead = _META_LEAD_IN.match(clause)
+            if not lead and CITATION_PATTERN.match(clause):
+                # "[S2] lists him as ..." -- a citation as grammatical subject
+                # with an unrecognized verb cannot be rewritten safely.
+                continue
+            if lead:
+                clause = clause[lead.end() :]
+                if CITATION_PATTERN.fullmatch(lead.group("subject")):
+                    citations = [lead.group("subject")]
+            text = re.sub(r"\s+([,.;:])", r"\1", CITATION_PATTERN.sub("", clause)).strip(" .,;\"'")
+            cited = CITATION_PATTERN.findall(clause) or (citations if lead or kept else [])
+            if text.count('"') % 2:
+                text = text.replace('"', "")
+            if not re.search(r"\w{2,}", text) or not cited:
+                continue
+            inline = CITATION_PATTERN.search(clause)
+            reference = inline.group(0) if inline else citations[0]
+            kept.append(f"{text[0].upper()}{text[1:]} {reference}.")
+    result = " ".join(kept)
+    # Never return a refusal dressed as an answer ("... is not explicitly stated [S1].").
+    if not result or is_abstention(result) or _HEDGE.search(CITATION_PATTERN.sub("", result)):
+        return None
+    return result
+
+
+def min_cited_rank(answer, ranks):
+    """Best (lowest) retrieval rank among an answer's citations, or None if uncited.
+
+    ``ranks`` maps lower-case citation keys (s1, chunk ids) to retrieval rank.
+    """
+    cited = [ranks[ref] for ref in cited_references(answer) if ref in ranks]
+    return min(cited) if cited else None

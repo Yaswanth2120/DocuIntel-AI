@@ -68,24 +68,23 @@ Recursive chunking cuts SciFact prompt context from ~1,530 to ~1,240 estimated
 tokens versus fixed chunks at higher recall.
 
 **Generation and hallucination** (SQuAD questions with human reference answers,
-Qwen3 4B-Instruct on CPU, full corpus retrieval; [report](evals/reports/generation_quality.json))
+Qwen3 4B-Instruct on CPU, full-corpus retrieval; [report](evals/reports/generation_quality.json))
 
-| Outcome | Dev baseline (200) | Dev improved (200) | **Held-out final (200)** |
-| --- | --- | --- | --- |
-| Delivered and correct | 76.5% | 80.0% | **75.5%** |
-| Delivered but wrong | 4.0% | 5.0% | **5.5%** |
-| Correct answer withheld by the gate | 8.0% | 3.5% | 3.5% |
-| Model refused although gold passage retrieved | 8.0% | 9.5% | 11.5% |
-| Gold passage not retrieved | 1.5% | 1.5% | 2.5% |
+| Outcome | Held-out (seed 7, 200) | **Final fresh set (seed 11, 200)** |
+| --- | --- | --- |
+| Delivered and correct | 75.5% | **81.5%** |
+| Delivered but wrong | 5.5% | **4.5%** |
+| Answers delivered that are correct | 93% | **95%** |
+| Model refused although gold passage retrieved | 11.5% | 4.0% |
+| Gold passage not retrieved | 2.5% | 3.0% |
 
-The held-out set (200 new questions, never inspected while tuning) is the
-number to quote. On the same held-out answers, the improved gate (stronger NLI
-second opinion for rejected claims, supported-sentence delivery, refusal
-detection) delivered 14 more answers, 13 of them correct, versus the previous
-all-claims policy (69.0% -> 75.5% correct). 93% of delivered answers are correct.
-Wrong answers are almost all supported by a retrieved passage but answer a
-different reading of a context-dependent question; the gate verifies support,
-not intent. Median answer time is ~10 s on 2 CPU cores; API cost is $0.
+Each run also scores the previous release on the identical answers. On the final
+set the previous release delivered 80.0% correct / 4.0% wrong, so the latest
+changes add +1.5 points of correct answers; most of the gap to 75.5% is question
+sampling, not the new code. Hedge salvage (16 of 20 salvaged answers correct
+across two sets) is the measured gain. Wrong answers are almost all supported by
+a retrieved passage but answer a different reading of a context-dependent
+question. Median answer time is ~9 s on 2 CPU cores; API cost is $0.
 
 **Operations:** 100 concurrent requests at concurrency 8 with 0 errors; tenant
 isolation enforced by PostgreSQL row-level security (verified even without the
