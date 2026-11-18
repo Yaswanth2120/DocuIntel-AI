@@ -29,3 +29,16 @@ for _var in (
 
 os.environ["API_KEY"] = TEST_API_KEY
 os.environ["LANGSMITH_TRACING"] = "false"
+
+for name, value in {
+    "APP_ENV": "test",
+    "TENANT_API_KEYS": "",
+    "DATABASE_URL": "",
+    "REDIS_URL": "",
+    "EMBEDDING_BACKEND": "local_hash",
+    "GROUNDING_VERIFIER": "off",
+    "RAG_DEFAULT_MODE": "vector",
+    "RAG_DEFAULT_RERANK": "false",
+    "RERANKER_BACKEND": "lexical",
+}.items():
+    os.environ[name] = value

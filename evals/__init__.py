@@ -1,1 +1,1 @@
-"""Local RAG evaluation pipeline for DocuIntelAI."""
+"""DocuIntel AI package."""

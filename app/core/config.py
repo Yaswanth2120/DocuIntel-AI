@@ -9,8 +9,8 @@ load_dotenv()
 
 @dataclass(frozen=True)
 class Settings:
-    app_name: str = "LangC Advanced RAG API"
-    app_version: str = "1.0.0"
+    app_name: str = "DocuIntel AI"
+    app_version: str = "2.0.0"
     chat_model: str = os.getenv("OPENAI_CHAT_MODEL", "gpt-4o-mini")
     embedding_model: str = os.getenv("OPENAI_EMBEDDING_MODEL", "text-embedding-3-small")
     temperature: float = float(os.getenv("OPENAI_TEMPERATURE", "0.2"))
@@ -27,9 +27,7 @@ class Settings:
     # Service-role key (bypasses RLS; server-side ONLY). This is what the
     # backend uses to access the documents table. Never expose client-side,
     # never log it.
-    supabase_service_role_key: str | None = (
-        os.getenv("SUPABASE_SERVICE_ROLE_KEY") or None
-    )
+    supabase_service_role_key: str | None = os.getenv("SUPABASE_SERVICE_ROLE_KEY") or None
     openai_api_key: str | None = os.getenv("OPENAI_API_KEY") or None
     api_key: str | None = os.getenv("API_KEY") or None
     rate_limit: str = os.getenv("RATE_LIMIT", "30/minute")
@@ -37,9 +35,7 @@ class Settings:
     # local static-served frontend; override via CORS_ALLOW_ORIGINS in prod.
     cors_allow_origins: tuple[str, ...] = tuple(
         o.strip()
-        for o in os.getenv(
-            "CORS_ALLOW_ORIGINS", "http://localhost:5500,http://127.0.0.1:5500"
-        ).split(",")
+        for o in os.getenv("CORS_ALLOW_ORIGINS", "http://localhost:5500,http://127.0.0.1:5500").split(",")
         if o.strip()
     )
 

@@ -1,0 +1,31 @@
+{
+  "app_env": "production",
+  "readiness_passed": true,
+  "provider": "private Ollama qwen3:4b-instruct-2507-q4_K_M through OpenAI-compatible API",
+  "configured_generation_passed": true,
+  "grounding_gate_passed": true,
+  "invalid_credentials_rejected": true,
+  "public_demo_disabled": true,
+  "answer": {
+    "question": "How long are backups retained, and how soon must incidents be reported?",
+    "answer": "Backups are retained for 35 days [S1]. Incidents must be reported within 24 hours [S1].",
+    "claims": 2,
+    "unsupported_claim_rate_nli": 0.0,
+    "invalid_citations": 0,
+    "total_tokens": 209,
+    "latency_s": {
+      "cold_model_load": 38.22,
+      "warm": 2.28
+    }
+  },
+  "scope": "Live localhost Docker Compose deployment; no cloud availability certification",
+  "verified_at": "2026-11-17",
+  "unanswerable": {
+    "question": "What is the CEO's salary?",
+    "answer": "I don't have enough information in the uploaded documents.",
+    "latency_s": 0.08,
+    "generation_called": false
+  },
+  "unauthenticated_status": 401,
+  "document_delete_status": 204
+}

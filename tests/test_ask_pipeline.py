@@ -2,7 +2,13 @@ import json
 import os
 import unittest
 
-for _var in ("OPENAI_API_KEY", "SUPABASE_URL", "SUPABASE_KEY", "SUPABASE_SERVICE_ROLE_KEY", "LANGSMITH_API_KEY"):
+for _var in (
+    "OPENAI_API_KEY",
+    "SUPABASE_URL",
+    "SUPABASE_KEY",
+    "SUPABASE_SERVICE_ROLE_KEY",
+    "LANGSMITH_API_KEY",
+):
     os.environ[_var] = ""
 os.environ["LANGSMITH_TRACING"] = "false"
 
@@ -84,7 +90,8 @@ class AskPipelineTestCase(unittest.TestCase):
 
     def test_stream_emits_meta_then_tokens_then_done(self):
         response = self.client.post(
-            "/ask", json={"question": "What retrieval modes does this API support?", "mode": "basic", "stream": True}
+            "/ask",
+            json={"question": "What retrieval modes does this API support?", "mode": "basic", "stream": True},
         )
 
         self.assertEqual(response.status_code, 200)

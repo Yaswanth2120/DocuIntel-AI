@@ -1,542 +1,175 @@
-# LangC Advanced RAG API
+# DocuIntel AI
 
-A deployable advanced Retrieval-Augmented Generation API built with FastAPI, LangChain, OpenAI, Chroma, LangSmith, and optional Supabase integration.
+A multi-tenant RAG API with shared PostgreSQL storage, pgvector semantic search,
+indexed full-text search, neural reranking, independent grounding verification,
+and reproducible public-data evaluations.
 
-This repo is cleaned up as a portfolio-ready project: one production API, organized source code, preserved learning examples, deployment config, and clear setup steps.
+## Start locally
 
-## Live Demo
+Requirements: Python 3.12, [uv](https://docs.astral.sh/uv/), and Docker Compose.
 
-- Backend: https://langc-advanced-rag-api.onrender.com
-- Frontend: https://langc-advanced-rag-api-1.onrender.com
+```bash
+uv sync --frozen --extra dev --python 3.12
+uv run python scripts/setup_local.py
+docker compose up --build -d
+curl http://127.0.0.1:8000/ready
+```
 
-Note: free-tier Render instances spin down on inactivity; first request after
-idle may take 50+ seconds.
+`setup_local.py` creates a private `.env` with random database, Redis, and tenant
+credentials. It never overwrites an existing file. Read your admin API key from
+`TENANT_API_KEYS` in that file. The first neural-model download takes time.
+The default local setup uses real semantic retrieval and an extractive answer
+when no generation API key is configured.
 
-## Demo
+To enable production generation, set `OPENAI_API_KEY` and `APP_ENV=production`
+in `.env`, then recreate the API container. `OPENAI_BASE_URL` can point at a
+private OpenAI-compatible inference service. Production startup requires real
+embeddings, the neural reranker, grounding verification, restricted database
+permissions, Redis, and strong tenant credentials; it refuses silent fallback.
 
-Screenshots of the deployed frontend against a real uploaded document
-(`docs/screenshots/`):
+An existing private Ollama endpoint also works through this interface. For a
+host service, use `OPENAI_BASE_URL=http://127.0.0.1:11434/v1` and
+`DOCKER_OPENAI_BASE_URL=http://host.docker.internal:11434/v1`; set the installed
+chat model and the local protocol token. `MODEL_REASONING_EFFORT=none` can disable
+thinking for compatible models. This workspace's private `.env` is configured
+for `qwen3:4b-instruct-2507-q4_K_M` (`ollama pull qwen3:4b-instruct-2507-q4_K_M`).
 
-**Comparison query (thrust vs power)**
+The static frontend remains available with:
 
-![Comparison query](docs/screenshots/compare.png)
+```bash
+uv run python -m http.server 5500 --directory frontend
+```
 
-**Thermal systems query**
+Connect to `http://127.0.0.1:8000` and use your tenant API key. The frontend is a
+development client; production identity and TLS termination belong at the edge.
 
-![Thermal systems query](docs/screenshots/multiple.png)
+## Measured results
 
-> Known limitation: broad category queries (e.g. "list every system related to
-> X") can under-retrieve when relevant chunks don't share the query's exact
-> terminology. Confirmed via test: a thermal-management query returned only 1
-> of 3 relevant sections.
+Public data, full corpora, 100 seeded queries per dataset, top-10, CPU-only
+(2 vCPU / 1.2 GB container). Full reports: [`evals/reports/`](evals/reports/);
+method: [evaluation](docs/evaluation.md).
 
-**Avionics summary query**
+**Retrieval: chunking × search mode × reranking** (recall@10 / nDCG@10)
 
-![Avionics summary query](docs/screenshots/summarize.png)
+| Configuration | SciFact (5,183 docs) | SQuAD (2,067 passages) |
+| --- | --- | --- |
+| Fixed chunks, vector | 0.810 / 0.698 | 0.940 / 0.843 |
+| Fixed chunks, keyword (full-text) | 0.613 / 0.435 | 0.810 / 0.630 |
+| Fixed chunks, hybrid | 0.761 / 0.663 | 0.960 / 0.842 |
+| Fixed chunks, hybrid + reranker | 0.801 / 0.711 | 0.970 / 0.888 |
+| Recursive chunks, vector | 0.824 / 0.718 | 0.940 / 0.862 |
+| Recursive chunks, keyword | 0.583 / 0.394 | 0.850 / 0.650 |
+| Recursive chunks, hybrid | 0.775 / 0.674 | 0.960 / 0.846 |
+| **Recursive chunks, hybrid + reranker (default)** | **0.854 / 0.716** | **0.970 / 0.894** |
 
-**Negative/fallback query — no hallucination**
+Default retrieval latency: p95 486 ms cold / 4 ms warm (SciFact), 181 ms / <1 ms
+(SQuAD). Redis caches results per tenant, configuration, and corpus revision.
+Recursive chunking cuts SciFact prompt context from ~1,530 to ~1,240 estimated
+tokens versus fixed chunks at higher recall.
 
-Query: "Does this document mention anything about lunar landing systems?"
-Answer: "I do not know."
+**Generation and hallucination** (SQuAD questions with human reference answers,
+Qwen3 4B-Instruct on CPU, full corpus retrieval; [report](evals/reports/generation_quality.json))
 
-![Negative/fallback query](docs/screenshots/DoNotKnow.png)
+| Outcome | Dev baseline (200) | Dev improved (200) | **Held-out final (200)** |
+| --- | --- | --- | --- |
+| Delivered and correct | 76.5% | 80.0% | **75.5%** |
+| Delivered but wrong | 4.0% | 5.0% | **5.5%** |
+| Correct answer withheld by the gate | 8.0% | 3.5% | 3.5% |
+| Model refused although gold passage retrieved | 8.0% | 9.5% | 11.5% |
+| Gold passage not retrieved | 1.5% | 1.5% | 2.5% |
 
-## What It Does
+The held-out set (200 new questions, never inspected while tuning) is the
+number to quote. On the same held-out answers, the improved gate (stronger NLI
+second opinion for rejected claims, supported-sentence delivery, refusal
+detection) delivered 14 more answers, 13 of them correct, versus the previous
+all-claims policy (69.0% -> 75.5% correct). 93% of delivered answers are correct.
+Wrong answers are almost all supported by a retrieved passage but answer a
+different reading of a context-dependent question; the gate verifies support,
+not intent. Median answer time is ~10 s on 2 CPU cores; API cost is $0.
 
-- Answers questions through a FastAPI `/ask` endpoint.
-- Uploads documents, ingests them, and answers questions grounded in them
-  through `/documents/*` and `/query/documents`.
-- Uses OpenAI embeddings and Chroma vector search for both flows.
-- Supports multiple advanced RAG retrieval modes on `/ask`.
-- Adds source/topic context to chunks before embedding.
-- Returns answers with source names and retrieval metadata.
-- Protects document and query routes with an `X-API-Key` header.
-- Rate limits the answer endpoints per client IP.
-- Persists document metadata in Supabase when configured, with a local JSON
-  fallback.
-- Ships a minimal static web UI (`frontend/`) for upload, listing, and querying.
-- Restricts browser access with an explicit CORS allow-list.
-- Uses LangSmith tracing when enabled.
+**Operations:** 100 concurrent requests at concurrency 8 with 0 errors; tenant
+isolation enforced by PostgreSQL row-level security (verified even without the
+application filter); backup restored into a separate database with policies intact.
 
-## Advanced RAG Modes
+## Workflow
+
+All document routes require `X-API-Key`.
+
+1. `POST /documents/upload` — upload `.txt`, `.md`, or `.pdf`.
+2. `POST /documents/{id}/ingest?strategy=recursive` — atomically index chunks.
+3. `POST /query/documents` — retrieve evidence and answer.
+4. `DELETE /documents/{id}` — delete document, chunks, and vectors together.
+
+Example query body:
+
+```json
+{
+  "question": "What are the incident response requirements?",
+  "mode": "hybrid",
+  "rerank": true,
+  "top_k": 4,
+  "context_chars": 12000
+}
+```
+
+The response includes source IDs, exact retrieved passages, ranking scores,
+cache/latency/context diagnostics, and grounding measurements. A retrieval score
+is not a probability that an answer is correct. With verification enabled,
+streaming buffers generated text until the grounding check passes.
+
+## Verify the system
+
+```bash
+make test
+make lint
+make eval
+```
+
+For real shared-storage integration tests, set `TEST_DATABASE_URL` to the
+restricted API database URL and `TEST_REDIS_URL` to a disposable Redis database,
+then run `make test-shared`. The migration administrator must first run
+`scripts/bootstrap_db.py` with `MIGRATION_DATABASE_URL` and `APP_DB_PASSWORD`.
+
+Public evaluation downloads complete corpora from the original providers:
+
+```bash
+# Start the Compose stack first; the wrapper keeps database/cache ports private.
+make eval-public
+make gates
+```
+
+The public runner compares two chunking strategies across vector, keyword,
+hybrid, and neural-reranked hybrid retrieval, using fixed seeded query samples.
+It measures precision/recall, MRR, nDCG, cold/warm latency, and context size.
+SQuAD also provides reference answers for a local generation/NLI experiment.
+See [evaluation methodology and results](docs/evaluation.md).
+
+## Repository map
 
 ```text
-basic        Vector similarity retrieval
-multi_query  Generates multiple search queries to improve recall
-hybrid       Combines vector retrieval with keyword retrieval
-agentic      Checks retrieval quality, rewrites weak queries, and retries
+app/
+  api/          HTTP endpoints and authorization dependencies
+  core/         Configuration, identity, quotas, runtime checks, metrics
+  documents/    Upload, extraction, chunking, document lifecycle
+  rag/          Retrieval, neural models, generation, grounding
+  storage/      PostgreSQL/pgvector, Redis, local/legacy adapters
+evals/          Public benchmarks, smoke evaluation, metrics, release gates
+  fixtures/     Small deterministic offline test questions
+  reports/      Measured public-data and operational validation results
+frontend/       Static development UI and browser tests
+migrations/     Shared-storage schema, indexes, RLS, permissions
+scripts/        Local setup, migrations, load verification, backups
+tests/          Unit, API, isolation, concurrency, and integration tests
+docs/           Architecture, operations, evaluation, cleanup record
 ```
 
-Example:
-
-```bash
-curl -X POST http://127.0.0.1:8000/ask \
-  -H "Content-Type: application/json" \
-  -d '{"question":"What advanced RAG features are included?","mode":"agentic"}'
-```
-
-## Project Structure
-
-Actual output of
-`tree -a -L 2 -I '__pycache__|.venv|node_modules|.git|.vscode|storage|.env'`
-at the repo root (`.env` and `storage/` are gitignored local state, excluded
-here since neither exists in a fresh clone):
-
-```text
-.
-├── .dockerignore
-├── .env.example
-├── .github
-│   └── workflows
-├── .gitignore
-├── .python-version
-├── Dockerfile
-├── Makefile
-├── README.md
-├── app
-│   ├── __init__.py
-│   ├── api
-│   ├── core
-│   ├── db
-│   ├── main.py
-│   ├── schemas
-│   └── services
-├── docker-compose.yml
-├── docs
-│   ├── dev-process        # planning docs from the build process (agents/, phases/)
-│   └── screenshots
-├── evals
-│   ├── __init__.py
-│   ├── questions.json
-│   ├── results.md
-│   └── run_eval.py
-├── examples
-│   ├── advanced_rag
-│   ├── basic_langchain
-│   └── langgraph
-├── frontend
-│   ├── README.md
-│   ├── e2e
-│   └── index.html
-├── pyproject.toml
-├── render.yaml
-├── requirements.txt
-├── runtime.txt
-├── supabase
-│   └── migrations
-└── tests
-    ├── __init__.py
-    ├── test_ask_pipeline.py
-    ├── test_auth.py
-    ├── test_documents.py
-    ├── test_evals.py
-    ├── test_health.py
-    ├── test_rag_pipeline.py
-    ├── test_rate_limit.py
-    └── test_supabase_integration.py
-
-22 directories, 29 files
-```
-
-## Local Setup
-
-Use Python 3.12. The project intentionally avoids Python 3.14 because some AI
-packages can be slow or unstable there.
-
-Install dependencies with pip:
-
-```bash
-.venv/bin/python -m pip install -r requirements.txt
-```
-
-Or with `uv` after regenerating the lock for Python 3.12:
-
-```bash
-uv lock --python 3.12
-uv sync
-```
-
-Run locally:
-
-```bash
-.venv/bin/python -m uvicorn app.main:app --host 127.0.0.1 --port 8000
-```
-
-Open:
-
-```text
-http://127.0.0.1:8000/docs
-```
-
-## Makefile Commands
-
-Common tasks are wrapped in a `Makefile`. Override the interpreter with
-`PYTHON=` (for example `make test PYTHON=.venv/bin/python`).
-
-```text
-make install       Install dependencies from requirements.txt
-make test          Run the test suite
-make run           Run the API locally on port 8000
-make eval          Run the offline RAG evaluation (deterministic, no API cost)
-make eval-live     Run the same evaluation against the real configured backend
-make docker-build  Build the Docker image
-make docker-run    Run the Docker image (uses .env if present)
-```
-
-## Docker
-
-Build and run with Docker:
-
-```bash
-make docker-build
-make docker-run
-```
-
-Or directly:
-
-```bash
-docker build -t docuintelai .
-docker run -p 8000:8000 docuintelai
-```
-
-The API boots without any credentials. To supply them, create `.env` from
-`.env.example`; `docker run` and `docker compose` pick it up automatically when
-present and start fine without it.
-
-With Docker Compose (persists uploaded documents in `./storage`):
-
-```bash
-docker compose up --build
-```
-
-## Frontend (Web UI)
-
-A single static page (`frontend/index.html`, plain HTML/CSS/JS, no build step)
-provides upload, document listing, and grounded querying with sources and a
-confidence score. It calls `/features` on connect and shows the active
-embedding backend (`openai` or `local_hash`).
-
-Run the backend with an API key configured, then serve the folder statically:
-
-```bash
-API_KEY=demo-key .venv/bin/python -m uvicorn app.main:app --host 127.0.0.1 --port 8000
-python -m http.server 5500 --directory frontend
-# open http://127.0.0.1:5500
-```
-
-In the UI set the API base URL and API key, click **Save & connect**, upload a
-document, then ask a question. The API key is stored in `localStorage` and sent
-as `X-API-Key` — a **demo-only** convenience, not secure credential storage.
-
-An automated headless-browser test lives in `frontend/e2e/` and drives the
-three actions end-to-end:
-
-```bash
-BACKEND_MODE=local bash frontend/e2e/run.sh   # boots backend + static, runs the test
-```
-
-## CORS
-
-Browser access is restricted to an explicit allow-list (not `*`). It defaults
-to the local static frontend origins and is configurable via
-`CORS_ALLOW_ORIGINS` (comma-separated):
-
-```text
-CORS_ALLOW_ORIGINS=http://localhost:5500,http://127.0.0.1:5500
-```
-
-Requests from any other origin are rejected by the browser preflight.
-
-## API Endpoints
-
-```text
-GET  /                          API info
-GET  /health                    Health check
-GET  /features                  Lists RAG capabilities
-POST /ask                       Ask a RAG question (rate limited, streamable)
-GET  /supabase/health           Checks Supabase config
-POST /documents/upload          Upload a .txt/.md/.pdf document (auth)
-GET  /documents                 List uploaded documents (auth)
-POST /documents/{id}/ingest     Chunk + embed a document into Chroma (auth)
-GET  /documents/{id}/chunks     List a document's chunks (auth)
-POST /query/documents           Answer from uploaded docs (auth, rate limited, streamable)
-```
-
-Routes marked `(auth)` require the `X-API-Key` header when `API_KEY` is set;
-`/health` and `/features` are always open.
-
-### Streaming
-
-Both `/ask` and `/query/documents` accept `"stream": true` in the request
-body. When set, the response is Server-Sent Events (`text/event-stream`)
-instead of a single JSON object — the answer streams token-by-token as the
-LLM generates it, instead of blocking until the full response is ready.
-
-```bash
-curl -N -X POST http://127.0.0.1:8000/ask \
-  -H "Content-Type: application/json" \
-  -d '{"question":"What retrieval modes are supported?","mode":"hybrid","stream":true}'
-```
-
-Each line is `data: <json>`, in order:
-
-```text
-{"type": "meta", "mode": "hybrid", "sources": [...], "rewritten_query": null, "retrieved_documents": 4}
-{"type": "token", "text": "..."}       # one or more, as generation streams
-{"type": "done"}
-```
-
-`meta` always comes first — retrieval runs eagerly and isn't itself streamed,
-only the answer generation is. Offline (no `OPENAI_API_KEY`), there's no LLM
-to stream tokens from, so the extractive answer is emitted as a single
-`token` event rather than pretending to stream.
-
-## Authentication
-
-Set `API_KEY` in the environment to require an `X-API-Key` header on all
-`/documents/*` and `/query/*` routes:
-
-```bash
-curl -X POST http://127.0.0.1:8000/query/documents \
-  -H "X-API-Key: $API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{"question":"What does the uploaded document say?"}'
-```
-
-Auth **fails closed**: if `API_KEY` is unset or empty, every `/documents/*` and
-`/query/*` request is rejected with 401 (the routes are locked, never silently
-open). The app still boots without credentials — the protected routes are just
-unusable until `API_KEY` is configured. `/health` and `/features` remain open.
-
-## Observability
-
-Every request logs one structured JSON line (method, path, status code,
-duration, client IP) via `AccessLogMiddleware`
-(`app/core/logging_middleware.py`) to the `app.access` logger — enough to
-answer "what happened" from log aggregation on any host without adding an
-external dependency. For deeper request/LLM-call tracing, enable LangSmith
-(`LANGSMITH_TRACING=true`); the two are independent and both optional.
-
-## Rate Limiting
-
-`/ask` and `/query/documents` are rate limited per client IP via slowapi.
-Configure the limit with `RATE_LIMIT` (slowapi syntax, default `30/minute`).
-Exceeding it returns HTTP 429.
-
-## Uploaded-Document RAG
-
-`/query/documents` answers strictly from uploaded documents:
-
-1. `POST /documents/upload` stores a `.txt`, `.md`, or `.pdf` file.
-2. `POST /documents/{id}/ingest` chunks the text and embeds the chunks into a
-   Chroma collection.
-3. `POST /query/documents` embeds the question, retrieves the most similar
-   chunks, and generates a grounded answer from them.
-
-When `OPENAI_API_KEY` is set, this flow uses OpenAI embeddings and an OpenAI
-chat model. Without a key it falls back to a deterministic local embedding and
-an extractive answer built from the retrieved chunks, so it runs fully offline.
-This fallback has lower retrieval quality, so it is never silent: the app logs
-a warning and `/features` reports the active backend as
-`"embedding_backend": "local_hash"` (vs `"openai"`). Chunks scoring below
-`RAG_RELEVANCE_THRESHOLD` are ignored; if none qualify the endpoint returns a
-fallback message with no sources.
-
-## Environment Variables
-
-Create `.env` from `.env.example`:
-
-```env
-OPENAI_API_KEY=your_openai_api_key
-OPENAI_CHAT_MODEL=gpt-4o-mini
-OPENAI_EMBEDDING_MODEL=text-embedding-3-small
-
-LANGSMITH_TRACING=true
-LANGSMITH_API_KEY=your_langsmith_api_key
-LANGSMITH_PROJECT=multi-agent-research
-
-SUPABASE_URL=your_supabase_project_url
-SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key
-SUPABASE_KEY=your_supabase_anon_key
-
-API_KEY=your_api_key
-RATE_LIMIT=30/minute
-CORS_ALLOW_ORIGINS=http://localhost:5500,http://127.0.0.1:5500
-```
-
-See `.env.example` for the full list. Supabase is optional; the app runs
-without it, and `/supabase/health` will return `configured: false`.
-
-## LangSmith Setup
-
-1. Create a LangSmith API key.
-2. Add `LANGSMITH_API_KEY` to `.env`.
-3. Set `LANGSMITH_TRACING=true`.
-4. Set `LANGSMITH_PROJECT=multi-agent-research`.
-5. Run the API and call `/ask`.
-6. Check LangSmith for traces under that project.
-
-LangSmith projects usually appear after the first traced request.
-
-## Supabase Setup
-
-When `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` are set, document metadata
-(the `DocumentMetadata` fields) is persisted to a Supabase `documents` table
-instead of the local `storage/documents.json` file. When they are unset, the
-app falls back to local JSON.
-
-**Key model (security-relevant):** the backend talks to Supabase exclusively
-with the **service-role key** (`SUPABASE_SERVICE_ROLE_KEY`), which bypasses RLS
-by design and must live server-side only — never in the frontend, never in
-logs. The **anon/publishable key** (`SUPABASE_KEY`) has zero access to the
-`documents` table: RLS is enabled with no policies for `anon`/`authenticated`
-(see `supabase/migrations/002_lock_down_documents_rls.sql`), so holding the
-anon key does not let anyone bypass the FastAPI auth layer. The frontend never
-talks to Supabase at all; it only calls this API.
-
-1. Create a free Supabase project.
-2. Copy the project URL and the **service-role** key into `.env`
-   (`SUPABASE_SERVICE_ROLE_KEY`).
-3. Provision the schema from this repo — do not create the table by hand:
-
-   ```bash
-   supabase link --project-ref <your-project-ref>
-   supabase db push        # applies supabase/migrations/*.sql
-   ```
-
-   The migrations create `public.documents` with columns matching
-   `app/schemas/document.py` exactly (`document_id`, `filename`, `file_type`,
-   `status`, `created_at`), enable RLS, and leave no anon policies.
-4. Run the API and visit `/supabase/health` (reports which key type is
-   configured).
-
-The `documents` table must exist before uploads work with Supabase enabled —
-`tests/test_supabase_integration.py` exercises this end-to-end against a real
-project (and is skipped when no credentials are present).
-
-## Deployment Plan
-
-Recommended free-tier deployment:
-
-```text
-Hosting: Render
-LLM: OpenAI
-Tracing: LangSmith
-Optional DB: Supabase
-```
-
-Render settings:
-
-```text
-Build command: pip install -r requirements.txt
-Start command: uvicorn app.main:app --host 0.0.0.0 --port $PORT
-Health check: /health
-```
-
-Add these Render environment variables:
-
-```text
-OPENAI_API_KEY
-OPENAI_CHAT_MODEL
-OPENAI_EMBEDDING_MODEL
-LANGSMITH_TRACING
-LANGSMITH_API_KEY
-LANGSMITH_PROJECT
-SUPABASE_URL
-SUPABASE_SERVICE_ROLE_KEY
-API_KEY
-RATE_LIMIT
-CORS_ALLOW_ORIGINS
-```
-
-## Testing
-
-```bash
-.venv/bin/python -m unittest discover -s tests -t .
-```
-
-The tests cover health/feature metadata, document upload and ingestion, the
-uploaded-document RAG flow (embedding retrieval via Chroma), API-key auth, and
-rate limiting. They run fully offline by default: the suite forces the local
-embedding backend, so no OpenAI calls are made.
-
-`tests/test_supabase_integration.py` is an integration test that runs against a
-real Supabase project. It is skipped unless credentials are provided, and runs
-in CI via the `SUPABASE_URL` / `SUPABASE_SERVICE_ROLE_KEY` GitHub Actions
-secrets (passed as `SUPABASE_TEST_URL` / `SUPABASE_TEST_KEY`). A separate CI job runs the
-Playwright frontend end-to-end test. See `.github/workflows/tests.yml`.
-
-## Evaluations
-
-A local evaluation pipeline measures the quality of the uploaded-document RAG
-flow. It seeds a fixed corpus into an isolated temporary storage directory,
-runs the questions in `evals/questions.json` through the real
-`/query/documents` retrieval pipeline (Chroma similarity search via
-`document_qa_service`), and writes a report.
-
-Two run modes:
-
-```bash
-.venv/bin/python -m evals.run_eval          # offline: deterministic, free, CI-safe
-.venv/bin/python -m evals.run_eval --live   # live: real OpenAI embeddings + chat model
-```
-
-`make eval` / `make eval-live` do the same. The offline run pins the local
-hashing-embedding backend (bag-of-words cosine similarity over Chroma, **not**
-BM25 and **not** a real embedding model) and an extractive "answer" — it's a
-fast, reproducible smoke test of the retrieval plumbing, and it's what CI and
-`tests/test_evals.py` run. It intentionally does **not** measure production
-answer quality; only `--live` (with `OPENAI_API_KEY` set) does that, writing
-to `evals/results_live.md` (gitignored — costs API credit, not deterministic,
-not run in CI).
-
-The corpus is deliberately adversarial, not curated to look good: it includes
-two near-miss distractor documents (Voyager vs. a Mars rover, both about
-nuclear-powered space probes), an adjacent-topic negative case, and a
-paraphrase question with no lexical overlap with its source chunk. See the
-`note` field on each entry in `evals/questions.json` for what it's designed to
-catch. The offline baseline currently scores **~86% retrieval recall**, with
-its one full miss being a multi-source "list everything" question — the same
-failure mode the Live Demo screenshots above document with a real document.
-
-Reported metrics:
-
-```text
-retrieval exact-hit rate    every expected source was cited (strict, all-or-nothing)
-retrieval recall            fraction of expected sources cited (multi-source aware)
-citation/source presence    answerable questions return non-empty sources
-fallback accuracy           out-of-scope questions return the fallback message
-latency_ms                  per-question and average answer latency
-```
-
-Edit `evals/questions.json` to add cases. Each item has a `type` of
-`answerable` (with `expected_sources` — a list, to support multi-source
-questions — and `expected_keywords`) or `fallback`.
-
-## Resume Bullet
-
-Built a production-style advanced RAG API using FastAPI, LangChain, OpenAI embeddings, Chroma vector search, contextual chunking, multi-query retrieval, hybrid keyword/vector retrieval, and agentic query rewrite/retry, with LangSmith observability, optional Supabase integration, tests, and Render-ready deployment configuration.
-
-## Still Missing / Future Work
-
-The following are genuinely not yet done after this phase:
-
-- **The RLS lockdown migration (`supabase/migrations/002_lock_down_documents_rls.sql`)
-  is written but not yet applied to the live Supabase project.** Verified live:
-  the anon key currently still returns `HTTP 200` on `SELECT` against
-  `documents`. Apply it via the Supabase SQL editor or `supabase db push`
-  before relying on RLS for protection — until then, the anon key (which is
-  not secret) has read access to that table directly, independent of the
-  FastAPI auth layer.
-- Per-key (not just per-IP) rate limiting and multiple API keys / roles.
-- Storing uploaded files, Chroma vectors, and rate-limit counters in durable
-  shared storage rather than local disk/process memory (document *metadata*
-  already persists to Supabase when configured). This is the main reason the
-  app doesn't yet scale past one instance or survive a redeploy on ephemeral
-  hosting cleanly — deferred pending a decision on Redis vs. a hosted vector
-  DB (e.g. pgvector on the existing Supabase project) rather than picked
-  unilaterally.
-- Evaluation datasets in LangSmith (the local eval in `evals/` covers offline
-  retrieval plumbing plus an optional `--live` run against the real backend,
-  but isn't tracked/versioned like a LangSmith dataset would be).
-- A managed vector database if traffic outgrows local Chroma.
+Tutorial examples and historical planning files were removed. Production source
+was reorganized without changing the document API paths. See the
+[cleanup record](docs/cleanup.md).
+
+Read [architecture](docs/architecture.md) and [operations](docs/operations.md)
+for security boundaries, deployment, scaling, backups, and release checks.
+
+To seed attributed public examples into a tenant, set `RAG_BASE_URL` and
+`RAG_TEST_API_KEY`, then run `python -m scripts.seed_public_demo --count 10`.
+The script uploads new public passages and never replaces existing documents.

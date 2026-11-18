@@ -1,0 +1,22 @@
+{
+  "profiled_model": "cross-encoder/ms-marco-MiniLM-L6-v2",
+  "scope": "Diagnostic sample of recent cold retrievals during CPU-limited SciFact run, not a controlled model quality comparison",
+  "cpu_limit": 2,
+  "memory_limit_mib": 1200,
+  "latency_ms": [
+    3938.961,
+    5094.178,
+    4775.852,
+    4489.641,
+    4996.078,
+    7430.863,
+    4413.398,
+    4755.699,
+    4867.02,
+    5088.785,
+    4599.806,
+    4306.628,
+    4077.39
+  ],
+  "decision": "Use pinned TinyBERT-L2 reranking and bound its candidate pool to 40; verify quality and latency on the same seeded public benchmark."
+}

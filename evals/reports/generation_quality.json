@@ -1,0 +1,114 @@
+{
+  "scope": "Generation quality on public SQuAD 1.1 dev questions with human reference answers, full 2,067-passage corpus, recursive hybrid + neural-reranked retrieval, Qwen3 4B-Instruct (Q4_K_M) via private Ollama on CPU. Not a domain certification.",
+  "method": {
+    "development_set": "seed 42, 200 questions; used to diagnose failures and tune the gate/prompt",
+    "held_out_set": "seed 7, 200 questions, zero overlap with the development set; never inspected before the final run",
+    "correctness": "Delivered answers containing a normalized reference span count as correct. Every delivered answer without a span match was reviewed individually against the references and question by the AI assistant (Claude) that built the system; this is a single, non-independent reviewer, so treat adjudication as indicative.",
+    "strict_policy_counterfactual": "Each run also records whether the previous policy (all claims must pass the fast verifier; no escalation, no partial delivery) would have accepted the same answer, isolating the gate change from prompt and sampling differences."
+  },
+  "results": {
+    "development_baseline": {
+      "report": "squad-generation-200-baseline.json",
+      "policy": "strict gate, previous prompt",
+      "delivered": 161,
+      "delivered_correct": 153,
+      "delivered_wrong": 8,
+      "correct_withheld_by_gate": 16,
+      "refused_with_gold_retrieved": 16
+    },
+    "development_improved": {
+      "report": "squad-generation-200.json",
+      "policy": "abstention fix + escalation + partial delivery + prompt v1",
+      "delivered": 170,
+      "delivered_correct": 160,
+      "delivered_wrong": 10,
+      "correct_withheld_by_gate": 7,
+      "refused_with_gold_retrieved": 19
+    },
+    "held_out_final": {
+      "report": "squad-generation-200-heldout.json",
+      "policy": "final (prompt v2, abbreviation-aware sentence splitting)",
+      "delivered": 162,
+      "delivered_correct": 151,
+      "delivered_wrong": 11,
+      "correct_withheld_by_gate": 7,
+      "refused_with_gold_retrieved": 23,
+      "refused_gold_not_retrieved": 5,
+      "strict_policy_same_answers": {
+        "delivered": 148,
+        "delivered_correct": 138
+      },
+      "added_by_new_gate": {
+        "delivered": 14,
+        "correct": 13,
+        "wrong": 1
+      },
+      "median_generation_and_verification_ms": 10031.339066998953
+    }
+  },
+  "adjudication": {
+    "development_baseline_wrong": [
+      "stadium the teams played in",
+      "question periods in the debating chamber",
+      "play performed in the 1970's",
+      "Mongols give control of Korea",
+      "area of Brookhaven",
+      "Luther's focus centered",
+      "Victoria enact its constitution",
+      "two different types of immunity"
+    ],
+    "development_improved_wrong": [
+      "stadium the teams played in",
+      "question periods in the debating chamber",
+      "protest against the government individually",
+      "play performed in the 1970's",
+      "Mongols give control of Korea",
+      "Tesla's new partners",
+      "homicide rates and inequality",
+      "Luther's focus centered",
+      "Victoria enact its constitution",
+      "two different types of immunity"
+    ],
+    "held_out_wrong": [
+      "Rhine join in the direction of its flow",
+      "Switzerland border formed by the Rhine",
+      "German general and fighter pilot of Huguenot ancestry",
+      "idealized value of imperialism",
+      "complexity of problems depends on",
+      "earliest civil disobedience against",
+      "modern city on the original Huguenot colony",
+      "what justifies us according to Luther",
+      "region outside Northern San Diego",
+      "War Doctor exists between",
+      "atmospheric engine air pressure"
+    ],
+    "held_out_correct_without_span_match": [
+      "Normans in Normandy (ref: north)",
+      "Tetzel capable of exaggerating",
+      "pupil in a classroom (ref: school)",
+      "political advantage / imperialism",
+      "chloroplasts and transgenes",
+      "grand coalition power sharing",
+      "starch grains distort grana",
+      "civil disobedience against unjust laws",
+      "Victoria public schools publicly funded"
+    ]
+  },
+  "findings": [
+    "Wrong delivered answers are almost all grounded in a retrieved passage but answer a different reading of a context-dependent question (SQuAD questions were written for one passage, e.g. 'the stadium the teams played in'). The NLI gate verifies support, not that the answer addresses the intended question.",
+    "The largest loss is model refusal despite retrieving the gold passage (11.5% held-out); the 4B model is conservative under strict grounding instructions.",
+    "Escalation to the stronger NLI model and partial delivery added 14 held-out answers, 13 correct, at ~0.16 s per escalated premise.",
+    "The 4B model as its own judge was unreliable in probes (accepted an unstated date, rejected a correct paraphrase) and is not used."
+  ],
+  "dataset": {
+    "dataset": "squad",
+    "url": "https://rajpurkar.github.io/SQuAD-explorer/dataset/dev-v1.1.json",
+    "sha256": "95aa6a52d5d6a735563366753ca50492a658031da74f301ac5238b03966972c9",
+    "downloaded_at": "2026-11-17T18:05:01.483739+00:00",
+    "verified_at": "2026-11-17T22:51:34.589881+00:00",
+    "license": "CC BY-SA 4.0",
+    "reference": "https://rajpurkar.github.io/SQuAD-explorer/",
+    "documents": 2067,
+    "queries": 10570
+  }
+}

@@ -1,7 +1,7 @@
 import unittest
 
-from app.services import document_service
-from evals import run_eval
+from app.documents import service as document_service
+from evals import smoke as run_eval
 
 
 class EvalRunnerTestCase(unittest.TestCase):
@@ -51,3 +51,13 @@ class EvalRunnerTestCase(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class GenerativeAnswerMetricTests(unittest.TestCase):
+    def test_reference_span_handles_citations_and_word_boundaries(self):
+        from evals.public_benchmark import answer_metrics
+
+        self.assertEqual(
+            answer_metrics("It was Paris [" + "a" * 32 + "]", ["Paris"])["reference_span_hit"], 1.0
+        )
+        self.assertEqual(answer_metrics("comparison", ["Paris"])["reference_span_hit"], 0.0)

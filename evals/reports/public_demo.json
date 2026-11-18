@@ -1,0 +1,55 @@
+{
+  "source": "https://rajpurkar.github.io/SQuAD-explorer/dataset/dev-v1.1.json",
+  "seeded": 3,
+  "examples": [
+    {
+      "document_id": "f299ae2d-8512-4dfb-bc2f-4116bdd23efc",
+      "question": "Which NFL team represented the AFC at Super Bowl 50?",
+      "reference_answers": [
+        "Denver Broncos",
+        "Denver Broncos",
+        "Denver Broncos"
+      ]
+    },
+    {
+      "document_id": "5beee003-b97f-408b-9bc9-f2b1740b43dc",
+      "question": "Which Carolina Panthers player was named Most Valuable Player?",
+      "reference_answers": [
+        "Cam Newton",
+        "Cam Newton",
+        "Cam Newton"
+      ]
+    },
+    {
+      "document_id": "6b82234d-7664-4771-bde9-e8cddf508b36",
+      "question": "Who was the Super Bowl 50 MVP?",
+      "reference_answers": [
+        "Von Miller",
+        "Von Miller",
+        "Miller"
+      ]
+    }
+  ],
+  "sample_response": {
+    "answer": "I don't have enough information in the uploaded documents.",
+    "sources": [],
+    "confidence_score": 0.0,
+    "citations": [],
+    "diagnostics": {
+      "retrieval_ms": 60.277,
+      "candidate_count": 7,
+      "context_chars": 426,
+      "estimated_context_tokens": 107,
+      "mode": "hybrid",
+      "reranker": "cross_encoder",
+      "cache_hit": false,
+      "grounding": {
+        "unsupported_claim_rate_nli": 1.0,
+        "claim_count": 3,
+        "verifier": "cross-encoder/nli-deberta-v3-xsmall"
+      },
+      "abstention_reason": "unsupported_generated_claims"
+    }
+  },
+  "scope": "Public SQuAD passages ingested through the real protected API into a dedicated validation tenant."
+}

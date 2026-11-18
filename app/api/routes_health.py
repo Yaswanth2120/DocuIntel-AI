@@ -1,9 +1,11 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
+from fastapi.responses import Response
+from app.api.dependencies import require_admin, require_operator
 
 from app.core.config import settings
-from app.db.supabase_client import create_supabase_client
+from app.storage.supabase_client import create_supabase_client
 from app.schemas.health import HealthResponse
-from app.services import rag_backends
+from app.rag import backends as rag_backends
 
 
 router = APIRouter()
@@ -12,7 +14,7 @@ router = APIRouter()
 @router.get("/")
 def root():
     return {
-        "message": "LangC Advanced RAG API is running",
+        "message": "DocuIntel AI is running",
         "docs": "/docs",
         "health": "/health",
     }
@@ -37,7 +39,10 @@ def features():
             "agentic": "Hybrid retrieval with relevance check, rewrite, and retry",
         },
         "observability": "LangSmith tracing when LANGSMITH_TRACING=true",
-        "optional_storage": "Supabase can be configured for persistence",
+        "optional_storage": "PostgreSQL/pgvector shared storage, or local development storage",
+        "document_retrieval_modes": ["vector", "keyword", "hybrid"],
+        "document_reranking": "Configurable neural cross-encoder or lexical reranking",
+        "tenant_roles": ["reader", "writer", "admin"],
         "embedding_backend": rag_backends.embedding_backend_name(),
     }
 
@@ -60,3 +65,29 @@ def supabase_health():
         }
     except Exception as exc:
         raise HTTPException(status_code=500, detail=str(exc)) from exc
+
+
+@router.get("/ready")
+def readiness():
+    from app.core.runtime import readiness
+
+    try:
+        return readiness()
+    except Exception:
+        raise HTTPException(status_code=503, detail="Required dependencies are not ready")
+
+
+@router.get("/metrics", dependencies=[Depends(require_operator)])
+def metrics():
+    from prometheus_client import generate_latest, CONTENT_TYPE_LATEST
+
+    return Response(generate_latest(), media_type=CONTENT_TYPE_LATEST)
+
+
+@router.get("/admin/audit", dependencies=[Depends(require_admin)])
+def audit():
+    from app.storage import postgres
+
+    if not postgres.enabled():
+        raise HTTPException(status_code=409, detail="Audit events require shared PostgreSQL storage")
+    return postgres.audit_events()

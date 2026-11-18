@@ -6,7 +6,13 @@ from pathlib import Path
 
 # Force offline/deterministic config before app import (mirrors tests/__init__,
 # in case the suite is run without the tests package being imported first).
-for _var in ("OPENAI_API_KEY", "SUPABASE_URL", "SUPABASE_KEY", "SUPABASE_SERVICE_ROLE_KEY", "LANGSMITH_API_KEY"):
+for _var in (
+    "OPENAI_API_KEY",
+    "SUPABASE_URL",
+    "SUPABASE_KEY",
+    "SUPABASE_SERVICE_ROLE_KEY",
+    "LANGSMITH_API_KEY",
+):
     os.environ[_var] = ""
 os.environ["API_KEY"] = "test-api-key"
 os.environ["LANGSMITH_TRACING"] = "false"
@@ -15,7 +21,8 @@ from fastapi.testclient import TestClient
 
 from app.api.dependencies import expected_api_key, get_rag_engine
 from app.main import app
-from app.services import document_service, vector_store
+from app.documents import service as document_service
+from app.storage import vector_store
 
 
 API_KEY = "test-api-key"
@@ -68,9 +75,7 @@ class AuthConfiguredTestCase(unittest.TestCase):
         headers = {"X-API-Key": "wrong"}
         for method, path in PROTECTED:
             with self.subTest(route=f"{method} {path}"):
-                self.assertEqual(
-                    _call(self.client, method, path, headers).status_code, 401
-                )
+                self.assertEqual(_call(self.client, method, path, headers).status_code, 401)
 
     def test_valid_key_allowed(self):
         headers = {"X-API-Key": API_KEY}
@@ -80,9 +85,7 @@ class AuthConfiguredTestCase(unittest.TestCase):
 
     def test_query_valid_key_allowed(self):
         headers = {"X-API-Key": API_KEY}
-        response = self.client.post(
-            "/query/documents", json={"question": "anything"}, headers=headers
-        )
+        response = self.client.post("/query/documents", json={"question": "anything"}, headers=headers)
         self.assertEqual(response.status_code, 200)
 
 
@@ -116,9 +119,7 @@ class AuthUnsetKeyFailsClosedTestCase(unittest.TestCase):
         headers = {"X-API-Key": "anything-at-all"}
         for method, path in PROTECTED:
             with self.subTest(route=f"{method} {path}"):
-                self.assertEqual(
-                    _call(self.client, method, path, headers).status_code, 401
-                )
+                self.assertEqual(_call(self.client, method, path, headers).status_code, 401)
 
 
 class AuthOpenRoutesTestCase(unittest.TestCase):

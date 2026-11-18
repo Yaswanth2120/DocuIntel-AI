@@ -11,6 +11,7 @@ set -u
 cd "$(dirname "$0")"
 REPO_ROOT="$(cd ../.. && pwd)"
 PYTHON="${PYTHON:-$REPO_ROOT/.venv/bin/python}"
+if [[ "$PYTHON" == */* && "$PYTHON" != /* ]]; then PYTHON="$REPO_ROOT/$PYTHON"; fi
 API_KEY="${API_KEY:-demo-key}"
 BACKEND_MODE="${BACKEND_MODE:-local}"
 
@@ -18,7 +19,11 @@ BACKEND_MODE="${BACKEND_MODE:-local}"
 # openai mode, leave OPENAI_API_KEY alone so config loads it from .env.
 # (Avoid bash arrays here: macOS ships bash 3.2, where expanding an empty array
 # under `set -u` errors.)
-if [ "$BACKEND_MODE" = "local" ]; then export OPENAI_API_KEY=""; fi
+if [ "$BACKEND_MODE" = "local" ]; then
+  export OPENAI_API_KEY="" TENANT_API_KEYS="" DATABASE_URL="" REDIS_URL=""
+  export APP_ENV=test EMBEDDING_BACKEND=local_hash GROUNDING_VERIFIER=off
+  export RAG_DEFAULT_MODE=vector RAG_DEFAULT_RERANK=false
+fi
 
 echo "== starting backend ($BACKEND_MODE) and static server =="
 ( cd "$REPO_ROOT" && API_KEY="$API_KEY" \
