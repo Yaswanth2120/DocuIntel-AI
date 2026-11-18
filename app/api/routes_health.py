@@ -3,7 +3,6 @@ from fastapi.responses import Response
 from app.api.dependencies import require_admin, require_operator
 
 from app.core.config import settings
-from app.storage.supabase_client import create_supabase_client
 from app.schemas import HealthResponse
 from app.rag import backends as rag_backends
 
@@ -45,26 +44,6 @@ def features():
         "tenant_roles": ["reader", "writer", "admin"],
         "embedding_backend": rag_backends.embedding_backend_name(),
     }
-
-
-@router.get("/supabase/health")
-def supabase_health():
-    key = settings.supabase_service_role_key or settings.supabase_key
-    if not settings.supabase_url or not key:
-        return {
-            "configured": False,
-            "message": "SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY/SUPABASE_KEY missing",
-        }
-
-    try:
-        create_supabase_client(settings.supabase_url, key)
-        return {
-            "configured": True,
-            "message": "Supabase client created",
-            "key_type": "service_role" if settings.supabase_service_role_key else "anon",
-        }
-    except Exception as exc:
-        raise HTTPException(status_code=500, detail=str(exc)) from exc
 
 
 @router.get("/ready")

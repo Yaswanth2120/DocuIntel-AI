@@ -1,7 +1,7 @@
 KNOWLEDGE_BASE = """# LangC Advanced RAG System
 
 LangC is a deployable RAG API built with FastAPI, LangChain, OpenAI embeddings,
-Chroma vector search, LangSmith tracing, and optional Supabase integration.
+Chroma vector search, and LangSmith tracing.
 
 The API supports four retrieval modes:
 
@@ -19,8 +19,6 @@ matching exact words. Chroma is used as the local vector store for deployment
 simplicity.
 
 LangSmith is used for tracing, debugging, monitoring, and evaluating LLM calls.
-Supabase is optional and can be used later for user data, documents, metadata,
-or persistent conversation history.
 """
 
 

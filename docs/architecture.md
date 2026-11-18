@@ -125,9 +125,7 @@ does not replace human review.
 
 ## Compatibility
 
-The development-only `/ask` engine and existing local/Supabase metadata adapters
-remain for compatibility; the public demo endpoint is disabled in production.
-Production storage uses the shared `DATABASE_URL` adapter, including when the
-PostgreSQL server is hosted by Supabase. Old REST metadata migrations are retained
-under `supabase/migrations` for existing installations, not used by the new shared
-storage path.
+The development-only `/ask` engine and the local (JSON + Chroma) document store
+remain for offline development; the public demo endpoint is disabled in
+production. Production storage uses the shared `DATABASE_URL` adapter, which
+works with any PostgreSQL server that has pgvector, including managed providers.

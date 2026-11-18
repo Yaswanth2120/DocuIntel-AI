@@ -8,8 +8,8 @@ retrieval pipeline (``document_qa_service.answer_question`` -> Chroma ->
 Two modes:
 
 - ``run()`` (default, used by ``make eval`` and CI): pins offline mode (see
-  ``app.core.offline``), so it makes no OpenAI calls and never touches
-  Supabase regardless of ``.env`` contents. Retrieval uses the deterministic
+  ``app.core.offline``), so it makes no OpenAI calls regardless of ``.env``
+  contents. Retrieval uses the deterministic
   local hashing embeddings (cosine similarity over hashed bag-of-words
   vectors, NOT BM25 and NOT a real embedding model) and an extractive
   "answer" (the retrieved context verbatim, no LLM). This is a fast,

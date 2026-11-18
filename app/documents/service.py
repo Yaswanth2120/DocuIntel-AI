@@ -50,8 +50,6 @@ def text_path_for(document_id: str) -> Path:
     """Local path of the extracted plain text for a document.
 
     Paths are always DERIVED from document_id; they are never persisted.
-    The live Supabase table's legacy ``text_path`` column stays NULL and is
-    ignored on read (see app/db/document_repository.py).
     """
     return _uploads_dir() / f"{document_id}.txt"
 
@@ -143,10 +141,8 @@ def save_upload(filename: str, content: bytes) -> dict:
     text_path_for(document_id).write_text(text, encoding="utf-8")
 
     # The persisted metadata record is exactly the DocumentMetadata schema
-    # (app/schemas.py) and the Supabase ``documents`` table columns.
-    # The on-disk file locations are derived from document_id/file_type
-    # (see stored_path_for/text_path_for), not stored, so this record matches
-    # the table field-for-field whether it goes to Supabase or local JSON.
+    # (app/schemas.py). On-disk file locations are derived from
+    # document_id/file_type (see stored_path_for/text_path_for), not stored.
     record = {
         "document_id": document_id,
         "filename": filename,
@@ -155,14 +151,9 @@ def save_upload(filename: str, content: bytes) -> dict:
         "created_at": datetime.now(timezone.utc).isoformat(),
     }
 
-    from app.storage import supabase_metadata as document_repository
-
-    if document_repository.enabled():
-        document_repository.insert(record)
-    else:
-        records = _read_metadata()
-        records.append(record)
-        _write_metadata(records)
+    records = _read_metadata()
+    records.append(record)
+    _write_metadata(records)
 
     return record
 
@@ -171,21 +162,13 @@ def list_documents(limit=100, offset=0) -> list[dict]:
     """Return all stored document metadata records."""
     if postgres.enabled():
         return postgres.list_documents(limit, offset)
-    from app.storage import supabase_metadata as document_repository
-
-    records = document_repository.list_all() if document_repository.enabled() else _read_metadata()
-    return records[offset : offset + limit]
+    return _read_metadata()[offset : offset + limit]
 
 
 def get_document(document_id: str) -> dict | None:
     """Return a single document metadata record, or None if not found."""
     if postgres.enabled():
         return postgres.get_document(document_id)
-    from app.storage import supabase_metadata as document_repository
-
-    if document_repository.enabled():
-        return document_repository.get(document_id)
-
     for record in _read_metadata():
         if record["document_id"] == document_id:
             return record
@@ -205,13 +188,10 @@ def delete_document(identifier):
     record = get_document(identifier)
     if record is None:
         return False
-    from app.storage import supabase_metadata, vector_store
+    from app.storage import vector_store
     from app.documents import chunking
 
-    if supabase_metadata.enabled():
-        supabase_metadata.delete(identifier)
-    else:
-        _write_metadata([r for r in _read_metadata() if r["document_id"] != identifier])
+    _write_metadata([r for r in _read_metadata() if r["document_id"] != identifier])
     chunking._write_chunks([c for c in chunking._read_chunks() if c["document_id"] != identifier])
     vector_store._get_store()._collection.delete(where={"document_id": identifier})
     vector_store.clear_search_cache()
