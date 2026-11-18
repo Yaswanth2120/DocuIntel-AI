@@ -102,6 +102,21 @@ the API and the evaluation runner, so measured coverage is what users receive:
    is supported, only supported sentences are delivered, verbatim with their
    citations; otherwise the API abstains. Unsupported text is never delivered.
    Disable with `GROUNDING_PARTIAL_DELIVERY=false`.
+6. **Hedge salvage.** Small models often refuse and then quote the answer
+   ("The evidence does not state who sold it. [S1] mentions it was sold by
+   Archduke Sigismund."). Refusal clauses and meta lead-ins are removed, only
+   cited facts are kept, and the result must pass the full gate again; salvage
+   never outputs a refusal. Disable with `GROUNDING_RECOVERY=false`.
+7. **Rank guard.** Answers whose citations all come from passages ranked 8th or
+   lower are declined (`GROUNDING_MAX_CITED_RANK=7`, 0 disables). These are
+   supported claims that answer a different reading of an ambiguous question.
+8. **Retry (off by default).** `GROUNDING_RETRY=true` rewrites the question for
+   search (without adding names or dates), appends up to 3 new passages, and
+   asks once more. With Qwen3-4B it recovered 0 of 16 refusals, so it is off to
+   avoid the latency; it is kept for stronger generators.
+
+All steps live in `grounded_answer` (`app/rag/answering.py`), which the API
+and the evaluation runner both call; diagnostics report the recovery path.
 
 Streaming with this gate buffers the answer; it does not release unverified
 tokens. NLI remains an imperfect automated check, particularly for numbers and

@@ -290,3 +290,111 @@ class RuntimeSecurityTests(unittest.TestCase):
             split_claims("It is in the U.S. Army. It has 8 units."),
             ["It is in the U.S. Army.", "It has 8 units."],
         )
+
+    def test_salvage_keeps_cited_facts_and_drops_refusals(self):
+        from app.rag.grounding import salvage_hedged_answer
+
+        self.assertEqual(
+            salvage_hedged_answer(
+                "The retrieved evidence does not state who sold the Upper Rhine. "
+                "[S1] mentions that Alsace was sold to Burgundy by Archduke Sigismund in 1469."
+            ),
+            "Alsace was sold to Burgundy by Archduke Sigismund in 1469 [S1].",
+        )
+        self.assertEqual(
+            salvage_hedged_answer(
+                "The evidence does not specify the count. [S1] mentions there are over 100 species, "
+                "but it does not give an exact count."
+            ),
+            "There are over 100 species [S1].",
+        )
+        self.assertIsNone(salvage_hedged_answer("The evidence does not mention it. The answer is unknown."))
+        self.assertIsNone(
+            salvage_hedged_answer("[S2] lists him as a receiver but does not state his position.")
+        )
+
+    def _docs(self, count):
+        return [
+            Document(page_content=f"Fact {i}.", metadata={"document_id": f"d{i}", "chunk_id": f"{i:064x}"})
+            for i in range(1, count + 1)
+        ]
+
+    def _supported(self, answer, *_args, **_kwargs):
+        from app.rag.grounding import split_claims
+
+        claims = [{"text": c, "supported": True, "verified_by": "primary"} for c in split_claims(answer)]
+        return {"claims": claims, "unsupported_claim_rate_nli": 0.0}
+
+    def test_rank_guard_declines_answers_citing_only_low_ranked_passages(self):
+        docs = self._docs(8)
+        with patch("app.rag.grounding.nli_grounding", side_effect=self._supported):
+            self.assertEqual(
+                answering.verify_answer("Fact 8 [S8].", docs)["abstention_reason"], "low_rank_evidence_only"
+            )
+            self.assertTrue(answering.verify_answer("Fact 7 [S7].", docs)["accepted"])
+            self.assertTrue(answering.verify_answer("Fact 8 [S8]. Fact 1 [S1].", docs)["accepted"])
+            with patch.dict(os.environ, {"GROUNDING_MAX_CITED_RANK": "0"}):
+                self.assertTrue(answering.verify_answer("Fact 8 [S8].", docs)["accepted"])
+
+    def test_recovery_salvages_then_retries_with_rewritten_query(self):
+        docs, extra = self._docs(2), self._docs(4)[2:]
+        with (
+            patch("app.rag.grounding.nli_grounding", side_effect=self._supported),
+            patch.object(answering, "_rewrite_query", return_value="rewritten"),
+        ):
+            with patch.object(
+                answering,
+                "_generate_answer",
+                return_value="The evidence does not specify it. [S2] states that Fact 2 holds.",
+            ):
+                result = answering.grounded_answer("q?", docs, {}, lambda query: docs + extra)
+            self.assertEqual(result["recovery"]["path"], "salvage")
+            self.assertEqual(result["verdict"]["answer"], "Fact 2 holds [S2].")
+
+            calls = []
+
+            def generate(question, used, diagnostics=None, system_prompt=None):
+                calls.append((len(used), system_prompt is answering.RECOVERY_PROMPT))
+                return "I do not know." if len(calls) == 1 else "Fact 3 [S3]."
+
+            with (
+                patch.dict(os.environ, {"GROUNDING_RETRY": "true"}),
+                patch.object(answering, "_generate_answer", side_effect=generate),
+            ):
+                result = answering.grounded_answer("q?", docs, {}, lambda query: docs + extra)
+            self.assertEqual(calls, [(2, False), (4, True)])
+            self.assertEqual(result["recovery"]["path"], "retry")
+            # The appended passage ranks 1st for the rewritten query, so the
+            # rank guard does not treat label S3 as a low-ranked citation.
+            self.assertEqual(result["verdict"]["min_cited_rank"], 1)
+            self.assertEqual(len(result["docs"]), 4)
+
+            with (
+                patch.dict(os.environ, {"GROUNDING_RECOVERY": "false"}),
+                patch.object(answering, "_generate_answer", return_value="I do not know."),
+            ):
+                result = answering.grounded_answer("q?", docs, {}, lambda query: docs + extra)
+            self.assertEqual(result["verdict"]["abstention_reason"], "model_abstained")
+
+    def test_salvage_never_returns_a_refusal(self):
+        from app.rag.grounding import salvage_hedged_answer
+
+        for answer in (
+            "The evidence does not state the number. Therefore, based on the evidence, the number of legions "
+            "is not explicitly stated [S1].",
+            "Therefore, the count is not explicitly given [S2].",
+            "The evidence does not say. It does not name the star [S1].",
+            "Nothing is specified. This refers to the Newcastle Mela [S1].",
+        ):
+            self.assertIsNone(salvage_hedged_answer(answer), answer)
+
+    def test_retry_is_off_by_default(self):
+        docs = self._docs(2)
+        with (
+            patch.object(answering, "_generate_answer", return_value="I do not know.") as generate,
+            patch.object(answering, "_rewrite_query") as rewrite,
+        ):
+            result = answering.grounded_answer("q?", docs, {}, lambda query: docs)
+        self.assertEqual(generate.call_count, 1)
+        rewrite.assert_not_called()
+        self.assertTrue(result["recovery"]["retry_skipped"])

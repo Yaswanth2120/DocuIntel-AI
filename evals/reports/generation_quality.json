@@ -110,5 +110,89 @@
     "reference": "https://rajpurkar.github.io/SQuAD-explorer/",
     "documents": 2067,
     "queries": 10570
+  },
+  "answer_recovery_release": {
+    "reports": {
+      "tuning": "squad-generation-200-recovery-dev.json (seed 7, same questions as held_out_final)",
+      "final": "squad-generation-200-final.json (seed 11)"
+    },
+    "final_set": "seed 11, 200 questions, zero overlap with seeds 42/7 generation runs and the 100-question SQuAD reports; never inspected before this run",
+    "changes": [
+      "hedge salvage of cited facts from refusals",
+      "rank guard: decline when every citation ranks 8th or lower",
+      "retry with rewritten search query (implemented, off by default: recovered 0/16 on tuning set)"
+    ],
+    "final_results": {
+      "this_release": {
+        "delivered": 172,
+        "delivered_correct": 163,
+        "delivered_wrong": 9
+      },
+      "previous_release_same_answers": {
+        "delivered": 168,
+        "delivered_correct": 160,
+        "delivered_wrong": 8
+      },
+      "salvage": {
+        "recovered": 8,
+        "correct": 6,
+        "wrong": 2
+      },
+      "rank_guard": {
+        "declined": 4,
+        "previously_correct": 3,
+        "previously_wrong": 1
+      },
+      "withheld_by_checker": {
+        "count": 10,
+        "raw_answer_contained_reference": 8
+      },
+      "refused_gold_retrieved": 8,
+      "gold_not_retrieved": 6,
+      "median_generation_and_verification_ms": 8823.690504500064
+    },
+    "tuning_results_seed7": {
+      "salvage": {
+        "recovered": 12,
+        "correct": 10,
+        "refusals_output_before_fix": 2
+      },
+      "retry": {
+        "attempted": 16,
+        "recovered": 0
+      },
+      "rank_guard_at_rank6": {
+        "declined": 6,
+        "previously_correct": 4
+      }
+    },
+    "adjudication_final_wrong": [
+      "rotary engine without pistons (Quasiturbine; ref Wankel)",
+      "Rhine length (Rhine-kilometers figure; ref 1,230 km)",
+      "result of civil rebellion",
+      "where ctenophores are found",
+      "extent of C\u00e9loron's expedition (route; ref ~3,000 miles)",
+      "art forms Luther used",
+      "vice presidents on the Student Board (salvage)",
+      "organization running university clubs",
+      "who constructed Newcastle's station (salvage)"
+    ],
+    "adjudication_final_correct_without_span_match": [
+      "health and social problems with income inequality",
+      "Turkana Boy 1.6 million years",
+      "tides since 7500 years ago",
+      "Doctor Who 1963 to 1989",
+      "Christmas Day special (salvage)",
+      "divisors 1, 2, and themselves",
+      "DECnet connected two PDP-11",
+      "deterministic Turing machine"
+    ],
+    "conclusions": [
+      "Same-question gain is small: +3 correct (+1.5 points) and +1 wrong; the sample's easier questions explain most of the difference from the 75.5% seed-7 figure.",
+      "Salvage is the only change with a measured positive effect on both sets (16 of 20 salvaged answers correct).",
+      "The rank guard did not generalize (3 of 4 declined answers were correct on fresh data; 4 of 7 wrong pooled). It is kept as a precision control but is not a coverage improvement.",
+      "Retry recovers nothing with Qwen3-4B; the binding constraint is the generator, not retrieval (95.5% recall@10).",
+      "The checker still withholds 8 answers whose raw text contained the reference: the next lever is verifier recall, not generation."
+    ]
   }
 }

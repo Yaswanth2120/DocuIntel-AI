@@ -27,7 +27,7 @@ from app.core.tenancy import tenant_id
 from app.documents.chunking import split_text
 from app.rag import backends, models
 from app.rag.retrieval import retrieve
-from app.rag.grounding import nli_grounding, CITATION_PATTERN
+from app.rag.grounding import CITATION_PATTERN
 from app.storage import postgres
 from evals.datasets import load
 
@@ -196,7 +196,8 @@ def run(
         raise ValueError("Public benchmark requires DATABASE_URL with migrated shared storage")
     postgres.readiness()
     corpus, all_cases, manifest = load(dataset)
-    excluded = set(json.loads(Path(exclude_report).read_text())["query_ids"]) if exclude_report else set()
+    reports = [exclude_report] if isinstance(exclude_report, str) else (exclude_report or [])
+    excluded = {qid for path in reports for qid in json.loads(Path(path).read_text())["query_ids"]}
     pool = sorted((case for case in all_cases if case["id"] not in excluded), key=lambda case: case["id"])
     sample = random.Random(seed_value).sample(pool, min(queries, len(pool)))
     suffix = "-production" if generation_backend == "configured" else ""
@@ -274,69 +275,16 @@ def run(
                     }
                 )
                 print(strategy, mode, rerank, json.dumps(summary), flush=True)
+            if pending_generation and not generation:
+                # Runs while this strategy's corpus is still indexed, so answer
+                # recovery can re-retrieve with a rewritten query.
+                generation.extend(_generate(pending_generation, generation_backend, k))
         finally:
             with postgres.transaction() as connection:
                 connection.execute("SET LOCAL statement_timeout = '300s'")
                 connection.execute("DELETE FROM rag_documents WHERE tenant_id=%s", (tenant_id.get(),))
                 connection.execute("DELETE FROM rag_revisions WHERE tenant_id=%s", (tenant_id.get(),))
             tenant_id.reset(token)
-    if pending_generation:
-        import gc
-
-        models.encoder.cache_clear()
-        models.reranker.cache_clear()
-        gc.collect()
-        for case, documents in pending_generation:
-            contexts = [document.page_content for document in documents]
-            started = perf_counter()
-            usage = {}
-            if generation_backend == "configured":
-                from app.rag.answering import _generate_answer
-
-                answer = _generate_answer(case["question"], documents, usage)
-            else:
-                answer = models.local_answer(case["question"], "\n\n".join(contexts))
-            from app.rag.answering import verify_answer
-
-            verdict = verify_answer(answer, documents)
-            if verdict.get("abstention_reason") == "model_abstained":
-                assessment = {"claims": [], "unsupported_claim_rate_nli": 0.0}
-            else:
-                assessment = verdict.get("assessment") or nli_grounding(answer, contexts)
-            generation.append(
-                {
-                    "id": case["id"],
-                    "question": case["question"],
-                    "answer": answer,
-                    "reference_answers": case["answers"],
-                    "provider_usage": usage,
-                    "delivered_answer": verdict.get("answer") if verdict["accepted"] else None,
-                    **verdict["citation_validation"],
-                    **answer_metrics(answer, case["answers"]),
-                    "delivered_reference_span_hit": answer_metrics(verdict["answer"], case["answers"])[
-                        "reference_span_hit"
-                    ]
-                    if verdict["accepted"]
-                    else 0.0,
-                    **assessment,
-                    "generation_and_verification_ms": (perf_counter() - started) * 1000,
-                    "accepted_by_grounding_gate": verdict["accepted"],
-                    "partial_delivery": bool(verdict.get("partial")),
-                    "dropped_claims": verdict.get("dropped_claims", []),
-                    "escalated_claims": sum("escalation_score" in c for c in assessment["claims"]),
-                    "escalation_rescued_claims": sum(
-                        c.get("verified_by") == "escalation" for c in assessment["claims"]
-                    ),
-                    # Counterfactual on the same answer: previous all-claims,
-                    # fast-verifier-only policy, for an apples-to-apples ablation.
-                    "accepted_by_strict_policy": verdict.get("abstention_reason") is None
-                    and bool(assessment["claims"])
-                    and all(
-                        c.get("verified_by") == "primary" and c["supported"] for c in assessment["claims"]
-                    ),
-                    "abstention_reason": verdict.get("abstention_reason"),
-                }
-            )
     report = {
         "dataset": manifest,
         "created_at": datetime.now(timezone.utc).isoformat(),
@@ -381,7 +329,12 @@ def run(
             if any(row["abstention_reason"] != "model_abstained" for row in generation)
             else 0.0,
             "grounding_gate_coverage": mean(row["accepted_by_grounding_gate"] for row in generation),
-            "strict_policy_coverage": mean(row["accepted_by_strict_policy"] for row in generation),
+            "previous_release_coverage": mean(row["accepted_by_previous_release"] for row in generation),
+            "recovered_by_salvage": mean(row["recovery_path"] == "salvage" for row in generation),
+            "recovered_by_retry": mean(row["recovery_path"] == "retry" for row in generation),
+            "declined_low_rank_evidence": mean(
+                row["abstention_reason"] == "low_rank_evidence_only" for row in generation
+            ),
             "partial_delivery_rate": mean(row["partial_delivery"] for row in generation),
             "escalation_rescue_rate": mean(row["escalation_rescued_claims"] > 0 for row in generation),
             # Outcomes of the delivered (post-gate) text against human references.
@@ -410,6 +363,70 @@ def run(
     return report
 
 
+def _generate(pending, generation_backend, k):
+    from app.rag.answering import grounded_answer
+
+    rows = []
+    for case, documents in pending:
+        started = perf_counter()
+        usage = {}
+        if generation_backend == "configured":
+
+            def retrieve_more(query):
+                return [document for document, _ in retrieve(query, "hybrid", True, k, 12000)[0]]
+
+            result = grounded_answer(case["question"], documents, usage, retrieve_more)
+            verdict, recovery = result["verdict"], result["recovery"]
+            answer = recovery["initial_answer"]
+        else:
+            from app.rag.answering import verify_answer
+
+            answer = models.local_answer(case["question"], "\n\n".join(d.page_content for d in documents))
+            verdict, recovery = verify_answer(answer, documents), {"path": "initial"}
+        if verdict.get("abstention_reason") == "model_abstained":
+            assessment = {"claims": [], "unsupported_claim_rate_nli": 0.0}
+        else:
+            assessment = verdict.get("assessment") or {"claims": [], "unsupported_claim_rate_nli": 0.0}
+        delivered = verdict.get("answer") if verdict["accepted"] else None
+        rows.append(
+            {
+                "id": case["id"],
+                "question": case["question"],
+                "answer": answer,
+                "reference_answers": case["answers"],
+                "provider_usage": usage,
+                "delivered_answer": delivered,
+                **verdict["citation_validation"],
+                **answer_metrics(answer, case["answers"]),
+                "delivered_reference_span_hit": answer_metrics(delivered, case["answers"])[
+                    "reference_span_hit"
+                ]
+                if delivered
+                else 0.0,
+                **assessment,
+                "generation_and_verification_ms": (perf_counter() - started) * 1000,
+                "accepted_by_grounding_gate": verdict["accepted"],
+                "partial_delivery": bool(verdict.get("partial")),
+                "dropped_claims": verdict.get("dropped_claims", []),
+                "escalated_claims": sum("escalation_score" in c for c in assessment["claims"]),
+                "escalation_rescued_claims": sum(
+                    c.get("verified_by") == "escalation" for c in assessment["claims"]
+                ),
+                "min_cited_rank": verdict.get("min_cited_rank"),
+                "recovery_path": recovery.get("path"),
+                "recovery": {key: value for key, value in recovery.items() if key != "initial_answer"},
+                # Counterfactual: what the previous release (no recovery, no rank
+                # guard) would have delivered for this same first answer.
+                "accepted_by_previous_release": recovery.get("initial_reason")
+                in (None, "low_rank_evidence_only"),
+                "previous_release_answer": recovery.get("initial_delivered"),
+                "abstention_reason": verdict.get("abstention_reason"),
+            }
+        )
+        print(len(rows), recovery.get("path"), verdict.get("abstention_reason"), flush=True)
+    return rows
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--dataset", choices=("scifact", "squad"), default="scifact")
@@ -418,7 +435,9 @@ if __name__ == "__main__":
     parser.add_argument("--output")
     parser.add_argument("--seed", type=int, default=42)
     parser.add_argument(
-        "--exclude-report", help="Held-out evaluation: never sample query ids that appear in this report"
+        "--exclude-report",
+        action="append",
+        help="Held-out evaluation: never sample query ids from this report (repeatable)",
     )
     parser.add_argument(
         "--generation-only",

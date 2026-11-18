@@ -150,3 +150,36 @@ Remaining error sources, in order: model refusal despite retrieved evidence,
 grounded answers to ambiguous context-dependent questions, and verifier false
 negatives. A larger generator and a question-answer relevance check address the
 first two; neither is solved by stricter entailment.
+
+## Answer-recovery release (final fresh set)
+
+Tuned on the seed-7 questions (`squad-generation-200-recovery-dev.json`), then
+measured once on 200 fresh questions (seed 11; excludes every earlier sample):
+
+```bash
+python scripts/run_evaluation.py --dataset squad --queries 200 --generate 200 \
+  --generation-backend configured --generation-only --seed 11 \
+  --exclude-report evals/reports/squad-generation-200.json \
+  --exclude-report evals/reports/squad-generation-200-heldout.json \
+  --exclude-report evals/reports/squad-production.json \
+  --exclude-report evals/reports/squad.json \
+  --output evals/reports/squad-generation-200-final.json
+```
+
+| Same 200 questions | Previous release | This release |
+| --- | --- | --- |
+| Delivered and correct | 160 (80.0%) | 163 (81.5%) |
+| Delivered but wrong | 8 (4.0%) | 9 (4.5%) |
+
+- Hedge salvage: 8 recovered, 6 correct (tuning set: 12 recovered, 10 correct;
+  two refusals that slipped through were fixed before the final run).
+- Rank guard (all citations ranked 8th or lower): 4 declined, 3 had been
+  correct. It did not reproduce the calibration result (3/3 wrong) and is
+  documented as a precision control, not a coverage gain.
+- Retry with a rewritten query: 0 of 16 refusals recovered on the tuning set, so
+  `GROUNDING_RETRY` defaults to off.
+- 8 of 10 answers withheld by the checker contained the reference: verifier
+  recall is the next lever.
+
+The `previous_release_answer` field and `accepted_by_previous_release` flag in
+the report record the previous release's verdict on the identical first answer.
