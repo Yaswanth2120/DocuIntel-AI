@@ -5,8 +5,8 @@ from fastapi.responses import StreamingResponse
 
 from app.api.dependencies import get_rag_engine, require_api_key, demo_only
 from app.core.rate_limit import current_rate_limit, limiter
-from app.schemas.document_query import DocumentQueryRequest, DocumentQueryResponse
-from app.schemas.query import AskRequest, AskResponse
+from app.schemas import DocumentQueryRequest, DocumentQueryResponse
+from app.schemas import AskRequest, AskResponse
 from app.rag import answering as document_qa_service
 from app.rag.demo_engine import AdvancedRAGEngine
 

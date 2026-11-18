@@ -4,7 +4,7 @@ from app.api.dependencies import require_admin, require_operator
 
 from app.core.config import settings
 from app.storage.supabase_client import create_supabase_client
-from app.schemas.health import HealthResponse
+from app.schemas import HealthResponse
 from app.rag import backends as rag_backends
 
 

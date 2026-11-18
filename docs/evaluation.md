@@ -79,7 +79,7 @@ Measured results are in [the report directory](../evals/reports/).
 
 The CPU deployment uses pinned TinyBERT-L2 reranking with at most 40 reranked
 candidates. A diagnostic profile of the larger MiniLM model is retained in
-`evals/reports/reranker_profile.json`; it is not a controlled model quality A/B.
+the `reranker_profile` section of `evals/reports/operations.json`; it is not a controlled model quality A/B.
 Public retrieval reports record the final model revisions and configuration.
 
 To evaluate your actual configured generation provider, set `OPENAI_API_KEY`
@@ -89,7 +89,7 @@ To evaluate your actual configured generation provider, set `OPENAI_API_KEY`
 python -m evals.public_benchmark --dataset squad --queries 100 --generate 30 --generation-backend configured
 ```
 
-This explicitly incurs provider charges and writes `squad-production.json`,
+This explicitly incurs provider charges and writes `squad-production.json` (not committed),
 separate from the local baseline. Actual provider token usage is recorded per
 answer; configured token prices enable generation-cost estimates. The same
 independent NLI verifier and human SQuAD references are used. Citation labels
@@ -114,7 +114,7 @@ python scripts/run_evaluation.py --dataset squad --queries 100 --generate 30 --g
 
 ## Generation model comparison
 
-`evals/reports/generation_models.json` pairs Qwen3 1.7B and Qwen3 4B-Instruct on
+The `model_selection` section of `evals/reports/generation_quality.json` pairs Qwen3 1.7B and Qwen3 4B-Instruct on
 the same 30 questions and gate. It also records an ablation of the verifier fix
 (4B: gate coverage 0.33 -> 0.77, invalid citations 0.20 -> 0) and a manual
 adjudication of delivered answers that missed the lexical reference match.
@@ -161,7 +161,6 @@ python scripts/run_evaluation.py --dataset squad --queries 200 --generate 200 \
   --generation-backend configured --generation-only --seed 11 \
   --exclude-report evals/reports/squad-generation-200.json \
   --exclude-report evals/reports/squad-generation-200-heldout.json \
-  --exclude-report evals/reports/squad-production.json \
   --exclude-report evals/reports/squad.json \
   --output evals/reports/squad-generation-200-final.json
 ```

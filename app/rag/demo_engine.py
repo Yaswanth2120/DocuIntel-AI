@@ -3,7 +3,7 @@ from dataclasses import dataclass
 
 from app.core.config import Settings
 from app.core.text_utils import tokenize
-from app.schemas.query import RetrievalMode
+from app.schemas import RetrievalMode
 from app.rag.demo_corpus import DOCUMENTS
 from app.rag.prompts import ANSWER_TEMPLATE, MULTI_QUERY_TEMPLATE, QUERY_REWRITE_TEMPLATE
 

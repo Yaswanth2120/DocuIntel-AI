@@ -28,3 +28,7 @@ data
 
 # Node dependencies may be a resident cache symlink on macOS.
 node_modules
+
+# Personal editor settings
+.vscode/
+evals/reports/squad-production.json
