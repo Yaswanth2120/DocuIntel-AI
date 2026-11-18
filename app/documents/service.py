@@ -143,7 +143,7 @@ def save_upload(filename: str, content: bytes) -> dict:
     text_path_for(document_id).write_text(text, encoding="utf-8")
 
     # The persisted metadata record is exactly the DocumentMetadata schema
-    # (app/schemas/document.py) and the Supabase ``documents`` table columns.
+    # (app/schemas.py) and the Supabase ``documents`` table columns.
     # The on-disk file locations are derived from document_id/file_type
     # (see stored_path_for/text_path_for), not stored, so this record matches
     # the table field-for-field whether it goes to Supabase or local JSON.

@@ -15,7 +15,7 @@ from time import perf_counter
 import httpx
 
 
-def run(requests=100, concurrency=8, output="evals/reports/load.json"):
+def run(requests=100, concurrency=8, output="evals/reports/operations.json"):
     base = os.environ["RAG_BASE_URL"].rstrip("/")
     key = os.environ["RAG_TEST_API_KEY"]
     question = os.getenv("RAG_TEST_QUESTION", "What authentication is required for production access?")
@@ -49,8 +49,12 @@ def run(requests=100, concurrency=8, output="evals/reports/load.json"):
         "scope": "Repeated-query cache/load smoke test, not a representative mixed production workload",
         "results": results,
     }
-    Path(output).parent.mkdir(parents=True, exist_ok=True)
-    Path(output).write_text(json.dumps(report, indent=2) + "\n")
+    # Stored as the "load" section of the combined operations report.
+    path = Path(output)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    combined = json.loads(path.read_text()) if path.exists() else {}
+    combined["load"] = report
+    path.write_text(json.dumps(combined, indent=2) + "\n")
     print(json.dumps({key: value for key, value in report.items() if key != "results"}, indent=2))
     if report["errors"]:
         raise SystemExit("Deployment load gate failed: HTTP errors observed")

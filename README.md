@@ -21,7 +21,7 @@ quality.
 | Measured quality | 85.7% retrieval hit rate on 10 questions | Recall@10 0.854 (SciFact) / 0.97 (SQuAD); **81.5% correct, 4.5% wrong** answers on 200 fresh questions |
 | Deployment | Free Render web service | Docker Compose with health checks; production mode refuses unsafe fallbacks |
 | Tests | 31 tests | 64 tests, including real PostgreSQL/Redis integration in CI |
-| Repository | 130 files incl. tutorials, planning notes, screenshots | 111 files; `app/` split into api, core, documents, rag, storage |
+| Repository | 130 files incl. tutorials, planning notes, screenshots | 96 files; `app/` split into api, core, documents, rag, storage |
 
 On 200 fresh questions, Qwen3 4B now delivers a correct answer 81.5% of the
 time and a wrong one 4.5% of the time; about 95% of delivered answers are
@@ -177,6 +177,7 @@ app/
   documents/    Upload, extraction, chunking, document lifecycle
   rag/          Retrieval, neural models, generation, grounding
   storage/      PostgreSQL/pgvector, Redis, local/legacy adapters
+  schemas.py    Request and response models
 evals/          Public benchmarks, smoke evaluation, metrics, release gates
   fixtures/     Small deterministic offline test questions
   reports/      Measured public-data and operational validation results
@@ -184,12 +185,12 @@ frontend/       Static development UI and browser tests
 migrations/     Shared-storage schema, indexes, RLS, permissions
 scripts/        Local setup, migrations, load verification, backups
 tests/          Unit, API, isolation, concurrency, and integration tests
-docs/           Architecture, operations, evaluation, cleanup record
+docs/           Architecture, operations, evaluation
 ```
 
-Tutorial examples and historical planning files were removed. Production source
-was reorganized without changing the document API paths. See the
-[cleanup record](docs/cleanup.md).
+Tutorial examples and historical planning files were removed; they remain in
+git history. Production source was reorganized without changing the document
+API paths.
 
 Read [architecture](docs/architecture.md) and [operations](docs/operations.md)
 for security boundaries, deployment, scaling, backups, and release checks.

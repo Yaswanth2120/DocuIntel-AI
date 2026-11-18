@@ -6,9 +6,9 @@ from typing import Literal
 from fastapi import APIRouter, Depends, File, HTTPException, UploadFile, Query
 
 from app.api.dependencies import require_api_key, require_writer
-from app.schemas.chunk import Chunk
+from app.schemas import Chunk
 from app.storage.postgres import TenantQuotaExceeded
-from app.schemas.document import DocumentMetadata
+from app.schemas import DocumentMetadata
 from app.documents import chunking as chunk_service
 from app.documents import service as document_service
 

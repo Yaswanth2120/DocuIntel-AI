@@ -19,7 +19,7 @@ The local Compose stack is not a multi-region highly available cluster.
 This workspace evaluates a private Ollama service through the same
 OpenAI-compatible production interface. The default is Qwen3 4B-Instruct (Q4_K_M,
 ~2.5 GB, ~7 s median CPU answer); Qwen3 1.7B is the lower-latency alternative
-(~3 s) with lower verified coverage. See `evals/reports/generation_models.json`. The smaller
+(~3 s) with lower verified coverage. See `model_selection` in `evals/reports/generation_quality.json`. The smaller
 FLAN-T5 baseline is reported separately. Local inference incurs no commercial
 API charge; hardware costs are separate. `OPENAI_BASE_URL` selects the provider;
 `DOCKER_OPENAI_BASE_URL` overrides it inside Docker when the service runs on the
@@ -75,7 +75,7 @@ Schedule retention and monitor backup failures. A backup is useful only after a
 restore test. Restore into a **new** database using `createdb` and `pg_restore`,
 connect with the restricted API role, and verify document counts and cross-tenant
 RLS before switching traffic. Never test restoration over the live database.
-`evals/reports/backup_restore.json` records a successful isolated local restore.
+The `backup_restore` section of `evals/reports/operations.json` records a successful isolated local restore.
 
 ## Release checks
 
