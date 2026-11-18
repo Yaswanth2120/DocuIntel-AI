@@ -4,6 +4,31 @@ A multi-tenant RAG API with shared PostgreSQL storage, pgvector semantic search,
 indexed full-text search, neural reranking, independent grounding verification,
 and reproducible public-data evaluations.
 
+## What changed from the original
+
+The original project (commit `161652f`, "LangC Advanced RAG API") was a
+single-user portfolio demo. This version is a multi-tenant service with measured
+quality.
+
+| Area | Original | Now |
+| --- | --- | --- |
+| Storage | Local Chroma files + JSON metadata (optional Supabase) | PostgreSQL + pgvector + full-text index, Redis cache, atomic re-ingestion, backups verified by restore |
+| Tenancy and security | One shared API key | Per-tenant keys with reader/writer/admin roles, PostgreSQL row-level security, quotas, audit, upload limits, request IDs, metrics |
+| Retrieval | Vector / multi-query / hybrid / agentic modes on a demo corpus | Fixed vs recursive chunking; vector, keyword, hybrid, and neural-reranked hybrid, all benchmarked |
+| Generation | OpenAI only, or extractive fallback | Any OpenAI-compatible endpoint; runs locally on Qwen3 4B via Ollama at $0 API cost |
+| Hallucination control | Prompt instructions plus "I do not know" fallback | Verification gate: citation checks, sentence-level NLI with a stronger second-opinion model, supported-sentence delivery, hedge salvage, rank guard |
+| Evaluation | 10 hand-written questions, hash embeddings, no generation scoring | Full public corpora (BEIR SciFact, SQuAD), human labels, held-out sets, previous-release counterfactuals |
+| Measured quality | 85.7% retrieval hit rate on 10 questions | Recall@10 0.854 (SciFact) / 0.97 (SQuAD); **81.5% correct, 4.5% wrong** answers on 200 fresh questions |
+| Deployment | Free Render web service | Docker Compose with health checks; production mode refuses unsafe fallbacks |
+| Tests | 31 tests | 64 tests, including real PostgreSQL/Redis integration in CI |
+| Repository | 130 files incl. tutorials, planning notes, screenshots | 111 files; `app/` split into api, core, documents, rag, storage |
+
+On 200 fresh questions, Qwen3 4B now delivers a correct answer 81.5% of the
+time and a wrong one 4.5% of the time; about 95% of delivered answers are
+correct. On those same questions the previous release scored 80.0% / 4.0%. The
+earlier 75.5% figure came from a different, harder question sample, so compare
+releases only on identical questions (see [Measured results](#measured-results)).
+
 ## Start locally
 
 Requirements: Python 3.12, [uv](https://docs.astral.sh/uv/), and Docker Compose.
